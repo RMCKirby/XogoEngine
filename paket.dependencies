@@ -1,0 +1,24 @@
+group Core
+    source https://nuget.org/api/v2
+
+    nuget OpenTK ~> 1.1
+
+group Test
+    source https://nuget.org/api/v2
+
+    nuget Moq ~> 4.2
+    nuget NUnit ~> 2.6
+    nuget Shouldly ~> 2.6
+
+group Tools
+    source https://nuget.org/api/v2
+
+    nuget Coveralls.io ~> 1.3
+    nuget NUnit.Runners ~> 2.6
+    nuget OpenCover ~> 4.6
+    nuget ReportGenerator ~> 2.3
+
+group Build
+    source https://nuget.org/api/v2
+
+    nuget FAKE ~> 4.0
