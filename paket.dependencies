@@ -1,7 +1,7 @@
 group Core
     source https://nuget.org/api/v2
 
-    nuget OpenTK ~> 1.1
+    nuget OpenTK = 1.1.1589.5942
 
 group Test
     source https://nuget.org/api/v2
