@@ -1,4 +1,4 @@
-#r @"packages/Build/FAKE/tools/FakeLib.dll"
+#r @"packages/build/FAKE/tools/FakeLib.dll"
 
 open Fake
 open Fake.OpenCoverHelper
