@@ -5,6 +5,7 @@ build/
 test/
 deploy/
 reports/
+history/
 
 [Tt]est-results
 [Tt]est[Rr]esult*

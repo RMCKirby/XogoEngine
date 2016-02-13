@@ -1,6 +1,8 @@
-#r @"packages/Build/FAKE/tools.FakeLib.dll"
+#r @"packages/Build/FAKE/tools/FakeLib.dll"
 
 open Fake
+open Fake.OpenCoverHelper
+open Fake.ReportGeneratorHelper
 
 let buildDir     = "./build/"
 let testDir      = "./test/"
@@ -62,6 +64,13 @@ Target "GenerateCoverageReport" (fun _ ->
             {p with
                 ExePath = "packages/tools/ReportGenerator/tools/ReportGenerator.exe"
                 TargetDir = reportDir
+                HistoryDir = historyDir
+                ReportTypes =
+                [
+                    ReportGeneratorReportType.Html;
+                    ReportGeneratorReportType.Latex;
+                    ReportGeneratorReportType.Badges;
+                ]
             }
         )
 )
