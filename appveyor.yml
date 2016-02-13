@@ -1,0 +1,15 @@
+test: off
+version: "{build}"
+platform: Any CPU
+init:
+    - cmd: msbuild /version
+environment:
+    COVERALLS_REPO_TOKEN:
+        secure: hF+VGBO+v0/t0C87iP6s17qBQJ+4L4639I9HeOsclesKGN30S1BTZEg+abpKDPC2
+build_script:
+    - cmd: build.cmd
+after_build:
+    - cmd: coveralls-upload.cmd
+artifacts:
+    - path: reports
+    - path: history

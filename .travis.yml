@@ -1,0 +1,4 @@
+language: csharp
+solution: src/XogoEngine.OpenGL.sln
+script:
+    - bash build.sh

@@ -1,0 +1,1 @@
+.\packages\tools\coveralls.io\tools\coveralls.net.exe --opencover reports\coverage\code-coverage.xml
