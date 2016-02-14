@@ -4,7 +4,7 @@ using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.OpenGL.Shaders
 {
-    public sealed class Shader : IDisposable
+    public sealed class Shader : IDisposable, IEquatable<Shader>
     {
         private int handle;
         private readonly IShaderAdapter adapter;
@@ -20,6 +20,14 @@ namespace XogoEngine.OpenGL.Shaders
         public int Handle { get { return handle; } }
         public bool IsDisposed { get { return isDisposed; } }
         public ShaderType ShaderType { get; }
+
+        public override bool Equals(object obj) => Equals(obj as Shader);
+
+        public bool Equals(Shader other)
+        {
+            return other == null ? false :
+                   handle == other.handle && ShaderType == other.ShaderType;
+        }
 
         public override string ToString()
         {

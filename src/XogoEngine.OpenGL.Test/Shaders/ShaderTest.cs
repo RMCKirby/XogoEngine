@@ -49,6 +49,32 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void ObjectEquals_ReturnsFalse_ForNullComparison()
+        {
+            shader.Equals(null).ShouldBeFalse();
+        }
+
+        [Test]
+        public void ObjectEquals_ReturnsFalse_ForUnequalType()
+        {
+            shader.Equals(new object()).ShouldBeFalse();
+        }
+
+        [Test]
+        public void ObjectEquals_ReturnsFalse_ForUnequalShaderType()
+        {
+            var other = new Shader(adapter.Object, ShaderType.FragmentShader);
+            shader.Equals(other).ShouldBeFalse();
+        }
+
+        [Test]
+        public void ObjectEquals_ReturnsTrue_ForEqualShader()
+        {
+            object other = new Shader(adapter.Object, ShaderType.VertexShader);
+            shader.Equals(other).ShouldBeTrue();
+        }
+
+        [Test]
         public void Shader_ToString_ReturnsExpectedString()
         {
             string expected = string.Format(
@@ -57,7 +83,7 @@ namespace XogoEngine.OpenGL.Test.Shaders
                 shader.ShaderType,
                 shader.IsDisposed
             );
-            expected.ShouldBe(shader.ToString());
+            expected.ShouldBe(shader.ToString(), Case.Sensitive);
         }
     }
 }
