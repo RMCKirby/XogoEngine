@@ -2,6 +2,8 @@ using Moq;
 using NUnit.Framework;
 using OpenTK.Graphics.OpenGL4;
 using Shouldly;
+using System;
+using System.Collections.Generic;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Shaders;
 
@@ -31,6 +33,28 @@ namespace XogoEngine.OpenGL.Test.Shaders
                 () => shader.ShaderType.ShouldBe(ShaderType.VertexShader),
                 () => shader.IsDisposed.ShouldBeFalse()
             );
+        }
+
+        [Test]
+        public void Adapter_CreateShader_IsInvokedOnce_OnConstruction()
+        {
+            adapter.Verify(a => a.CreateShader(shader.ShaderType), Times.Once);
+        }
+
+        [Test, TestCaseSource(nameof(InvalidSourceStrings))]
+        public void Load_Throws_CustomException_OnInvalidSourceStrings(string invalidSource)
+        {
+            Assert.Throws<ArgumentException>(() => shader.Load(invalidSource));
+        }
+
+        private IEnumerable<TestCaseData> InvalidSourceStrings
+        {
+            get
+            {
+                yield return new TestCaseData(string.Empty);
+                yield return new TestCaseData(null);
+                yield return new TestCaseData("  ");
+            }
         }
 
         [Test]

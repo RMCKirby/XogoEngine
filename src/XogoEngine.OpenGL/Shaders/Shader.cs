@@ -21,6 +21,14 @@ namespace XogoEngine.OpenGL.Shaders
         public bool IsDisposed { get { return isDisposed; } }
         public ShaderType ShaderType { get; }
 
+        public void Load(string source)
+        {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source))
+            {
+                throw new ArgumentException("The given source string was null, empty or whitespace");
+            }
+        }
+
         public override bool Equals(object obj) => Equals(obj as Shader);
 
         public bool Equals(Shader other)
