@@ -20,13 +20,25 @@ namespace XogoEngine.OpenGL.Test.Shaders
             adapter.Setup(a => a.CreateShader(It.IsAny<ShaderType>()))
                    .Returns(1);
 
-            shader = new Shader(adapter.Object);
+            shader = new Shader(adapter.Object, ShaderType.VertexShader);
         }
 
         [Test]
         public void Constructor_CorrectlyInstantiates_Handle()
         {
             shader.Handle.ShouldBe(1);
+        }
+
+        [Test]
+        public void Constructor_CorrectlyInstantiates_ShaderType()
+        {
+            shader.ShaderType.ShouldBe(ShaderType.VertexShader);
+        }
+
+        [Test]
+        public void Shader_isNotDisposed_AfterConstruction()
+        {
+            shader.IsDisposed.ShouldBeFalse();
         }
     }
 }
