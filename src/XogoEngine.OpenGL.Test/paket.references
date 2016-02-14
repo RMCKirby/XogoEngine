@@ -1,4 +1,7 @@
 group Test
-    AutoFixture
+    Moq
     NUnit
     Shouldly
+
+group Core
+    OpenTK

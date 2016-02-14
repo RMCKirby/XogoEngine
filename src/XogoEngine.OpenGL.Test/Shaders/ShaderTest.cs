@@ -1,6 +1,8 @@
+using Moq;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
+using OpenTK.Graphics.OpenGL4;
 using Shouldly;
+using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Shaders;
 
 namespace XogoEngine.OpenGL.Test.Shaders
@@ -9,11 +11,16 @@ namespace XogoEngine.OpenGL.Test.Shaders
     internal sealed class ShaderTest
     {
         private Shader shader;
+        private Mock<IShaderAdapter> adapter;
 
         [SetUp]
         public void SetUp()
         {
-            shader = new Shader();
+            adapter = new Mock<IShaderAdapter>();
+            adapter.Setup(a => a.CreateShader(It.IsAny<ShaderType>()))
+                   .Returns(1);
+
+            shader = new Shader(adapter.Object);
         }
 
         [Test]
