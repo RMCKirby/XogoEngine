@@ -75,6 +75,27 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void TypeEquals_ReturnsFalse_ForNullComparison()
+        {
+            Shader other = null;
+            shader.Equals(other).ShouldBeFalse();
+        }
+
+        [Test]
+        public void TypeEquals_ReturnsFalse_ForUnequalShaders()
+        {
+            Shader other = new Shader(adapter.Object, ShaderType.ComputeShader);
+            shader.Equals(other).ShouldBeFalse();
+        }
+
+        [Test]
+        public void TypeEquals_ReturnsTrue_ForEqualInstance()
+        {
+            Shader other = new Shader(adapter.Object, ShaderType.VertexShader);
+            shader.Equals(other).ShouldBeTrue();
+        }
+
+        [Test]
         public void Shader_ToString_ReturnsExpectedString()
         {
             string expected = string.Format(
