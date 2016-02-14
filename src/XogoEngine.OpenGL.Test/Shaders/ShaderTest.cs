@@ -96,6 +96,30 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void HashCodes_AreEqual_ForIdenticalShaders()
+        {
+            Shader other = new Shader(adapter.Object, ShaderType.VertexShader);
+
+            shader.ShouldSatisfyAllConditions(
+                () => shader.Equals(other).ShouldBeTrue(),
+                () => shader.GetHashCode().ShouldBe(other.GetHashCode())
+            );
+        }
+
+        [Test]
+        public void HashCodes_AreNotEqual_ForShaderWithUnidenticalHandles()
+        {
+            var otherAdapter = new Mock<IShaderAdapter>();
+            otherAdapter.Setup(a => a.CreateShader(ShaderType.VertexShader)).Returns(2);
+            Shader other = new Shader(otherAdapter.Object, ShaderType.VertexShader);
+
+            shader.ShouldSatisfyAllConditions(
+                () => shader.Equals(other).ShouldBeFalse(),
+                () => shader.GetHashCode().ShouldNotBe(other.GetHashCode())
+            );
+        }
+
+        [Test]
         public void Shader_ToString_ReturnsExpectedString()
         {
             string expected = string.Format(

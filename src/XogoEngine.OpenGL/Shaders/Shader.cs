@@ -29,6 +29,17 @@ namespace XogoEngine.OpenGL.Shaders
                    handle == other.handle && ShaderType == other.ShaderType;
         }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + handle.GetHashCode();
+                hash = hash * 23 + ShaderType.GetHashCode();
+                return hash;
+            }
+        }
+
         public override string ToString()
         {
             return string.Format(
