@@ -24,21 +24,13 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void Constructor_CorrectlyInstantiates_Handle()
+        public void Constructor_CorrectlyInstantiates_Instance()
         {
-            shader.Handle.ShouldBe(1);
-        }
-
-        [Test]
-        public void Constructor_CorrectlyInstantiates_ShaderType()
-        {
-            shader.ShaderType.ShouldBe(ShaderType.VertexShader);
-        }
-
-        [Test]
-        public void Shader_isNotDisposed_AfterConstruction()
-        {
-            shader.IsDisposed.ShouldBeFalse();
+            shader.ShouldSatisfyAllConditions(
+                () => shader.Handle.ShouldBe(1),
+                () => shader.ShaderType.ShouldBe(ShaderType.VertexShader),
+                () => shader.IsDisposed.ShouldBeFalse()
+            );
         }
     }
 }
