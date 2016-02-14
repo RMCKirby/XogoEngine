@@ -41,8 +41,15 @@ namespace XogoEngine.OpenGL.Test.Shaders
             adapter.Verify(a => a.CreateShader(shader.ShaderType), Times.Once);
         }
 
+        [Test]
+        public void Load_Throws_ObjectDisposedException_OnDisposedShader()
+        {
+            shader.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => shader.Load("source"));
+        }
+
         [Test, TestCaseSource(nameof(InvalidSourceStrings))]
-        public void Load_Throws_CustomException_OnInvalidSourceStrings(string invalidSource)
+        public void Load_Throws_ArgumentException_OnInvalidSourceStrings(string invalidSource)
         {
             Assert.Throws<ArgumentException>(() => shader.Load(invalidSource));
         }

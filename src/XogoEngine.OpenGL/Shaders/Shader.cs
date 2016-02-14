@@ -23,6 +23,10 @@ namespace XogoEngine.OpenGL.Shaders
 
         public void Load(string source)
         {
+            if (isDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
             if (string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentException("The given source string was null, empty or whitespace");
