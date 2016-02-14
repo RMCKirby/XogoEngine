@@ -54,6 +54,7 @@ Target "UnitTest_WithCoverage" (fun _ ->
                 TestRunnerExePath = "packages/tools/NUnit.Runners/tools/nunit-console.exe"
                 Output = coverageFile
                 Filter = "+[XogoEngine*]* -[*.Test*]*"
+                Register = RegisterUser
             }
         )
 )

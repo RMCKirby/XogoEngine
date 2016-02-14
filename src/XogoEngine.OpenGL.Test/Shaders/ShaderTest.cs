@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Ploeh.AutoFixture;
 using Shouldly;
 using XogoEngine.OpenGL.Shaders;
 
@@ -18,7 +19,7 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void Constructor_CorrectlyInstantiates_Handle()
         {
-            //shader.Handle.ShouldBe(1);
+            shader.Handle.ShouldBe(1);
         }
     }
 }

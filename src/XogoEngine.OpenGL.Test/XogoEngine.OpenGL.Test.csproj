@@ -41,6 +41,19 @@
     <Reference Include="XogoEngine.OpenGL">
       <HintPath>..\..\build\XogoEngine.OpenGL.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+      <ItemGroup>
+        <Reference Include="Ploeh.AutoFixture">
+          <HintPath>..\..\packages\test\AutoFixture\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\test\NUnit\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
