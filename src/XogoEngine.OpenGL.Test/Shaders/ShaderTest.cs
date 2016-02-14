@@ -32,5 +32,19 @@ namespace XogoEngine.OpenGL.Test.Shaders
                 () => shader.IsDisposed.ShouldBeFalse()
             );
         }
+
+        [Test]
+        public void Shader_ShouldBeDisposed_AfterDisposal()
+        {
+            shader.Dispose();
+            shader.IsDisposed.ShouldBeTrue();
+        }
+
+        [Test]
+        public void Adapter_ShouldDeleteHandle_OnDisposal()
+        {
+            shader.Dispose();
+            adapter.Verify(a => a.DeleteShader(shader.Handle), Times.Once);
+        }
     }
 }

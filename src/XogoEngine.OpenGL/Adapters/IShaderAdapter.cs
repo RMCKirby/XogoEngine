@@ -5,5 +5,6 @@ namespace XogoEngine.OpenGL.Adapters
     public interface IShaderAdapter
     {
         int CreateShader(ShaderType shaderType);
+        void DeleteShader(int handle);
     }
 }
