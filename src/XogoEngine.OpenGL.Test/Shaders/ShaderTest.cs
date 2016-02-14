@@ -41,10 +41,23 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void Adapter_ShouldDeleteHandle_OnDisposal()
+        public void Adapter_ShouldDeleteHandleOnce_OnDisposal()
         {
             shader.Dispose();
+            shader.Dispose();
             adapter.Verify(a => a.DeleteShader(shader.Handle), Times.Once);
+        }
+
+        [Test]
+        public void Shader_ToString_ReturnsExpectedString()
+        {
+            string expected = string.Format(
+                "[Shader: Handle={0}, ShaderType={1}, IsDisposed={2}]",
+                shader.Handle,
+                shader.ShaderType,
+                shader.IsDisposed
+            );
+            expected.ShouldBe(shader.ToString());
         }
     }
 }
