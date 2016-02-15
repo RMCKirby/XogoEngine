@@ -31,6 +31,21 @@ namespace XogoEngine.OpenGL.Shaders
             {
                 throw new ArgumentException("The given source string was null, empty or whitespace");
             }
+            adapter.ShaderSource(handle, source);
+            Compile();
+        }
+
+        private void Compile()
+        {
+            adapter.CompileShader(handle);
+            bool compiled = adapter.GetShaderStatus(handle, ShaderParameter.CompileStatus);
+            if (!compiled)
+            {
+                string reason = adapter.GetShaderInfoLog(handle);
+                throw new ShaderCompilationException(
+                    $"Failed to compile shader Id : {handle}, reason : {reason}"
+                );
+            }
         }
 
         public override bool Equals(object obj) => Equals(obj as Shader);

@@ -21,6 +21,9 @@ namespace XogoEngine.OpenGL.Test.Shaders
             adapter = new Mock<IShaderAdapter>();
             adapter.Setup(a => a.CreateShader(It.IsAny<ShaderType>()))
                    .Returns(1);
+            adapter.Setup(a => a.GetShaderStatus(It.IsAny<int>(), ShaderParameter.CompileStatus))
+                   .Returns(true);
+
 
             shader = new Shader(adapter.Object, ShaderType.VertexShader);
         }
@@ -62,6 +65,38 @@ namespace XogoEngine.OpenGL.Test.Shaders
                 yield return new TestCaseData(null);
                 yield return new TestCaseData("  ");
             }
+        }
+
+        [Test]
+        public void Adapter_ShaderSource_ShouldBeInvoked_OnLoad()
+        {
+            shader.Load("source");
+            adapter.Verify(a => a.ShaderSource(shader.Handle, "source"), Times.Once);
+        }
+
+        [Test]
+        public void Adapter_CompileShader_ShouldBeInvoked_OnLoad()
+        {
+            shader.Load("source");
+            adapter.Verify(a => a.CompileShader(shader.Handle), Times.Once);
+        }
+
+        [Test]
+        public void Load_ShouldThrowShaderCompilationException_OnFailedCompilation()
+        {
+            Action load = () => shader.Load("source");
+            adapter.Setup(a => a.GetShaderStatus(shader.Handle, ShaderParameter.CompileStatus))
+                   .Returns(false);
+            adapter.Setup(a => a.GetShaderInfoLog(shader.Handle))
+                   .Returns("error:syntax error");
+
+            string expectedMessage = string.Format(
+                "Failed to compile shader Id : {0}, Reason : {1}",
+                shader.Handle,
+                "error:syntax error"
+            );
+
+            load.ShouldThrow<ShaderCompilationException>().Message.ShouldContain(expectedMessage);
         }
 
         [Test]
