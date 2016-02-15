@@ -34,6 +34,7 @@ namespace XogoEngine.OpenGL.Shaders
         public void Attach(Shader shader)
         {
             this.ThrowIfDisposed();
+            shader.ThrowIfDisposed();
             if (!AttachedShaders.Contains(shader))
             {
                 adapter.AttachShader(handle, shader.Handle);

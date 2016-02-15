@@ -90,7 +90,20 @@ namespace XogoEngine.OpenGL.Test.Shaders
         public void Attach_ThrowsObjectDisposedException_OnDisposedProgram()
         {
             program.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => program.Attach(fragmentShader));
+            Action attach = () => program.Attach(fragmentShader);
+
+            attach.ShouldThrow<ObjectDisposedException>()
+                  .ObjectName.ShouldContain(program.GetType().FullName);
+        }
+
+        [Test]
+        public void Attach_ThrowsObjectDisposedException_OnDisposedShader()
+        {
+            vertexShader.Dispose();
+            Action attach = () => program.Attach(vertexShader);
+
+            attach.ShouldThrow<ObjectDisposedException>()
+                  .ObjectName.ShouldContain(vertexShader.GetType().FullName);
         }
 
         [Test]
