@@ -27,6 +27,22 @@ namespace XogoEngine.OpenGL.Test.Shaders
             shader = new Shader(adapter.Object, ShaderType.VertexShader);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            shader.Dispose();
+        }
+
+        [Test]
+        public void Constructor_ThrowsArgumentNullException_OnNullAdapter()
+        {
+            IShaderAdapter nullAdapter = null;
+            Action construct = () => shader = new Shader(nullAdapter, ShaderType.VertexShader);
+
+            construct.ShouldThrow<ArgumentNullException>()
+                     .Message.ShouldContain("adapter");
+        }
+
         [Test]
         public void Constructor_CorrectlyInstantiates_Instance()
         {
@@ -128,15 +144,19 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void ObjectEquals_ReturnsFalse_ForUnequalShaderType()
         {
-            var other = new Shader(adapter.Object, ShaderType.FragmentShader);
-            shader.Equals(other).ShouldBeFalse();
+            using (IDisposable other = new Shader(adapter.Object, ShaderType.FragmentShader))
+            {
+                shader.Equals(other).ShouldBeFalse();
+            }
         }
 
         [Test]
         public void ObjectEquals_ReturnsTrue_ForEqualShader()
         {
-            object other = new Shader(adapter.Object, ShaderType.VertexShader);
-            shader.Equals(other).ShouldBeTrue();
+            using (IDisposable other = new Shader(adapter.Object, ShaderType.VertexShader))
+            {
+                shader.Equals(other).ShouldBeTrue();
+            }
         }
 
         [Test]
@@ -149,26 +169,31 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void TypeEquals_ReturnsFalse_ForUnequalShaders()
         {
-            Shader other = new Shader(adapter.Object, ShaderType.ComputeShader);
-            shader.Equals(other).ShouldBeFalse();
+            using (var other = new Shader(adapter.Object, ShaderType.ComputeShader))
+            {
+                shader.Equals(other).ShouldBeFalse();
+            }
         }
 
         [Test]
         public void TypeEquals_ReturnsTrue_ForEqualInstance()
         {
-            Shader other = new Shader(adapter.Object, ShaderType.VertexShader);
-            shader.Equals(other).ShouldBeTrue();
+            using (var other = new Shader(adapter.Object, ShaderType.VertexShader))
+            {
+                shader.Equals(other).ShouldBeTrue();
+            }
         }
 
         [Test]
         public void HashCodes_AreEqual_ForIdenticalShaders()
         {
-            Shader other = new Shader(adapter.Object, ShaderType.VertexShader);
-
-            shader.ShouldSatisfyAllConditions(
-                () => shader.Equals(other).ShouldBeTrue(),
-                () => shader.GetHashCode().ShouldBe(other.GetHashCode())
-            );
+            using (var other = new Shader(adapter.Object, ShaderType.VertexShader))
+            {
+                shader.ShouldSatisfyAllConditions(
+                    () => shader.Equals(other).ShouldBeTrue(),
+                    () => shader.GetHashCode().ShouldBe(other.GetHashCode())
+                );
+            }
         }
 
         [Test]
@@ -176,12 +201,14 @@ namespace XogoEngine.OpenGL.Test.Shaders
         {
             var otherAdapter = new Mock<IShaderAdapter>();
             otherAdapter.Setup(a => a.CreateShader(ShaderType.VertexShader)).Returns(2);
-            Shader other = new Shader(otherAdapter.Object, ShaderType.VertexShader);
 
-            shader.ShouldSatisfyAllConditions(
-                () => shader.Equals(other).ShouldBeFalse(),
-                () => shader.GetHashCode().ShouldNotBe(other.GetHashCode())
-            );
+            using (var other = new Shader(otherAdapter.Object, ShaderType.VertexShader))
+            {
+                shader.ShouldSatisfyAllConditions(
+                    () => shader.Equals(other).ShouldBeFalse(),
+                    () => shader.GetHashCode().ShouldNotBe(other.GetHashCode())
+                );
+            }
         }
 
         [Test]

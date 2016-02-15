@@ -1,10 +1,11 @@
 using OpenTK.Graphics.OpenGL4;
 using System;
 using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Shaders
 {
-    public sealed class Shader : IDisposable, IEquatable<Shader>
+    public sealed class Shader : IResource<int>, IEquatable<Shader>
     {
         private int handle;
         private readonly IShaderAdapter adapter;
@@ -12,6 +13,10 @@ namespace XogoEngine.OpenGL.Shaders
 
         public Shader(IShaderAdapter adapter, ShaderType shaderType)
         {
+            if (adapter == null)
+            {
+                throw new ArgumentNullException(nameof(adapter));
+            }
             this.handle = adapter.CreateShader(shaderType);
             this.ShaderType = shaderType;
             this.adapter = adapter;
@@ -23,10 +28,7 @@ namespace XogoEngine.OpenGL.Shaders
 
         public void Load(string source)
         {
-            if (isDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().FullName);
-            }
+            this.ThrowIfDisposed();
             if (string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentException("The given source string was null, empty or whitespace");
