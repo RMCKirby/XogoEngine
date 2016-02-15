@@ -1,6 +1,7 @@
 using OpenTK.Graphics.OpenGL4;
 using System;
 using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Shaders
 {
@@ -23,10 +24,7 @@ namespace XogoEngine.OpenGL.Shaders
 
         public void Load(string source)
         {
-            if (isDisposed)
-            {
-                throw new ObjectDisposedException(this.GetType().FullName);
-            }
+            this.ThrowIfDisposed();
             if (string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source))
             {
                 throw new ArgumentException("The given source string was null, empty or whitespace");

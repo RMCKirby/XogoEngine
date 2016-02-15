@@ -22,15 +22,18 @@ namespace XogoEngine.OpenGL.Test.Shaders
         public void SetUp()
         {
             adapter = new Mock<IShaderAdapter>();
-            adapter.Setup(a => a.CreateProgram()).Returns(1);
-            adapter.SetupSequence(a => a.CreateShader(It.IsAny<ShaderType>()))
+            adapter.SetupSequence(a => a.CreateProgram())
                    .Returns(1)
                    .Returns(2);
+            adapter.SetupSequence(a => a.CreateShader(It.IsAny<ShaderType>()))
+                   .Returns(1)
+                   .Returns(2)
+                   .Returns(3);
 
             vertexShader = new Shader(adapter.Object, ShaderType.VertexShader);
             fragmentShader = new Shader(adapter.Object, ShaderType.FragmentShader);
 
-            program = new ShaderProgram(adapter.Object, vertexShader);
+            program = new ShaderProgram(adapter.Object, vertexShader, fragmentShader);
         }
 
         [TearDown]
@@ -40,13 +43,47 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void Constructor_CorrectlyIntialises_Instance()
+        public void Constructor_ThrowsNullArgumentException_OnNullAdapter()
         {
-            program.ShouldSatisfyAllConditions(
-                () => program.Handle.ShouldBe(1),
-                () => program.IsDisposed.ShouldBeFalse(),
-                () => program.AttachedShaders.ShouldContain(vertexShader)
-            );
+            IShaderAdapter nullAdapter = null;
+            Action construct = () => program = new ShaderProgram(nullAdapter);
+
+            construct.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void Handle_IsInitialised_OnConstruction()
+        {
+            program.Handle.ShouldBe(1);
+        }
+
+        [Test]
+        public void ShaderProgram_IsNotDisposed_AfterConstruction()
+        {
+            program.IsDisposed.ShouldBeFalse();
+        }
+
+        [Test]
+        public void AdapterCreateProgram_IsInvoked_OnConstruction()
+        {
+            adapter.Verify(a => a.CreateProgram(), Times.Once);
+        }
+
+        [Test]
+        public void AttachedShaders_Contain_ExpectedValues()
+        {
+            program.AttachedShaders.ShouldContain(vertexShader);
+            program.AttachedShaders.ShouldContain(fragmentShader);
+        }
+
+        [Test]
+        public void Attach_IsNotInvokedOnConstruction_WhenNoShadersAreSupplied()
+        {
+            var otherProgram = new ShaderProgram(adapter.Object);
+
+            adapter.Verify(a => a.AttachShader(otherProgram.Handle, It.IsAny<int>()), Times.Never);
+            otherProgram.AttachedShaders.ShouldNotBeNull();
+            otherProgram.AttachedShaders.ShouldBeEmpty();
         }
 
         [Test]
@@ -57,11 +94,18 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void Shader_IsNotAttached_IfAlreadyAttached()
+        public void AdapterAttachShader_isInvoked_OnNonAttachedShader()
         {
-            program.AttachedShaders.ShouldContain(vertexShader);
-            program.AttachedShaders.Count().ShouldBe(1);
-            //program.Attach(vertexShader);
+            var computeShader = new Shader(adapter.Object, ShaderType.ComputeShader);
+            program.Attach(computeShader);
+            adapter.Verify(a => a.AttachShader(program.Handle, computeShader.Handle), Times.Once);
+        }
+
+        [Test]
+        public void AdapterAttachShader_IsNotInvoked_OnAlreadyAttachedShader()
+        {
+            program.Attach(vertexShader);
+            adapter.Verify(a => a.AttachShader(program.Handle, vertexShader.Handle), Times.Once);
         }
 
         [Test]
