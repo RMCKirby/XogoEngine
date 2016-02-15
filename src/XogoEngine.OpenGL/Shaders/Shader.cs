@@ -4,7 +4,7 @@ using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.OpenGL.Shaders
 {
-    public sealed class Shader : IDisposable, IEquatable<Shader>
+    public sealed class Shader : IResource<int>, IEquatable<Shader>
     {
         private int handle;
         private readonly IShaderAdapter adapter;

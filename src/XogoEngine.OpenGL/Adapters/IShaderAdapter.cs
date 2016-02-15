@@ -7,9 +7,11 @@ namespace XogoEngine.OpenGL.Adapters
         int CreateShader(ShaderType shaderType);
         int CreateProgram();
 
+        void DeleteShader(int handle);
+        void DeleteProgram(int handle);
+
         void ShaderSource(int handle, string source);
         void CompileShader(int handle);
-        void DeleteShader(int handle);
 
         bool GetShaderStatus(int handle, ShaderParameter pname);
 
