@@ -4,7 +4,7 @@ using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.OpenGL.Shaders
 {
-    public sealed class Shader : IDisposable
+    public sealed class Shader : IDisposable, IEquatable<Shader>
     {
         private int handle;
         private readonly IShaderAdapter adapter;
@@ -20,6 +20,52 @@ namespace XogoEngine.OpenGL.Shaders
         public int Handle { get { return handle; } }
         public bool IsDisposed { get { return isDisposed; } }
         public ShaderType ShaderType { get; }
+
+        public void Load(string source)
+        {
+            if (isDisposed)
+            {
+                throw new ObjectDisposedException(this.GetType().FullName);
+            }
+            if (string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source))
+            {
+                throw new ArgumentException("The given source string was null, empty or whitespace");
+            }
+            adapter.ShaderSource(handle, source);
+            Compile();
+        }
+
+        private void Compile()
+        {
+            adapter.CompileShader(handle);
+            bool compiled = adapter.GetShaderStatus(handle, ShaderParameter.CompileStatus);
+            if (!compiled)
+            {
+                string reason = adapter.GetShaderInfoLog(handle);
+                throw new ShaderCompilationException(
+                    $"Failed to compile shader Id : {handle}, reason : {reason}"
+                );
+            }
+        }
+
+        public override bool Equals(object obj) => Equals(obj as Shader);
+
+        public bool Equals(Shader other)
+        {
+            return other == null ? false :
+                   handle == other.handle && ShaderType == other.ShaderType;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + handle.GetHashCode();
+                hash = hash * 23 + ShaderType.GetHashCode();
+                return hash;
+            }
+        }
 
         public override string ToString()
         {

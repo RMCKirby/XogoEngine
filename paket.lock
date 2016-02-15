@@ -17,7 +17,7 @@ NUGET
   remote: https://www.nuget.org/api/v2
   specs:
     AutoFixture (3.40.0)
-    Moq (4.2.1507.118)
+    Moq (4.2.1510.2205)
     NUnit (2.6.4)
     Shouldly (2.6.0)
 

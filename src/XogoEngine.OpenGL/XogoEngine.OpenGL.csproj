@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Adapters\IShaderAdapter.cs" />
     <Compile Include="Shaders\Shader.cs" />
+    <Compile Include="Shaders\ShaderCompilationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Choose>
