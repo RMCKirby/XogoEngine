@@ -35,8 +35,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IResource.cs" />
     <Compile Include="Adapters\IShaderAdapter.cs" />
     <Compile Include="Shaders\Shader.cs" />
+    <Compile Include="Shaders\ShaderProgram.cs" />
     <Compile Include="Shaders\ShaderCompilationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
