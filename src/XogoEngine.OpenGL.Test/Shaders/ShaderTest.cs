@@ -24,7 +24,6 @@ namespace XogoEngine.OpenGL.Test.Shaders
             adapter.Setup(a => a.GetShaderStatus(It.IsAny<int>(), ShaderParameter.CompileStatus))
                    .Returns(true);
 
-
             shader = new Shader(adapter.Object, ShaderType.VertexShader);
         }
 
@@ -194,7 +193,7 @@ namespace XogoEngine.OpenGL.Test.Shaders
                 shader.ShaderType,
                 shader.IsDisposed
             );
-            expected.ShouldBe(shader.ToString(), Case.Sensitive);
+            shader.ToString().ShouldBe(expected);
         }
     }
 }
