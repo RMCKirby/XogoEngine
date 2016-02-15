@@ -34,6 +34,16 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void Constructor_ThrowsArgumentNullException_OnNullAdapter()
+        {
+            IShaderAdapter nullAdapter = null;
+            Action construct = () => shader = new Shader(nullAdapter, ShaderType.VertexShader);
+
+            construct.ShouldThrow<ArgumentNullException>()
+                     .Message.ShouldContain("adapter");
+        }
+
+        [Test]
         public void Constructor_CorrectlyInstantiates_Instance()
         {
             shader.ShouldSatisfyAllConditions(

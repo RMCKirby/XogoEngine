@@ -13,6 +13,10 @@ namespace XogoEngine.OpenGL.Shaders
 
         public Shader(IShaderAdapter adapter, ShaderType shaderType)
         {
+            if (adapter == null)
+            {
+                throw new ArgumentNullException(nameof(adapter));
+            }
             this.handle = adapter.CreateShader(shaderType);
             this.ShaderType = shaderType;
             this.adapter = adapter;
