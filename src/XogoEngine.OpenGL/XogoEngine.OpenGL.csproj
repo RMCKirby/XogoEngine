@@ -31,12 +31,14 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Adapters\" />
+    <Folder Include="Extensions\" />
     <Folder Include="Shaders\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IResource.cs" />
     <Compile Include="Adapters\IShaderAdapter.cs" />
+    <Compile Include="Extensions\IResourceExtensions.cs" />
     <Compile Include="Shaders\Shader.cs" />
     <Compile Include="Shaders\ShaderProgram.cs" />
     <Compile Include="Shaders\ShaderCompilationException.cs" />
