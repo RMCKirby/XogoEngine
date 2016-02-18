@@ -30,10 +30,12 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Folder Include="Extensions\" />
     <Folder Include="Shaders\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ResourceExtensionsTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
