@@ -10,7 +10,7 @@ namespace XogoEngine.OpenGL.Shaders
     {
         private int handle;
         private readonly IShaderAdapter adapter;
-        private IList<Shader> attachedShaders = new List<Shader>();
+        private List<Shader> attachedShaders = new List<Shader>();
         private bool isDisposed = false;
 
         public ShaderProgram(IShaderAdapter adapter, params Shader[] shaders)
@@ -48,6 +48,7 @@ namespace XogoEngine.OpenGL.Shaders
             {
                 return;
             }
+            attachedShaders.ForEach((s) => s.Dispose());
             adapter.DeleteProgram(handle);
             isDisposed = true;
             GC.SuppressFinalize(this);

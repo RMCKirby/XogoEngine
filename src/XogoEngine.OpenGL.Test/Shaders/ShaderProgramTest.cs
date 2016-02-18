@@ -135,5 +135,14 @@ namespace XogoEngine.OpenGL.Test.Shaders
             program.Dispose();
             program.IsDisposed.ShouldBeTrue();
         }
+
+        [Test]
+        public void AttachedShaders_ShouldBeDisposed_AfterDisposal()
+        {
+            program.Dispose();
+            program.AttachedShaders.ShouldAllBe(
+                (s) => s.IsDisposed == true
+            );
+        }
     }
 }
