@@ -29,6 +29,8 @@ namespace XogoEngine.OpenGL.Test.Shaders
                    .Returns(1)
                    .Returns(2)
                    .Returns(3);
+            adapter.Setup(a => a.GetShaderProgramStatus(It.IsAny<int>(), GetProgramParameterName.LinkStatus))
+                   .Returns(true);
 
             vertexShader = new Shader(adapter.Object, ShaderType.VertexShader);
             fragmentShader = new Shader(adapter.Object, ShaderType.FragmentShader);
@@ -74,6 +76,35 @@ namespace XogoEngine.OpenGL.Test.Shaders
         {
             program.AttachedShaders.ShouldContain(vertexShader);
             program.AttachedShaders.ShouldContain(fragmentShader);
+        }
+
+        [Test]
+        public void Link_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            AssertThrowsDisposedException(() => program.Link(), program.GetType().FullName);
+        }
+
+        [Test]
+        public void AdapterLinkProgram_isInvoked_OnLink()
+        {
+            program.Link();
+            adapter.Verify(a => a.LinkProgram(program.Handle), Times.Once);
+        }
+
+        [Test]
+        public void Link_ThrowsLinkException_OnFailureToLinkProgram()
+        {
+            Action link = () => program.Link();
+            string errorMessage = "error: syntax error";
+            adapter.Setup(a => a.GetShaderProgramStatus(program.Handle, GetProgramParameterName.LinkStatus))
+                   .Returns(false);
+            adapter.Setup(a => a.GetProgramInfoLog(program.Handle))
+                   .Returns(errorMessage);
+
+            link.ShouldThrow<ShaderProgramLinkException>()
+                .Message.ShouldContain(
+                    $"Failed to link program Id : {program.Handle}, Reason : {errorMessage}"
+                );
         }
 
         [Test]

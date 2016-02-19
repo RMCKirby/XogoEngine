@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Extensions;
 
@@ -40,6 +41,23 @@ namespace XogoEngine.OpenGL.Shaders
             {
                 adapter.AttachShader(handle, shader.Handle);
                 attachedShaders.Add(shader);
+            }
+        }
+
+        public void Link()
+        {
+            this.ThrowIfDisposed();
+            adapter.LinkProgram(handle);
+            bool linkSuccessful = adapter.GetShaderProgramStatus(
+                handle,
+                GetProgramParameterName.LinkStatus
+            );
+            if (!linkSuccessful)
+            {
+                string info = adapter.GetProgramInfoLog(handle);
+                throw new ShaderProgramLinkException(
+                    $"Failed to link program Id : {handle}, Reason : {info}"
+                );
             }
         }
 
