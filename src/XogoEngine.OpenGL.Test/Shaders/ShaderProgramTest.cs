@@ -89,11 +89,8 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void Attach_ThrowsObjectDisposedException_OnDisposedProgram()
         {
-            program.Dispose();
             Action attach = () => program.Attach(fragmentShader);
-
-            attach.ShouldThrow<ObjectDisposedException>()
-                  .ObjectName.ShouldContain(program.GetType().FullName);
+            AssertThrowsDisposedException(attach, program.GetType().FullName);
         }
 
         [Test]
@@ -130,11 +127,7 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void DetachShaders_ThrowsObjectDisposedException_OnDisposedProgram()
         {
-            program.Dispose();
-            Action detach = () => program.DetachShaders();
-
-            detach.ShouldThrow<ObjectDisposedException>()
-                  .ObjectName.ShouldBe(program.GetType().FullName);
+            AssertThrowsDisposedException(() => program.DetachShaders(), program.GetType().FullName);
         }
 
         [Test]
@@ -143,6 +136,21 @@ namespace XogoEngine.OpenGL.Test.Shaders
             program.DetachShaders();
             adapter.Verify(a => a.DetachShader(program.Handle, vertexShader.Handle), Times.Once);
             adapter.Verify(a => a.DetachShader(program.Handle, fragmentShader.Handle), Times.Once);
+        }
+
+        [Test]
+        public void DeleteShaders_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            AssertThrowsDisposedException(() => program.DeleteShaders(), program.GetType().FullName);
+        }
+
+        [Test]
+        public void DeleteShaders_DisposesOfAttachedShaders_OnInvocation()
+        {
+            program.DeleteShaders();
+            program.AttachedShaders.ShouldAllBe(
+                (s) => s.IsDisposed == true
+            );
         }
 
         [Test]
@@ -167,6 +175,13 @@ namespace XogoEngine.OpenGL.Test.Shaders
             program.AttachedShaders.ShouldAllBe(
                 (s) => s.IsDisposed == true
             );
+        }
+
+        private void AssertThrowsDisposedException(Action action, string objectName)
+        {
+            program.Dispose();
+            action.ShouldThrow<ObjectDisposedException>()
+                  .ObjectName.ShouldBe(objectName);
         }
     }
 }

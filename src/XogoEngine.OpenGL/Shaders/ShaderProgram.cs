@@ -51,6 +51,12 @@ namespace XogoEngine.OpenGL.Shaders
             );
         }
 
+        public void DeleteShaders()
+        {
+            this.ThrowIfDisposed();
+            attachedShaders.ForEach((s) => s.Dispose());
+        }
+
         public void Dispose()
         {
             if (isDisposed)
