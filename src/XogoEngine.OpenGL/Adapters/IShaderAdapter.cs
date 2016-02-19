@@ -12,7 +12,9 @@ namespace XogoEngine.OpenGL.Adapters
 
         void ShaderSource(int handle, string source);
         void CompileShader(int handle);
+
         void AttachShader(int programHandle, int shaderHandle);
+        void DetachShader(int programHandle, int shaderHandle);
 
         bool GetShaderStatus(int handle, ShaderParameter pname);
 

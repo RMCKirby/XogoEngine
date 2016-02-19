@@ -89,11 +89,14 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void Attach_ThrowsObjectDisposedException_OnDisposedProgram()
         {
-            program.Dispose();
             Action attach = () => program.Attach(fragmentShader);
+            AssertThrowsDisposedException(attach, program.GetType().FullName);
+        }
 
-            attach.ShouldThrow<ObjectDisposedException>()
-                  .ObjectName.ShouldContain(program.GetType().FullName);
+        [Test]
+        public void Attach_ThrowsArgumentNullException_OnNullShader()
+        {
+            Assert.Throws<ArgumentNullException>(() => program.Attach(null));
         }
 
         [Test]
@@ -122,6 +125,35 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void DetachShaders_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            AssertThrowsDisposedException(() => program.DetachShaders(), program.GetType().FullName);
+        }
+
+        [Test]
+        public void AdapterDetachShader_IsInvokedOnEachShader_OnDetach()
+        {
+            program.DetachShaders();
+            adapter.Verify(a => a.DetachShader(program.Handle, vertexShader.Handle), Times.Once);
+            adapter.Verify(a => a.DetachShader(program.Handle, fragmentShader.Handle), Times.Once);
+        }
+
+        [Test]
+        public void DeleteShaders_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            AssertThrowsDisposedException(() => program.DeleteShaders(), program.GetType().FullName);
+        }
+
+        [Test]
+        public void DeleteShaders_DisposesOfAttachedShaders_OnInvocation()
+        {
+            program.DeleteShaders();
+            program.AttachedShaders.ShouldAllBe(
+                (s) => s.IsDisposed == true
+            );
+        }
+
+        [Test]
         public void Program_isOnlyDisposedOnce_OnDisposal()
         {
             program.Dispose();
@@ -134,6 +166,22 @@ namespace XogoEngine.OpenGL.Test.Shaders
         {
             program.Dispose();
             program.IsDisposed.ShouldBeTrue();
+        }
+
+        [Test]
+        public void AttachedShaders_ShouldBeDisposed_AfterDisposal()
+        {
+            program.Dispose();
+            program.AttachedShaders.ShouldAllBe(
+                (s) => s.IsDisposed == true
+            );
+        }
+
+        private void AssertThrowsDisposedException(Action action, string objectName)
+        {
+            program.Dispose();
+            action.ShouldThrow<ObjectDisposedException>()
+                  .ObjectName.ShouldBe(objectName);
         }
     }
 }
