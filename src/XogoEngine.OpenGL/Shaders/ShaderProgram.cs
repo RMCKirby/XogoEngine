@@ -34,12 +34,18 @@ namespace XogoEngine.OpenGL.Shaders
         public void Attach(Shader shader)
         {
             this.ThrowIfDisposed();
+            ThrowIfNull(shader);
             shader.ThrowIfDisposed();
             if (!AttachedShaders.Contains(shader))
             {
                 adapter.AttachShader(handle, shader.Handle);
                 attachedShaders.Add(shader);
             }
+        }
+
+        public void DetachShaders()
+        {
+            this.ThrowIfDisposed();
         }
 
         public void Dispose()
@@ -52,6 +58,14 @@ namespace XogoEngine.OpenGL.Shaders
             adapter.DeleteProgram(handle);
             isDisposed = true;
             GC.SuppressFinalize(this);
+        }
+
+        private void ThrowIfNull(Shader shader)
+        {
+            if (shader == null)
+            {
+                throw new ArgumentNullException(nameof(shader));
+            }
         }
     }
 }

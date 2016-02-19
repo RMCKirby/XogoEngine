@@ -97,6 +97,12 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void Attach_ThrowsArgumentNullException_OnNullShader()
+        {
+            Assert.Throws<ArgumentNullException>(() => program.Attach(null));
+        }
+
+        [Test]
         public void Attach_ThrowsObjectDisposedException_OnDisposedShader()
         {
             vertexShader.Dispose();
@@ -119,6 +125,16 @@ namespace XogoEngine.OpenGL.Test.Shaders
         {
             program.Attach(vertexShader);
             adapter.Verify(a => a.AttachShader(program.Handle, vertexShader.Handle), Times.Once);
+        }
+
+        [Test]
+        public void DetachShaders_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            program.Dispose();
+            Action detach = () => program.DetachShaders();
+
+            detach.ShouldThrow<ObjectDisposedException>()
+                  .ObjectName.ShouldBe(program.GetType().FullName);
         }
 
         [Test]
