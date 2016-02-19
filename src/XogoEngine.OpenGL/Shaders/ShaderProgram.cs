@@ -46,6 +46,9 @@ namespace XogoEngine.OpenGL.Shaders
         public void DetachShaders()
         {
             this.ThrowIfDisposed();
+            attachedShaders.ForEach(
+                (s) => adapter.DetachShader(handle, s.Handle)
+            );
         }
 
         public void Dispose()

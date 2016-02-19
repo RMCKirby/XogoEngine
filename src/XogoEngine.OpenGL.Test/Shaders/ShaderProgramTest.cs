@@ -138,6 +138,14 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void AdapterDetachShader_IsInvokedOnEachShader_OnDetach()
+        {
+            program.DetachShaders();
+            adapter.Verify(a => a.DetachShader(program.Handle, vertexShader.Handle), Times.Once);
+            adapter.Verify(a => a.DetachShader(program.Handle, fragmentShader.Handle), Times.Once);
+        }
+
+        [Test]
         public void Program_isOnlyDisposedOnce_OnDisposal()
         {
             program.Dispose();
