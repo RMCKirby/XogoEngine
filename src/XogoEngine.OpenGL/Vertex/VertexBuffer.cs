@@ -28,6 +28,12 @@ namespace XogoEngine.OpenGL.Vertex
             adapter.BindBuffer(Target, handle);
         }
 
+        public void Fill(IntPtr size, T[] data, BufferUsageHint usageHint)
+        {
+            this.ThrowIfDisposed();
+            adapter.BufferData(Target, size, data, usageHint);
+        }
+
         public void Dispose()
         {
             if (isDisposed)

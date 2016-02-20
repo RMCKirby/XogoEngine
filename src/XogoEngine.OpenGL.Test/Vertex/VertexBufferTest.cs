@@ -70,8 +70,22 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void Fill_ThrowsObjectDisposedException_OnDisposedBuffer()
         {
+            Action fill = () => buffer.Fill(new IntPtr(20), new int[] { 1 }, BufferUsageHint.StaticDraw);
             buffer.Dispose();
-            //buffer.Fill(new IntPtr(100), new int[] { 0, 1 }, BufferUsageHint.DynamicDraw);
+
+            fill.ShouldThrow<ObjectDisposedException>()
+                .ObjectName.ShouldBe(buffer.GetType().FullName);
+        }
+
+        [Test]
+        public void AdapterBufferData_IsInvoked_OnFill()
+        {
+            int[] data = { 1, 2, 3, 4 };
+            var size = new IntPtr(20);
+            var usageHint = BufferUsageHint.DynamicDraw;
+
+            buffer.Fill(size, data, usageHint);
+            adapter.Verify(a => a.BufferData(buffer.Target, size, data, usageHint), Times.Once);
         }
 
         [Test]
