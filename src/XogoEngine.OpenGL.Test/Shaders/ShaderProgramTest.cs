@@ -79,7 +79,7 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void ProgramUniforms_ShouldContain_ExpectedValues_AfterLink()
+        public void ProgramAttributes_Contain_ExpectedValues_AfterLink()
         {
             int attributeCount = 2;
             var positionAttribute = new ShaderAttribute("position", 0, 8, ActiveAttribType.FloatVec2);
@@ -95,6 +95,25 @@ namespace XogoEngine.OpenGL.Test.Shaders
 
             program.Attributes.ShouldContainKeyAndValue(positionAttribute.Name, positionAttribute);
             program.Attributes.ShouldContainKeyAndValue(colourAttribute.Name, colourAttribute);
+        }
+
+        [Test]
+        public void ProgramUniforms_ContainExpectedValues_AfterLink()
+        {
+            int uniformCount = 2;
+            var modelUniform = new ShaderUniform("model", 0, 64, ActiveUniformType.FloatMat4);
+            var projectionUniform = new ShaderUniform("projection", 1, 64, ActiveUniformType.FloatMat4);
+
+            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveUniforms))
+                   .Returns(uniformCount);
+            adapter.SetupSequence(a => a.GetActiveUniform(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
+                   .Returns(modelUniform)
+                   .Returns(projectionUniform);
+
+            program.Link();
+
+            program.Uniforms.ShouldContainKeyAndValue(modelUniform.Name, modelUniform);
+            program.Uniforms.ShouldContainKeyAndValue(projectionUniform.Name, projectionUniform);
         }
 
         [Test]

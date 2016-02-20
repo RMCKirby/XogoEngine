@@ -8,6 +8,7 @@ using XogoEngine.OpenGL.Extensions;
 namespace XogoEngine.OpenGL.Shaders
 {
     using AttribDictionary = Dictionary<string, ShaderAttribute>;
+    using UniformDictionary = Dictionary<string, ShaderUniform>;
 
     public sealed class ShaderProgram : IResource<int>
     {
@@ -16,6 +17,7 @@ namespace XogoEngine.OpenGL.Shaders
 
         private List<Shader> attachedShaders = new List<Shader>();
         private IDictionary<string, ShaderAttribute> attributes = new AttribDictionary();
+        private IDictionary<string, ShaderUniform> uniforms = new UniformDictionary();
         private bool isDisposed = false;
 
         public ShaderProgram(IShaderAdapter adapter, params Shader[] shaders)
@@ -35,6 +37,7 @@ namespace XogoEngine.OpenGL.Shaders
         public int Handle { get { return handle; } }
         public IEnumerable<Shader> AttachedShaders { get { return attachedShaders; } }
         public IDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
+        public IDictionary<string, ShaderUniform> Uniforms { get { return uniforms; } }
         public bool IsDisposed { get { return isDisposed; } }
 
         public void Attach(Shader shader)
@@ -65,6 +68,7 @@ namespace XogoEngine.OpenGL.Shaders
                 );
             }
             ReadAttributes();
+            ReadUniforms();
         }
 
         public void Use()
@@ -106,6 +110,16 @@ namespace XogoEngine.OpenGL.Shaders
             {
                 var attribute = adapter.GetActiveAttrib(handle, index, 200);
                 attributes.Add(attribute.Name, attribute);
+            }
+        }
+
+        private void ReadUniforms()
+        {
+            int uniformCount = adapter.GetProgram(handle, GetProgramParameterName.ActiveUniforms);
+            for (int index = 0; index < uniformCount; index++)
+            {
+                var uniform = adapter.GetActiveUniform(handle, index, 200);
+                uniforms.Add(uniform.Name, uniform);
             }
         }
 

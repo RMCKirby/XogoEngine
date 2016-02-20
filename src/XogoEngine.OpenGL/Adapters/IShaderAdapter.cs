@@ -29,5 +29,6 @@ namespace XogoEngine.OpenGL.Adapters
         string GetProgramInfoLog(int handle);
 
         ShaderAttribute GetActiveAttrib(int handle, int index, int bufferSize);
+        ShaderUniform GetActiveUniform(int handle, int index, int bufferSize);
     }
 }

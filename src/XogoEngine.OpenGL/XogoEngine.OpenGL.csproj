@@ -41,6 +41,7 @@
     <Compile Include="Extensions\IResourceExtensions.cs" />
     <Compile Include="Shaders\Shader.cs" />
     <Compile Include="Shaders\ShaderAttribute.cs" />
+    <Compile Include="Shaders\ShaderUniform.cs" />
     <Compile Include="Shaders\ShaderProgram.cs" />
     <Compile Include="Shaders\ShaderProgramLinkException.cs" />
     <Compile Include="Shaders\ShaderCompilationException.cs" />

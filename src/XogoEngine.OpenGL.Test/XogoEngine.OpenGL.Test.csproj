@@ -38,6 +38,7 @@
     <Compile Include="Extensions\ResourceExtensionsTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />
     <Compile Include="Shaders\ShaderAttributeTest.cs" />
+    <Compile Include="Shaders\ShaderUniformTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
