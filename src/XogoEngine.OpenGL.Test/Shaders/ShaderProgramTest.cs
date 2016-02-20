@@ -27,9 +27,9 @@ namespace XogoEngine.OpenGL.Test.Shaders
                    .Returns(2);
             adapter.SetupSequence(a => a.CreateShader(It.IsAny<ShaderType>()))
                    .Returns(1)
-                   .Returns(2)
-                   .Returns(3);
-            adapter.Setup(a => a.GetShaderProgramStatus(It.IsAny<int>(), GetProgramParameterName.LinkStatus))
+                   .Returns(2);
+            adapter.Setup(a => a.GetShaderProgramStatus(
+                    It.IsAny<int>(), GetProgramParameterName.LinkStatus))
                    .Returns(true);
 
             vertexShader = new Shader(adapter.Object, ShaderType.VertexShader);
@@ -54,6 +54,12 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void AdapterCreateProgram_IsInvoked_OnConstruction()
+        {
+            adapter.Verify(a => a.CreateProgram(), Times.Once);
+        }
+
+        [Test]
         public void Handle_IsInitialised_OnConstruction()
         {
             program.Handle.ShouldBe(1);
@@ -66,16 +72,16 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void AdapterCreateProgram_IsInvoked_OnConstruction()
-        {
-            adapter.Verify(a => a.CreateProgram(), Times.Once);
-        }
-
-        [Test]
         public void AttachedShaders_Contain_ExpectedValues()
         {
             program.AttachedShaders.ShouldContain(vertexShader);
             program.AttachedShaders.ShouldContain(fragmentShader);
+        }
+
+        [Test]
+        public void ProgramUniforms_ShouldContain_ExpectedValues()
+        {
+            int attributeCount = 2;
         }
 
         [Test]
