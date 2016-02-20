@@ -1,5 +1,7 @@
 using OpenTK.Graphics.OpenGL4;
+using System;
 using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Vertex
 {
@@ -17,11 +19,24 @@ namespace XogoEngine.OpenGL.Vertex
         }
 
         public int Handle { get { return handle; } }
+        public BufferTarget Target { get { return BufferTarget.ArrayBuffer; } }
         public bool IsDisposed { get { return isDisposed; } }
+
+        public void Bind()
+        {
+            this.ThrowIfDisposed();
+            adapter.BindBuffer(Target, handle);
+        }
 
         public void Dispose()
         {
-            
+            if (isDisposed)
+            {
+                return;
+            }
+            adapter.DeleteBuffer(handle);
+            isDisposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }
