@@ -34,9 +34,11 @@
     <Folder Include="Extensions\" />
     <Folder Include="Shaders\" />
     <Folder Include="Properties\" />
+    <Folder Include="Vertex\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IResource.cs" />
+    <Compile Include="Adapters\IBufferAdapter.cs" />
     <Compile Include="Adapters\IShaderAdapter.cs" />
     <Compile Include="Extensions\IResourceExtensions.cs" />
     <Compile Include="Shaders\Shader.cs" />
@@ -46,6 +48,7 @@
     <Compile Include="Shaders\ShaderProgramLinkException.cs" />
     <Compile Include="Shaders\ShaderCompilationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vertex\VertexBuffer.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
