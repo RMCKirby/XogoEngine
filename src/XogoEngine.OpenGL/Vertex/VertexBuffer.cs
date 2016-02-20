@@ -20,6 +20,7 @@ namespace XogoEngine.OpenGL.Vertex
 
         public int Handle { get { return handle; } }
         public BufferTarget Target { get { return BufferTarget.ArrayBuffer; } }
+        public IntPtr Size { get; private set; }
         public bool IsDisposed { get { return isDisposed; } }
 
         public void Bind()
@@ -31,7 +32,13 @@ namespace XogoEngine.OpenGL.Vertex
         public void Fill(IntPtr size, T[] data, BufferUsageHint usageHint)
         {
             this.ThrowIfDisposed();
+            Size = size;
             adapter.BufferData(Target, size, data, usageHint);
+        }
+
+        public void FillPartial(IntPtr offset, IntPtr size, T[] data)
+        {
+            this.ThrowIfDisposed();
         }
 
         public void Dispose()

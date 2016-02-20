@@ -78,6 +78,15 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test]
+        public void BufferSize_IsStored_OnFill()
+        {
+            var size = new IntPtr(10);
+            buffer.Fill(size, new int[] { 1 }, BufferUsageHint.StaticDraw);
+
+            buffer.Size.ShouldBe(size);
+        }
+
+        [Test]
         public void AdapterBufferData_IsInvoked_OnFill()
         {
             int[] data = { 1, 2, 3, 4 };
@@ -86,6 +95,16 @@ namespace XogoEngine.OpenGL.Test.Vertex
 
             buffer.Fill(size, data, usageHint);
             adapter.Verify(a => a.BufferData(buffer.Target, size, data, usageHint), Times.Once);
+        }
+
+        [Test]
+        public void FillPartial_ThrowsObjectDisposedException_OnDisposedBuffer()
+        {
+            Action fillPartial = () => buffer.FillPartial(IntPtr.Zero, new IntPtr(10), new int[] { 1 });
+            buffer.Dispose();
+
+            fillPartial.ShouldThrow<ObjectDisposedException>()
+                       .ObjectName.ShouldBe(buffer.GetType().FullName);
         }
 
         [Test]
