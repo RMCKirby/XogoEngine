@@ -7,12 +7,15 @@ using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Shaders
 {
+    using AttribDictionary = Dictionary<string, ShaderAttribute>;
+
     public sealed class ShaderProgram : IResource<int>
     {
         private int handle;
         private readonly IShaderAdapter adapter;
+
         private List<Shader> attachedShaders = new List<Shader>();
-        private Dictionary<string, ShaderAttribute> attributes = new Dictionary<string, ShaderAttribute>();
+        private IDictionary<string, ShaderAttribute> attributes = new AttribDictionary();
         private bool isDisposed = false;
 
         public ShaderProgram(IShaderAdapter adapter, params Shader[] shaders)
@@ -31,7 +34,7 @@ namespace XogoEngine.OpenGL.Shaders
 
         public int Handle { get { return handle; } }
         public IEnumerable<Shader> AttachedShaders { get { return attachedShaders; } }
-        public IReadOnlyDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
+        public IDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
         public bool IsDisposed { get { return isDisposed; } }
 
         public void Attach(Shader shader)
