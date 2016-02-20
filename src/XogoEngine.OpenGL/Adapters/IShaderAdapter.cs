@@ -14,6 +14,8 @@ namespace XogoEngine.OpenGL.Adapters
         void CompileShader(int handle);
         void LinkProgram(int handle);
 
+        void UseProgram(int handle);
+
         void AttachShader(int programHandle, int shaderHandle);
         void DetachShader(int programHandle, int shaderHandle);
 

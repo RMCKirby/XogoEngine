@@ -108,6 +108,19 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void Use_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            AssertThrowsDisposedException(() => program.Use(), program.GetType().FullName);
+        }
+
+        [Test]
+        public void AdapterUseProgram_isInvoked_OnUse()
+        {
+            program.Use();
+            adapter.Verify(a => a.UseProgram(program.Handle), Times.Once);
+        }
+
+        [Test]
         public void Attach_IsNotInvokedOnConstruction_WhenNoShadersAreSupplied()
         {
             var otherProgram = new ShaderProgram(adapter.Object);

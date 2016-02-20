@@ -61,6 +61,12 @@ namespace XogoEngine.OpenGL.Shaders
             }
         }
 
+        public void Use()
+        {
+            this.ThrowIfDisposed();
+            adapter.UseProgram(handle);
+        }
+
         public void DetachShaders()
         {
             this.ThrowIfDisposed();
