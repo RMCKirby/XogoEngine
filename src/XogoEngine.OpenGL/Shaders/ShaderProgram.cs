@@ -12,6 +12,7 @@ namespace XogoEngine.OpenGL.Shaders
         private int handle;
         private readonly IShaderAdapter adapter;
         private List<Shader> attachedShaders = new List<Shader>();
+        private Dictionary<string, ShaderAttribute> attributes = new Dictionary<string, ShaderAttribute>();
         private bool isDisposed = false;
 
         public ShaderProgram(IShaderAdapter adapter, params Shader[] shaders)
@@ -30,6 +31,7 @@ namespace XogoEngine.OpenGL.Shaders
 
         public int Handle { get { return handle; } }
         public IEnumerable<Shader> AttachedShaders { get { return attachedShaders; } }
+        public IReadOnlyDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
         public bool IsDisposed { get { return isDisposed; } }
 
         public void Attach(Shader shader)
@@ -59,6 +61,7 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Failed to link program Id : {handle}, Reason : {info}"
                 );
             }
+            ReadAttributes();
         }
 
         public void Use()
@@ -91,6 +94,16 @@ namespace XogoEngine.OpenGL.Shaders
             adapter.DeleteProgram(handle);
             isDisposed = true;
             GC.SuppressFinalize(this);
+        }
+
+        private void ReadAttributes()
+        {
+            int attributeCount = adapter.GetProgram(handle, GetProgramParameterName.ActiveAttributes);
+            for (int index = 0; index < attributeCount; index++)
+            {
+                var attribute = adapter.GetActiveAttrib(handle, index, 200);
+                attributes.Add(attribute.Name, attribute);
+            }
         }
 
         private void ThrowIfNull(Shader shader)

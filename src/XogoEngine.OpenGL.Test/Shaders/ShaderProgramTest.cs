@@ -82,6 +82,17 @@ namespace XogoEngine.OpenGL.Test.Shaders
         public void ProgramUniforms_ShouldContain_ExpectedValues()
         {
             int attributeCount = 2;
+            var positionAttribute = new ShaderAttribute("position", 0, 8, ActiveAttribType.FloatVec2);
+            var colourAttribute = new ShaderAttribute("colour", 1, 16, ActiveAttribType.FloatVec4);
+
+            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveAttributes))
+                   .Returns(attributeCount);
+            adapter.SetupSequence(a => a.GetActiveAttrib(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
+                   .Returns(positionAttribute)
+                   .Returns(colourAttribute);
+
+            program.Attributes.ShouldContainKeyAndValue(positionAttribute.Name, positionAttribute);
+            program.Attributes.ShouldContainKeyAndValue(colourAttribute.Name, colourAttribute);
         }
 
         [Test]
