@@ -1,16 +1,23 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Shaders
 {
+    using AttribDictionary = Dictionary<string, ShaderAttribute>;
+    using UniformDictionary = Dictionary<string, ShaderUniform>;
+
     public sealed class ShaderProgram : IResource<int>
     {
         private int handle;
         private readonly IShaderAdapter adapter;
+
         private List<Shader> attachedShaders = new List<Shader>();
+        private IDictionary<string, ShaderAttribute> attributes = new AttribDictionary();
+        private IDictionary<string, ShaderUniform> uniforms = new UniformDictionary();
         private bool isDisposed = false;
 
         public ShaderProgram(IShaderAdapter adapter, params Shader[] shaders)
@@ -29,6 +36,8 @@ namespace XogoEngine.OpenGL.Shaders
 
         public int Handle { get { return handle; } }
         public IEnumerable<Shader> AttachedShaders { get { return attachedShaders; } }
+        public IDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
+        public IDictionary<string, ShaderUniform> Uniforms { get { return uniforms; } }
         public bool IsDisposed { get { return isDisposed; } }
 
         public void Attach(Shader shader)
@@ -41,6 +50,31 @@ namespace XogoEngine.OpenGL.Shaders
                 adapter.AttachShader(handle, shader.Handle);
                 attachedShaders.Add(shader);
             }
+        }
+
+        public void Link()
+        {
+            this.ThrowIfDisposed();
+            adapter.LinkProgram(handle);
+            bool linkSuccessful = adapter.GetShaderProgramStatus(
+                handle,
+                GetProgramParameterName.LinkStatus
+            );
+            if (!linkSuccessful)
+            {
+                string info = adapter.GetProgramInfoLog(handle);
+                throw new ShaderProgramLinkException(
+                    $"Failed to link program Id : {handle}, Reason : {info}"
+                );
+            }
+            ReadAttributes();
+            ReadUniforms();
+        }
+
+        public void Use()
+        {
+            this.ThrowIfDisposed();
+            adapter.UseProgram(handle);
         }
 
         public void DetachShaders()
@@ -67,6 +101,26 @@ namespace XogoEngine.OpenGL.Shaders
             adapter.DeleteProgram(handle);
             isDisposed = true;
             GC.SuppressFinalize(this);
+        }
+
+        private void ReadAttributes()
+        {
+            int attributeCount = adapter.GetProgram(handle, GetProgramParameterName.ActiveAttributes);
+            for (int index = 0; index < attributeCount; index++)
+            {
+                var attribute = adapter.GetActiveAttrib(handle, index, 200);
+                attributes.Add(attribute.Name, attribute);
+            }
+        }
+
+        private void ReadUniforms()
+        {
+            int uniformCount = adapter.GetProgram(handle, GetProgramParameterName.ActiveUniforms);
+            for (int index = 0; index < uniformCount; index++)
+            {
+                var uniform = adapter.GetActiveUniform(handle, index, 200);
+                uniforms.Add(uniform.Name, uniform);
+            }
         }
 
         private void ThrowIfNull(Shader shader)

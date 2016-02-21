@@ -33,12 +33,16 @@
     <Folder Include="Extensions\" />
     <Folder Include="Shaders\" />
     <Folder Include="Properties\" />
+    <Folder Include="Vertex\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ResourceExtensionsTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />
+    <Compile Include="Shaders\ShaderAttributeTest.cs" />
+    <Compile Include="Shaders\ShaderUniformTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vertex\VertexBufferTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="XogoEngine.OpenGL">

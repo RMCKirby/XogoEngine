@@ -27,8 +27,10 @@ namespace XogoEngine.OpenGL.Test.Shaders
                    .Returns(2);
             adapter.SetupSequence(a => a.CreateShader(It.IsAny<ShaderType>()))
                    .Returns(1)
-                   .Returns(2)
-                   .Returns(3);
+                   .Returns(2);
+            adapter.Setup(a => a.GetShaderProgramStatus(
+                    It.IsAny<int>(), GetProgramParameterName.LinkStatus))
+                   .Returns(true);
 
             vertexShader = new Shader(adapter.Object, ShaderType.VertexShader);
             fragmentShader = new Shader(adapter.Object, ShaderType.FragmentShader);
@@ -52,6 +54,12 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void AdapterCreateProgram_IsInvoked_OnConstruction()
+        {
+            adapter.Verify(a => a.CreateProgram(), Times.Once);
+        }
+
+        [Test]
         public void Handle_IsInitialised_OnConstruction()
         {
             program.Handle.ShouldBe(1);
@@ -64,16 +72,90 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void AdapterCreateProgram_IsInvoked_OnConstruction()
-        {
-            adapter.Verify(a => a.CreateProgram(), Times.Once);
-        }
-
-        [Test]
         public void AttachedShaders_Contain_ExpectedValues()
         {
             program.AttachedShaders.ShouldContain(vertexShader);
             program.AttachedShaders.ShouldContain(fragmentShader);
+        }
+
+        [Test]
+        public void ProgramAttributes_Contain_ExpectedValues_AfterLink()
+        {
+            int attributeCount = 2;
+            var positionAttribute = new ShaderAttribute("position", 0, 8, ActiveAttribType.FloatVec2);
+            var colourAttribute = new ShaderAttribute("colour", 1, 16, ActiveAttribType.FloatVec4);
+
+            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveAttributes))
+                   .Returns(attributeCount);
+            adapter.SetupSequence(a => a.GetActiveAttrib(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
+                   .Returns(positionAttribute)
+                   .Returns(colourAttribute);
+
+            program.Link();
+
+            program.Attributes.ShouldContainKeyAndValue(positionAttribute.Name, positionAttribute);
+            program.Attributes.ShouldContainKeyAndValue(colourAttribute.Name, colourAttribute);
+        }
+
+        [Test]
+        public void ProgramUniforms_ContainExpectedValues_AfterLink()
+        {
+            int uniformCount = 2;
+            var modelUniform = new ShaderUniform("model", 0, 64, ActiveUniformType.FloatMat4);
+            var projectionUniform = new ShaderUniform("projection", 1, 64, ActiveUniformType.FloatMat4);
+
+            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveUniforms))
+                   .Returns(uniformCount);
+            adapter.SetupSequence(a => a.GetActiveUniform(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
+                   .Returns(modelUniform)
+                   .Returns(projectionUniform);
+
+            program.Link();
+
+            program.Uniforms.ShouldContainKeyAndValue(modelUniform.Name, modelUniform);
+            program.Uniforms.ShouldContainKeyAndValue(projectionUniform.Name, projectionUniform);
+        }
+
+        [Test]
+        public void Link_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            AssertThrowsDisposedException(() => program.Link(), program.GetType().FullName);
+        }
+
+        [Test]
+        public void AdapterLinkProgram_isInvoked_OnLink()
+        {
+            program.Link();
+            adapter.Verify(a => a.LinkProgram(program.Handle), Times.Once);
+        }
+
+        [Test]
+        public void Link_ThrowsLinkException_OnFailureToLinkProgram()
+        {
+            Action link = () => program.Link();
+            string errorMessage = "error: syntax error";
+            adapter.Setup(a => a.GetShaderProgramStatus(program.Handle, GetProgramParameterName.LinkStatus))
+                   .Returns(false);
+            adapter.Setup(a => a.GetProgramInfoLog(program.Handle))
+                   .Returns(errorMessage);
+
+            link.ShouldThrow<ShaderProgramLinkException>()
+                .Message.ShouldContain(
+                    $"Failed to link program Id : {program.Handle}, Reason : {errorMessage}"
+                );
+        }
+
+        [Test]
+        public void Use_ThrowsObjectDisposedException_OnDisposedProgram()
+        {
+            AssertThrowsDisposedException(() => program.Use(), program.GetType().FullName);
+        }
+
+        [Test]
+        public void AdapterUseProgram_isInvoked_OnUse()
+        {
+            program.Use();
+            adapter.Verify(a => a.UseProgram(program.Handle), Times.Once);
         }
 
         [Test]
