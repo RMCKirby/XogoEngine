@@ -34,7 +34,7 @@ namespace XogoEngine.OpenGL.Vertex
             this.ThrowIfDisposed();
             if (size == IntPtr.Zero || size.ToInt32() < 0)
             {
-                throw new ArgumentException(
+                throw new ArgumentOutOfRangeException(
                     $"The size allocated to the buffer must be greater than zero, got : {size}"
                 );
             }
@@ -49,6 +49,27 @@ namespace XogoEngine.OpenGL.Vertex
             {
                 throw new UnallocatedBufferSizeException(
                     "The size of the buffer has not yet been allocated. Have you called Fill?"
+                );
+            }
+            ValidateNonNegativePtr(offset, nameof(offset));
+            ValidateNonNegativePtr(size, nameof(size));
+            int bufferSize = Size.ToInt32();
+            if (offset.ToInt32() + size.ToInt32() > bufferSize)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"The given offset : {offset} and size : {size} were outside the buffer's size"
+                );
+            }
+            adapter.BufferSubData(Target, offset, size, data);
+        }
+
+        private void ValidateNonNegativePtr(IntPtr pointer, string name)
+        {
+            int size = pointer.ToInt32();
+            if (size < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"{name} cannot be negative, got : {size}"
                 );
             }
         }

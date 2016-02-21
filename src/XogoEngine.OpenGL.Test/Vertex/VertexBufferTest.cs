@@ -3,6 +3,7 @@ using NUnit.Framework;
 using OpenTK.Graphics.OpenGL4;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Vertex;
 
@@ -80,8 +81,8 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void Fill_ThrowsArgumentException_OnZeroSize()
         {
-            Action fill = () => buffer.Fill(IntPtr.Zero, new int[]{1}, BufferUsageHint.StaticDraw);
-            fill.ShouldThrow<ArgumentException>().Message.ShouldContain(
+            Action fill = () => buffer.Fill(IntPtr.Zero, new int[] { 1 }, BufferUsageHint.StaticDraw);
+            fill.ShouldThrow<ArgumentOutOfRangeException>().Message.ShouldContain(
                 "The size allocated to the buffer must be greater than zero"
             );
         }
@@ -126,17 +127,47 @@ namespace XogoEngine.OpenGL.Test.Vertex
             );
         }
 
-        [Test]
-        public void FillPartial_ThrowsArgumentException_ForIllegalSize()
+        [Test, TestCaseSource(nameof(InvalidPartialInputs))]
+        public void FillPartial_ThrowsArgumentOutOfRangeException_ForNegativeInputs(IntPtr offset, IntPtr size, string name)
         {
-            IntPtr bufferSize = new IntPtr(50);
-            IntPtr partialSize = new IntPtr(51);
-            Action fillPartial = () => buffer.FillPartial(partialSize, IntPtr.Zero, new int[] { 1 });
+            FillBufferCorrectly();
+            Action fillPartial = () => buffer.FillPartial(offset, size, new int[] { 1 });
+            fillPartial.ShouldThrow<ArgumentOutOfRangeException>()
+                       .Message.ShouldContain($"{nameof(name)}");
+        }
 
-            buffer.Fill(bufferSize, new int[] { 1, 2 }, BufferUsageHint.DynamicDraw);
-            /*fillPartial.ShouldThrow<ArgumentException>().Message.ShouldContain(
-                $"given size of {partialSize} was larger than the allocated size of {bufferSize}"
-            );*/
+        private IEnumerable<TestCaseData> InvalidPartialInputs
+        {
+            get
+            {
+                yield return new TestCaseData(new IntPtr(-1), new IntPtr(1), "offset");
+                yield return new TestCaseData(new IntPtr(1), new IntPtr(-1), "size");
+            }
+        }
+
+        [Test]
+        public void FillPartial_ThrowsArgumentOutOfRangeException_ForIllegalSize()
+        {
+            FillBufferCorrectly();
+            IntPtr size = new IntPtr(100);
+            IntPtr offset = new IntPtr(100);
+            Action fillPartial = () => buffer.FillPartial(size, offset, new int[] { 1 });
+
+            fillPartial.ShouldThrow<ArgumentOutOfRangeException>().Message.ShouldContain(
+                $"The given offset : {offset} and size : {size} were outside the buffer's size"
+            );
+        }
+
+        [Test]
+        public void AdapterBufferSubData_IsInvoked_OnFillPartial()
+        {
+            FillBufferCorrectly();
+            FillPartialCorrectly();
+
+            adapter.Verify(a => a.BufferSubData(
+                buffer.Target, new IntPtr(4), new IntPtr(4), new int[] { 1 }),
+                Times.Once
+           );
         }
 
         [Test]
@@ -152,6 +183,16 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             buffer.Dispose();
             buffer.IsDisposed.ShouldBeTrue();
+        }
+
+        private void FillBufferCorrectly()
+        {
+            buffer.Fill(new IntPtr(10), new int[] { 1 }, BufferUsageHint.StaticDraw);
+        }
+
+        private void FillPartialCorrectly()
+        {
+            buffer.FillPartial(new IntPtr(4), new IntPtr(4), new int[] { 1 });
         }
     }
 }
