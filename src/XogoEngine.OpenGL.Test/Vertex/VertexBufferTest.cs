@@ -78,6 +78,15 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test]
+        public void Fill_ThrowsArgumentException_OnZeroSize()
+        {
+            Action fill = () => buffer.Fill(IntPtr.Zero, new int[]{1}, BufferUsageHint.StaticDraw);
+            fill.ShouldThrow<ArgumentException>().Message.ShouldContain(
+                "The size allocated to the buffer must be greater than zero"
+            );
+        }
+
+        [Test]
         public void BufferSize_IsStored_OnFill()
         {
             var size = new IntPtr(10);
@@ -105,6 +114,29 @@ namespace XogoEngine.OpenGL.Test.Vertex
 
             fillPartial.ShouldThrow<ObjectDisposedException>()
                        .ObjectName.ShouldBe(buffer.GetType().FullName);
+        }
+
+        [Test]
+        public void FillPartial_ThrowsUnallocatedBufferSizeException_WhenInvokedBeforeFill()
+        {
+            Action fillPartial = () => buffer.FillPartial(IntPtr.Zero, IntPtr.Zero, new int[] { 1 });
+
+            fillPartial.ShouldThrow<UnallocatedBufferSizeException>().Message.ShouldContain(
+                $"The size of the buffer has not yet been allocated. Have you called Fill?"
+            );
+        }
+
+        [Test]
+        public void FillPartial_ThrowsArgumentException_ForIllegalSize()
+        {
+            IntPtr bufferSize = new IntPtr(50);
+            IntPtr partialSize = new IntPtr(51);
+            Action fillPartial = () => buffer.FillPartial(partialSize, IntPtr.Zero, new int[] { 1 });
+
+            buffer.Fill(bufferSize, new int[] { 1, 2 }, BufferUsageHint.DynamicDraw);
+            /*fillPartial.ShouldThrow<ArgumentException>().Message.ShouldContain(
+                $"given size of {partialSize} was larger than the allocated size of {bufferSize}"
+            );*/
         }
 
         [Test]
