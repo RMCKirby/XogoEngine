@@ -42,6 +42,7 @@
     <Compile Include="Shaders\ShaderUniformTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vertex\VertexArrayObjectTest.cs" />
     <Compile Include="Vertex\VertexBufferTest.cs" />
   </ItemGroup>
   <ItemGroup>
