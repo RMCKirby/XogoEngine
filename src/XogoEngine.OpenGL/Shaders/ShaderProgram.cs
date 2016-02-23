@@ -80,7 +80,15 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Shader program Id : {handle} has not been linked. Have you called Link?"
                 );
             }
-            return -1;
+            if (attributes.ContainsKey(name))
+            {
+                return attributes[name].Location;
+            }
+            int location = adapter.GetAttribLocation(handle, name);
+
+            var attribute = adapter.GetActiveAttrib(handle, location, 200);
+            attributes.Add(attribute.Name, attribute);
+            return location;
         }
 
         public void Use()

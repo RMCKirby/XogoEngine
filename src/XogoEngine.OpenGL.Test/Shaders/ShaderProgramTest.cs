@@ -139,6 +139,25 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void AdapterGetAttribLocation_IsInvokedOnlyOnce_WhenAttributeHasAlreadyBeenQueried()
+        {
+            string attributeName = "position";
+            int location = 2;
+            var positionAttribute = new ShaderAttribute(attributeName, location, 8, ActiveAttribType.FloatVec2);
+
+            adapter.Setup(a => a.GetAttribLocation(program.Handle, attributeName))
+                   .Returns(location);
+            adapter.Setup(a => a.GetActiveAttrib(program.Handle, location, It.IsAny<int>()))
+                   .Returns(positionAttribute);
+
+            program.Link();
+            program.GetAttributeLocation(attributeName);
+            program.GetAttributeLocation(attributeName);
+
+            adapter.Verify(a => a.GetAttribLocation(program.Handle, attributeName), Times.Once);
+        }
+
+        [Test]
         public void GetAttributeLocation_ThrowsAttributeNotFoundException_OnNegativeOneValue()
         {
             program.Link();
