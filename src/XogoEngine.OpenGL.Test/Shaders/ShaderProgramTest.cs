@@ -79,41 +79,17 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void ProgramAttributes_Contain_ExpectedValues_AfterLink()
+        public void ProgramAttributes_ContainNoElements_AfterLink()
         {
-            int attributeCount = 2;
-            var positionAttribute = new ShaderAttribute("position", 0, 8, ActiveAttribType.FloatVec2);
-            var colourAttribute = new ShaderAttribute("colour", 1, 16, ActiveAttribType.FloatVec4);
-
-            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveAttributes))
-                   .Returns(attributeCount);
-            adapter.SetupSequence(a => a.GetActiveAttrib(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
-                   .Returns(positionAttribute)
-                   .Returns(colourAttribute);
-
             program.Link();
-
-            program.Attributes.ShouldContainKeyAndValue(positionAttribute.Name, positionAttribute);
-            program.Attributes.ShouldContainKeyAndValue(colourAttribute.Name, colourAttribute);
+            program.Attributes.ShouldBeEmpty();
         }
 
         [Test]
-        public void ProgramUniforms_ContainExpectedValues_AfterLink()
+        public void ProgramUniforms_ContainNoElements_AfterLink()
         {
-            int uniformCount = 2;
-            var modelUniform = new ShaderUniform("model", 0, 64, ActiveUniformType.FloatMat4);
-            var projectionUniform = new ShaderUniform("projection", 1, 64, ActiveUniformType.FloatMat4);
-
-            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveUniforms))
-                   .Returns(uniformCount);
-            adapter.SetupSequence(a => a.GetActiveUniform(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
-                   .Returns(modelUniform)
-                   .Returns(projectionUniform);
-
             program.Link();
-
-            program.Uniforms.ShouldContainKeyAndValue(modelUniform.Name, modelUniform);
-            program.Uniforms.ShouldContainKeyAndValue(projectionUniform.Name, projectionUniform);
+            program.Uniforms.ShouldBeEmpty();
         }
 
         [Test]

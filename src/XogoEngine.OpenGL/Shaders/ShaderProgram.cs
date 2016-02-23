@@ -67,8 +67,6 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Failed to link program Id : {handle}, Reason : {info}"
                 );
             }
-            ReadAttributes();
-            ReadUniforms();
         }
 
         public void Use()
@@ -101,26 +99,6 @@ namespace XogoEngine.OpenGL.Shaders
             adapter.DeleteProgram(handle);
             isDisposed = true;
             GC.SuppressFinalize(this);
-        }
-
-        private void ReadAttributes()
-        {
-            int attributeCount = adapter.GetProgram(handle, GetProgramParameterName.ActiveAttributes);
-            for (int index = 0; index < attributeCount; index++)
-            {
-                var attribute = adapter.GetActiveAttrib(handle, index, 200);
-                attributes.Add(attribute.Name, attribute);
-            }
-        }
-
-        private void ReadUniforms()
-        {
-            int uniformCount = adapter.GetProgram(handle, GetProgramParameterName.ActiveUniforms);
-            for (int index = 0; index < uniformCount; index++)
-            {
-                var uniform = adapter.GetActiveUniform(handle, index, 200);
-                uniforms.Add(uniform.Name, uniform);
-            }
         }
 
         private void ThrowIfNull(Shader shader)
