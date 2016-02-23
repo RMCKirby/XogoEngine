@@ -85,7 +85,12 @@ namespace XogoEngine.OpenGL.Shaders
                 return attributes[name].Location;
             }
             int location = adapter.GetAttribLocation(handle, name);
-
+            if (location == -1)
+            {
+                throw new ShaderAttributeNotFoundException(
+                    $"Attribute name : {name} could not be found for shader program Id : {handle}"
+                );
+            }
             var attribute = adapter.GetActiveAttrib(handle, location, 200);
             attributes.Add(attribute.Name, attribute);
             return location;

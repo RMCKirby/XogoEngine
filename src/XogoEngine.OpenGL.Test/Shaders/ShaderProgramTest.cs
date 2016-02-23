@@ -139,6 +139,20 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void GetAttributeLocation_ThrowsAttributeNotFoundException_OnNegativeOneValue()
+        {
+            string attributeName = "badname";
+            Action getAttributeLocation = () => program.GetAttributeLocation(attributeName);
+            program.Link();
+            adapter.Setup(a => a.GetAttribLocation(program.Handle, attributeName))
+                   .Returns(-1);
+
+            getAttributeLocation.ShouldThrow<ShaderAttributeNotFoundException>().Message.ShouldContain(
+                $"Attribute name : {attributeName} could not be found for shader program Id : {program.Handle}"
+            );
+        }
+
+        [Test]
         public void AdapterGetAttribLocation_IsInvokedOnlyOnce_WhenAttributeHasAlreadyBeenQueried()
         {
             string attributeName = "position";
@@ -155,12 +169,6 @@ namespace XogoEngine.OpenGL.Test.Shaders
             program.GetAttributeLocation(attributeName);
 
             adapter.Verify(a => a.GetAttribLocation(program.Handle, attributeName), Times.Once);
-        }
-
-        [Test]
-        public void GetAttributeLocation_ThrowsAttributeNotFoundException_OnNegativeOneValue()
-        {
-            program.Link();
         }
 
         [Test]
