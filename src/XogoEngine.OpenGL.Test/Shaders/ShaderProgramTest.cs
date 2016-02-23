@@ -122,6 +122,29 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void Program_IsLinked_AfterSuccessfullLink()
+        {
+            program.Linked.ShouldBeFalse();
+            program.Link();
+            program.Linked.ShouldBeTrue();
+        }
+
+        [Test]
+        public void GetAttributeLocation_ThrowsProgramNotLinkedException_WhenProgramHasNotBeenLinked()
+        {
+            Action getAttributeLocation = () => program.GetAttributeLocation("position");
+            getAttributeLocation.ShouldThrow<ProgramNotLinkedException>().Message.ShouldContain(
+                $"Shader program Id : {program.Handle} has not been linked. Have you called Link?"
+            );
+        }
+
+        [Test]
+        public void GetAttributeLocation_ThrowsAttributeNotFoundException_OnNegativeOneValue()
+        {
+            program.Link();
+        }
+
+        [Test]
         public void Use_ThrowsObjectDisposedException_OnDisposedProgram()
         {
             AssertThrowsDisposedException(() => program.Use(), program.GetType().FullName);

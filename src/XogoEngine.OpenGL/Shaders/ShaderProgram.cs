@@ -18,6 +18,7 @@ namespace XogoEngine.OpenGL.Shaders
         private List<Shader> attachedShaders = new List<Shader>();
         private IDictionary<string, ShaderAttribute> attributes = new AttribDictionary();
         private IDictionary<string, ShaderUniform> uniforms = new UniformDictionary();
+        private bool linked = false;
         private bool isDisposed = false;
 
         public ShaderProgram(IShaderAdapter adapter, params Shader[] shaders)
@@ -38,6 +39,7 @@ namespace XogoEngine.OpenGL.Shaders
         public IEnumerable<Shader> AttachedShaders { get { return attachedShaders; } }
         public IDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
         public IDictionary<string, ShaderUniform> Uniforms { get { return uniforms; } }
+        public bool Linked { get { return linked; } }
         public bool IsDisposed { get { return isDisposed; } }
 
         public void Attach(Shader shader)
@@ -67,6 +69,18 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Failed to link program Id : {handle}, Reason : {info}"
                 );
             }
+            linked = true;
+        }
+
+        public int GetAttributeLocation(string name)
+        {
+            if (!linked)
+            {
+                throw new ProgramNotLinkedException(
+                    $"Shader program Id : {handle} has not been linked. Have you called Link?"
+                );
+            }
+            return -1;
         }
 
         public void Use()
