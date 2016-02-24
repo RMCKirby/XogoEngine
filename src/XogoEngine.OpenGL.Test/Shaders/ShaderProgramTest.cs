@@ -174,20 +174,108 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void AdapterGetAttribLocation_IsInvokedOnlyOnce_WhenAttributeHasAlreadyBeenQueried()
         {
-            string attributeName = "position";
-            int location = 2;
-            var positionAttribute = new ShaderAttribute(attributeName, location, 8, ActiveAttribType.FloatVec2);
+            GivenProgramHasAttribute("position");
+            program.GetAttributeLocation("position");
 
-            adapter.Setup(a => a.GetAttribLocation(program.Handle, attributeName))
-                   .Returns(location);
-            adapter.Setup(a => a.GetActiveAttrib(program.Handle, location, It.IsAny<int>()))
-                   .Returns(positionAttribute);
+            adapter.Verify(a => a.GetAttribLocation(program.Handle, "position"), Times.Once);
+        }
+
+        [Test]
+        public void ProgramAttributes_ContainQueriedElement_AfterSuccessfulGetAttributeLocation()
+        {
+            GivenProgramHasAttribute("position");
+            program.Attributes.ShouldContainKey("position");
+            program.Attributes["position"].Location.ShouldBe(2);
+        }
+
+        [Test]
+        public void GetAttributeLocation_ReturnsExpectedResult_FromAdapter()
+        {
+            int expectedLocation = 1;
+            GivenProgramHasAttribute("colour", expectedLocation);
+            program.GetAttributeLocation("colour").ShouldBe(expectedLocation);
+        }
+
+        private void GivenProgramHasAttribute(string name, int expectedLocation = 2)
+        {
+            var attribute = new ShaderAttribute(name, expectedLocation, 8, ActiveAttribType.FloatVec2);
+            adapter.Setup(a => a.GetAttribLocation(program.Handle, name))
+                   .Returns(expectedLocation);
+            adapter.Setup(a => a.GetActiveAttrib(program.Handle, expectedLocation, It.IsAny<int>()))
+                   .Returns(attribute);
 
             program.Link();
-            program.GetAttributeLocation(attributeName);
-            program.GetAttributeLocation(attributeName);
+            program.GetAttributeLocation(name);
+        }
 
-            adapter.Verify(a => a.GetAttribLocation(program.Handle, attributeName), Times.Once);
+        [Test, TestCaseSource(nameof(InvalidNames))]
+        public void GetUniformLocation_ThrowsArgumentException_OnInvalidNames(string name)
+        {
+            Action getUniformLocation = () => program.GetUniformLocation(name);
+
+            program.Link();
+            getUniformLocation.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
+        public void GetUniformLocation_ThrowsProgramNotLinkedException_WhenProgramHasNotBeenLinked()
+        {
+            Action getUniformLocation = () => program.GetUniformLocation("projection");
+            getUniformLocation.ShouldThrow<ProgramNotLinkedException>().Message.ShouldContain(
+                $"Shader program Id : {program.Handle} has not been linked. Have you called Link?"
+            );
+        }
+
+        [Test]
+        public void GetUniformLocation_ThrowsShaderUniformNotFoundException_OnNegativeOneValue()
+        {
+            string uniformName = "badname";
+            Action getUniformLocation = () => program.GetUniformLocation(uniformName);
+            program.Link();
+            adapter.Setup(a => a.GetUniformLocation(program.Handle, uniformName))
+                   .Returns(-1);
+
+            getUniformLocation.ShouldThrow<ShaderUniformNotFoundException>().Message.ShouldContain(
+                $"Uniform name : {uniformName} could not be found for shader program Id : {program.Handle}"
+            );
+        }
+
+        [Test]
+        public void AdapterGetUniformLocation_IsInvokedOnlyOnce_WhenUniformHasAlreadyBeenQueried()
+        {
+            GivenProgramHasUniform("model");
+            program.GetUniformLocation("model");
+
+            adapter.Verify(a => a.GetUniformLocation(program.Handle, "model"), Times.Once);
+        }
+
+        [Test]
+        public void ProgramUniforms_ContainQueriedElement_AfterSuccessfulgetUniformLocation()
+        {
+            GivenProgramHasUniform("view");
+            program.Uniforms.ShouldContainKey("view");
+            program.Uniforms["view"].Location.ShouldBe(2);
+        }
+
+        [Test]
+        public void GetUniformLocation_ReturnsExpectedResult_FromAdapter()
+        {
+            int expectedLocation = 1;
+            GivenProgramHasUniform("projection", expectedLocation);
+
+            program.GetUniformLocation("projection").ShouldBe(expectedLocation);
+        }
+
+        private void GivenProgramHasUniform(string name, int expectedLocation = 2)
+        {
+            var uniform = new ShaderUniform(name, expectedLocation, 8, ActiveUniformType.FloatMat4);
+            adapter.Setup(a => a.GetUniformLocation(program.Handle, name))
+                   .Returns(expectedLocation);
+            adapter.Setup(a => a.GetActiveUniform(program.Handle, expectedLocation, It.IsAny<int>()))
+                   .Returns(uniform);
+
+            program.Link();
+            program.GetUniformLocation(name);
         }
 
         [Test]

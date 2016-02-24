@@ -74,10 +74,7 @@ namespace XogoEngine.OpenGL.Shaders
 
         public int GetAttributeLocation(string name)
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException(nameof(name) + " was null, empty or whitespace");
-            }
+            ThrowIfNullOrWhiteSpaceOrEmpty(name);
             ThrowIfNotLinked();
             if (attributes.ContainsKey(name))
             {
@@ -95,6 +92,26 @@ namespace XogoEngine.OpenGL.Shaders
              * and use its result instead */
             var attribute = adapter.GetActiveAttrib(handle, location, 200);
             attributes.Add(attribute.Name, attribute);
+            return location;
+        }
+
+        public int GetUniformLocation(string name)
+        {
+            ThrowIfNullOrWhiteSpaceOrEmpty(name);
+            ThrowIfNotLinked();
+            if (uniforms.ContainsKey(name))
+            {
+                return uniforms[name].Location;
+            }
+            int location = adapter.GetUniformLocation(handle, name);
+            if (location == -1)
+            {
+                throw new ShaderUniformNotFoundException(
+                    $"Uniform name : {name} could not be found for shader program Id : {handle}"
+                );
+            }
+            var uniform = adapter.GetActiveUniform(handle, location, 200);
+            uniforms.Add(uniform.Name, uniform);
             return location;
         }
 
@@ -145,6 +162,14 @@ namespace XogoEngine.OpenGL.Shaders
                 throw new ProgramNotLinkedException(
                     $"Shader program Id : {handle} has not been linked. Have you called Link?"
                 );
+            }
+        }
+
+        private void ThrowIfNullOrWhiteSpaceOrEmpty(string name)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException($"{nameof(name)} was null, empty or whitespace");
             }
         }
     }
