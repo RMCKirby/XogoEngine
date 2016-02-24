@@ -99,6 +99,10 @@ namespace XogoEngine.OpenGL.Shaders
         {
             ThrowIfNullOrWhiteSpaceOrEmpty(name);
             ThrowIfNotLinked();
+            if (uniforms.ContainsKey(name))
+            {
+                return uniforms[name].Location;
+            }
             int location = adapter.GetUniformLocation(handle, name);
             if (location == -1)
             {
@@ -106,7 +110,9 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Uniform name : {name} could not be found for shader program Id : {handle}"
                 );
             }
-            return -1;
+            var uniform = adapter.GetActiveUniform(handle, location, 200);
+            uniforms.Add(uniform.Name, uniform);
+            return location;
         }
 
         public void Use()
