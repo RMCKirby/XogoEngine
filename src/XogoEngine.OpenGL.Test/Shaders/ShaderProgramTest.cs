@@ -129,6 +129,25 @@ namespace XogoEngine.OpenGL.Test.Shaders
             program.Linked.ShouldBeTrue();
         }
 
+        [Test, TestCaseSource(nameof(InvalidNames))]
+        public void GetAttributeLocation_ThrowsArgumentException_OnInvalidNameString(string invalidName)
+        {
+            Action getAttributeLocation = () => program.GetAttributeLocation(invalidName);
+            program.Link();
+
+            getAttributeLocation.ShouldThrow<ArgumentException>();
+        }
+
+        private IEnumerable<ITestCaseData> InvalidNames
+        {
+            get
+            {
+                yield return new TestCaseData("");
+                yield return new TestCaseData("  ");
+                yield return new TestCaseData(null);
+            }
+        }
+
         [Test]
         public void GetAttributeLocation_ThrowsProgramNotLinkedException_WhenProgramHasNotBeenLinked()
         {

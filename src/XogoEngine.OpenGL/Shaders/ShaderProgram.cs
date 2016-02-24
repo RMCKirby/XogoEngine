@@ -74,12 +74,11 @@ namespace XogoEngine.OpenGL.Shaders
 
         public int GetAttributeLocation(string name)
         {
-            if (!linked)
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
-                throw new ProgramNotLinkedException(
-                    $"Shader program Id : {handle} has not been linked. Have you called Link?"
-                );
+                throw new ArgumentException(nameof(name) + " was null, empty or whitespace");
             }
+            ThrowIfNotLinked();
             if (attributes.ContainsKey(name))
             {
                 return attributes[name].Location;
@@ -91,6 +90,9 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Attribute name : {name} could not be found for shader program Id : {handle}"
                 );
             }
+            /* Currently bufferSize is hard-coded as 200
+             * in the future we may want to query for GL_ACTIVE_ATTRIBUTE_MAX_LENGTH
+             * and use its result instead */
             var attribute = adapter.GetActiveAttrib(handle, location, 200);
             attributes.Add(attribute.Name, attribute);
             return location;
@@ -133,6 +135,16 @@ namespace XogoEngine.OpenGL.Shaders
             if (shader == null)
             {
                 throw new ArgumentNullException(nameof(shader));
+            }
+        }
+
+        private void ThrowIfNotLinked()
+        {
+            if (!linked)
+            {
+                throw new ProgramNotLinkedException(
+                    $"Shader program Id : {handle} has not been linked. Have you called Link?"
+                );
             }
         }
     }
