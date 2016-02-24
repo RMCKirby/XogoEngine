@@ -210,6 +210,29 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
+        public void GetUniformLocation_ThrowsProgramNotLinkedException_WhenProgramHasNotBeenLinked()
+        {
+            Action getUniformLocation = () => program.GetUniformLocation("projection");
+            getUniformLocation.ShouldThrow<ProgramNotLinkedException>().Message.ShouldContain(
+                $"Shader program Id : {program.Handle} has not been linked. Have you called Link?"
+            );
+        }
+
+        [Test]
+        public void GetUniformLocation_ThrowsShaderUniformNotFoundException_OnNegativeOneValue()
+        {
+            string uniformName = "badname";
+            Action getUniformLocation = () => program.GetUniformLocation(uniformName);
+            program.Link();
+            adapter.Setup(a => a.GetUniformLocation(program.Handle, uniformName))
+                   .Returns(-1);
+
+            getUniformLocation.ShouldThrow<ShaderUniformNotFoundException>().Message.ShouldContain(
+                $"Uniform name : {uniformName} could not be found for shader program Id : {program.Handle}"
+            );
+        }
+
+        [Test]
         public void Use_ThrowsObjectDisposedException_OnDisposedProgram()
         {
             AssertThrowsDisposedException(() => program.Use(), program.GetType().FullName);

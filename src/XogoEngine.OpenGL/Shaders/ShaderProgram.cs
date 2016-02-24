@@ -98,6 +98,14 @@ namespace XogoEngine.OpenGL.Shaders
         public int GetUniformLocation(string name)
         {
             ThrowIfNullOrWhiteSpaceOrEmpty(name);
+            ThrowIfNotLinked();
+            int location = adapter.GetUniformLocation(handle, name);
+            if (location == -1)
+            {
+                throw new ShaderUniformNotFoundException(
+                    $"Uniform name : {name} could not be found for shader program Id : {handle}"
+                );
+            }
             return -1;
         }
 
