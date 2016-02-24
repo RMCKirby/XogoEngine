@@ -74,10 +74,7 @@ namespace XogoEngine.OpenGL.Shaders
 
         public int GetAttributeLocation(string name)
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException(nameof(name) + " was null, empty or whitespace");
-            }
+            ThrowIfNullOrWhiteSpaceOrEmpty(name);
             ThrowIfNotLinked();
             if (attributes.ContainsKey(name))
             {
@@ -96,6 +93,12 @@ namespace XogoEngine.OpenGL.Shaders
             var attribute = adapter.GetActiveAttrib(handle, location, 200);
             attributes.Add(attribute.Name, attribute);
             return location;
+        }
+
+        public int GetUniformLocation(string name)
+        {
+            ThrowIfNullOrWhiteSpaceOrEmpty(name);
+            return -1;
         }
 
         public void Use()
@@ -145,6 +148,14 @@ namespace XogoEngine.OpenGL.Shaders
                 throw new ProgramNotLinkedException(
                     $"Shader program Id : {handle} has not been linked. Have you called Link?"
                 );
+            }
+        }
+
+        private void ThrowIfNullOrWhiteSpaceOrEmpty(string name)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException($"{nameof(name)} was null, empty or whitespace");
             }
         }
     }

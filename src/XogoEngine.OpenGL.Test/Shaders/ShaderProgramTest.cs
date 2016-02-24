@@ -200,6 +200,15 @@ namespace XogoEngine.OpenGL.Test.Shaders
             program.GetAttributeLocation(name);
         }
 
+        [Test, TestCaseSource(nameof(InvalidNames))]
+        public void GetUniformLocation_ThrowsArgumentException_OnInvalidNames(string name)
+        {
+            Action getUniformLocation = () => program.GetUniformLocation(name);
+
+            program.Link();
+            getUniformLocation.ShouldThrow<ArgumentException>();
+        }
+
         [Test]
         public void Use_ThrowsObjectDisposedException_OnDisposedProgram()
         {
