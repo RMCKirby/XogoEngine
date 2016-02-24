@@ -79,41 +79,17 @@ namespace XogoEngine.OpenGL.Test.Shaders
         }
 
         [Test]
-        public void ProgramAttributes_Contain_ExpectedValues_AfterLink()
+        public void ProgramAttributes_ContainNoElements_AfterLink()
         {
-            int attributeCount = 2;
-            var positionAttribute = new ShaderAttribute("position", 0, 8, ActiveAttribType.FloatVec2);
-            var colourAttribute = new ShaderAttribute("colour", 1, 16, ActiveAttribType.FloatVec4);
-
-            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveAttributes))
-                   .Returns(attributeCount);
-            adapter.SetupSequence(a => a.GetActiveAttrib(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
-                   .Returns(positionAttribute)
-                   .Returns(colourAttribute);
-
             program.Link();
-
-            program.Attributes.ShouldContainKeyAndValue(positionAttribute.Name, positionAttribute);
-            program.Attributes.ShouldContainKeyAndValue(colourAttribute.Name, colourAttribute);
+            program.Attributes.ShouldBeEmpty();
         }
 
         [Test]
-        public void ProgramUniforms_ContainExpectedValues_AfterLink()
+        public void ProgramUniforms_ContainNoElements_AfterLink()
         {
-            int uniformCount = 2;
-            var modelUniform = new ShaderUniform("model", 0, 64, ActiveUniformType.FloatMat4);
-            var projectionUniform = new ShaderUniform("projection", 1, 64, ActiveUniformType.FloatMat4);
-
-            adapter.Setup(a => a.GetProgram(program.Handle, GetProgramParameterName.ActiveUniforms))
-                   .Returns(uniformCount);
-            adapter.SetupSequence(a => a.GetActiveUniform(program.Handle, It.IsAny<int>(), It.IsAny<int>()))
-                   .Returns(modelUniform)
-                   .Returns(projectionUniform);
-
             program.Link();
-
-            program.Uniforms.ShouldContainKeyAndValue(modelUniform.Name, modelUniform);
-            program.Uniforms.ShouldContainKeyAndValue(projectionUniform.Name, projectionUniform);
+            program.Uniforms.ShouldBeEmpty();
         }
 
         [Test]
@@ -143,6 +119,75 @@ namespace XogoEngine.OpenGL.Test.Shaders
                 .Message.ShouldContain(
                     $"Failed to link program Id : {program.Handle}, Reason : {errorMessage}"
                 );
+        }
+
+        [Test]
+        public void Program_IsLinked_AfterSuccessfullLink()
+        {
+            program.Linked.ShouldBeFalse();
+            program.Link();
+            program.Linked.ShouldBeTrue();
+        }
+
+        [Test, TestCaseSource(nameof(InvalidNames))]
+        public void GetAttributeLocation_ThrowsArgumentException_OnInvalidNameString(string invalidName)
+        {
+            Action getAttributeLocation = () => program.GetAttributeLocation(invalidName);
+            program.Link();
+
+            getAttributeLocation.ShouldThrow<ArgumentException>();
+        }
+
+        private IEnumerable<ITestCaseData> InvalidNames
+        {
+            get
+            {
+                yield return new TestCaseData("");
+                yield return new TestCaseData("  ");
+                yield return new TestCaseData(null);
+            }
+        }
+
+        [Test]
+        public void GetAttributeLocation_ThrowsProgramNotLinkedException_WhenProgramHasNotBeenLinked()
+        {
+            Action getAttributeLocation = () => program.GetAttributeLocation("position");
+            getAttributeLocation.ShouldThrow<ProgramNotLinkedException>().Message.ShouldContain(
+                $"Shader program Id : {program.Handle} has not been linked. Have you called Link?"
+            );
+        }
+
+        [Test]
+        public void GetAttributeLocation_ThrowsAttributeNotFoundException_OnNegativeOneValue()
+        {
+            string attributeName = "badname";
+            Action getAttributeLocation = () => program.GetAttributeLocation(attributeName);
+            program.Link();
+            adapter.Setup(a => a.GetAttribLocation(program.Handle, attributeName))
+                   .Returns(-1);
+
+            getAttributeLocation.ShouldThrow<ShaderAttributeNotFoundException>().Message.ShouldContain(
+                $"Attribute name : {attributeName} could not be found for shader program Id : {program.Handle}"
+            );
+        }
+
+        [Test]
+        public void AdapterGetAttribLocation_IsInvokedOnlyOnce_WhenAttributeHasAlreadyBeenQueried()
+        {
+            string attributeName = "position";
+            int location = 2;
+            var positionAttribute = new ShaderAttribute(attributeName, location, 8, ActiveAttribType.FloatVec2);
+
+            adapter.Setup(a => a.GetAttribLocation(program.Handle, attributeName))
+                   .Returns(location);
+            adapter.Setup(a => a.GetActiveAttrib(program.Handle, location, It.IsAny<int>()))
+                   .Returns(positionAttribute);
+
+            program.Link();
+            program.GetAttributeLocation(attributeName);
+            program.GetAttributeLocation(attributeName);
+
+            adapter.Verify(a => a.GetAttribLocation(program.Handle, attributeName), Times.Once);
         }
 
         [Test]
