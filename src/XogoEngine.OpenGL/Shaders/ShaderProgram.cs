@@ -110,6 +110,9 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Uniform name : {name} could not be found for shader program Id : {handle}"
                 );
             }
+            /* Currently bufferSize is hard-coded as 200
+             * in the future we may want to query for GL_ACTIVE_UNIFORM_MAX_LENGTH
+             * and use its result instead */
             var uniform = adapter.GetActiveUniform(handle, location, 200);
             uniforms.Add(uniform.Name, uniform);
             return location;

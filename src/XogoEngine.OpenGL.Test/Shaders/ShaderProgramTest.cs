@@ -3,7 +3,6 @@ using NUnit.Framework;
 using OpenTK.Graphics.OpenGL4;
 using Shouldly;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Shaders;
