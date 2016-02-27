@@ -5,7 +5,10 @@ using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Vertex
 {
-    public sealed class VertexBuffer<T> : IResource<int> where T : struct, IVertexDeclarable
+    public sealed class VertexBuffer<T> :
+        IVertexBuffer<T>,
+        IResource<int>
+        where T : struct, IVertexDeclarable
     {
         private int handle;
         private readonly IBufferAdapter adapter;
