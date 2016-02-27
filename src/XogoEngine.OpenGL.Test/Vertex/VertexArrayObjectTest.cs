@@ -11,12 +11,17 @@ namespace XogoEngine.OpenGL.Test.Vertex
     {
         private VertexArrayObject vertexArray;
         private Mock<IVertexArrayAdapter> vertexAdapter;
-        private Mock<VertexBuffer> vertexBuffer;
+        private Mock<VertexBuffer<VertexPosition>> vertexBuffer;
 
         [SetUp]
         public void SetUp()
         {
             vertexArray = new VertexArrayObject();
+        }
+
+        private struct VertexPosition : IVertexDeclarable
+        {
+
         }
     }
 }
