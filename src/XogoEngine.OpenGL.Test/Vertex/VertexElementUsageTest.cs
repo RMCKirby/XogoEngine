@@ -19,6 +19,8 @@ namespace XogoEngine.OpenGL.Test.Vertex
             get
             {
                 yield return new TestCaseData("position", VertexElementUsage.Position);
+                yield return new TestCaseData("colour", VertexElementUsage.Colour);
+                yield return new TestCaseData("texCoord", VertexElementUsage.TexCoord);
             }
         }
     }
