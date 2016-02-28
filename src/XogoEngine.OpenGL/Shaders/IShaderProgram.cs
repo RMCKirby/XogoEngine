@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace XogoEngine.OpenGL.Shaders
 {
-    public interface IShaderProgram
+    public interface IShaderProgram : IResource<int>
     {
         IDictionary<string, ShaderAttribute> Attributes { get; }
         IDictionary<string, ShaderUniform> Uniforms { get; }

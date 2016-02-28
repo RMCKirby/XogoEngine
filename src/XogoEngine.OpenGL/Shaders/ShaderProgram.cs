@@ -10,7 +10,7 @@ namespace XogoEngine.OpenGL.Shaders
     using AttribDictionary = Dictionary<string, ShaderAttribute>;
     using UniformDictionary = Dictionary<string, ShaderUniform>;
 
-    public sealed class ShaderProgram : IShaderProgram, IResource<int>
+    public sealed class ShaderProgram : IShaderProgram
     {
         private int handle;
         private readonly IShaderAdapter adapter;

@@ -57,5 +57,15 @@ namespace XogoEngine.OpenGL.Test.Vertex
                 yield return new TestCaseData(adapter, null);
             }
         }
+
+        [Test]
+        public void Apply_ThrowsObjectDisposedException_OnDisposedShaderProgram()
+        {
+            shaderProgram.SetupGet(s => s.IsDisposed).Returns(true);
+            Action apply = () => vertexDeclaration.Apply(adapter.Object, shaderProgram.Object);
+
+            apply.ShouldThrow<ObjectDisposedException>()
+                 .ObjectName.ShouldBe(shaderProgram.Object.GetType().FullName);
+        }
     }
 }

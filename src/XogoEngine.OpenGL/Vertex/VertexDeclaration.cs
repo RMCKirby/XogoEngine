@@ -1,5 +1,6 @@
 using System;
 using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Extensions;
 using XogoEngine.OpenGL.Shaders;
 
 namespace XogoEngine.OpenGL.Vertex
@@ -25,6 +26,7 @@ namespace XogoEngine.OpenGL.Vertex
             {
                 throw new ArgumentNullException(nameof(shaderProgram));
             }
+            shaderProgram.ThrowIfDisposed();
         }
     }
 }
