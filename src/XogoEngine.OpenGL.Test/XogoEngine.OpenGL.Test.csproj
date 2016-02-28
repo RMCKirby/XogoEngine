@@ -45,6 +45,7 @@
     <Compile Include="Vertex\VertexArrayObjectTest.cs" />
     <Compile Include="Vertex\VertexBufferTest.cs" />
     <Compile Include="Vertex\VertexDeclarationTest.cs" />
+    <Compile Include="Vertex\VertexElementTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="XogoEngine.OpenGL">
