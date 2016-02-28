@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Shaders;
 using XogoEngine.OpenGL.Vertex;
 
 namespace XogoEngine.OpenGL.Test.Vertex
@@ -33,12 +34,50 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test]
+        public void AdapterGenVertexArray_IsInvokedOnlyOnce_OnConstruction()
+        {
+            adapter.Verify(a => a.GenVertexArray(), Times.Once);
+        }
+
+        [Test]
         public void Instance_IsCorrectlySet_OnConstruction()
         {
             vertexArray.ShouldSatisfyAllConditions(
                 () => vertexArray.Handle.ShouldBe(1),
                 () => vertexArray.IsDisposed.ShouldBe(false)
             );
+        }
+
+        [Test]
+        public void Bind_ThrowsObjectDisposedException_OnDisposedInstance()
+        {
+            Action bind = () => vertexArray.Bind();
+            vertexArray.Dispose();
+
+            bind.ShouldThrow<ObjectDisposedException>()
+                .ObjectName.ShouldBe(vertexArray.GetType().FullName);
+        }
+
+        [Test]
+        public void AdapterBindVertexArray_IsInvoked_OnBind()
+        {
+            vertexArray.Bind();
+            adapter.Verify(a => a.BindVertexArray(vertexArray.Handle), Times.Once);
+        }
+
+        [Test]
+        public void AdapterDeleteVertexArray_IsInvokedOnce_OnDisposal()
+        {
+            vertexArray.Dispose();
+            vertexArray.Dispose();
+            adapter.Verify(a => a.DeleteVertexArray(vertexArray.Handle), Times.Once);
+        }
+
+        [Test]
+        public void Instance_ShouldBeDisposed_AfterDisposal()
+        {
+            vertexArray.Dispose();
+            vertexArray.IsDisposed.ShouldBe(true);
         }
 
         private struct VertexPosition : IVertexDeclarable

@@ -1,6 +1,7 @@
 using System;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Extensions;
+using XogoEngine.OpenGL.Shaders;
 
 namespace XogoEngine.OpenGL.Vertex
 {
@@ -23,9 +24,21 @@ namespace XogoEngine.OpenGL.Vertex
         public int Handle { get { return handle; } }
         public bool IsDisposed { get { return isDisposed; } }
 
+        public void Bind()
+        {
+            this.ThrowIfDisposed();
+            adapter.BindVertexArray(handle);
+        }
+
         public void Dispose()
         {
-
+            if (isDisposed)
+            {
+                return;
+            }
+            adapter.DeleteVertexArray(handle);
+            isDisposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }
