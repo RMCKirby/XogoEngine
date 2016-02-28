@@ -27,6 +27,15 @@ namespace XogoEngine.OpenGL.Vertex
                 throw new ArgumentNullException(nameof(shaderProgram));
             }
             shaderProgram.ThrowIfDisposed();
+
+            foreach (var element in Elements)
+            {
+                /* Let ShaderAttributeNotFoundException bubble up
+                 * If we can't find an attribute in the shaderProgram that matches
+                 * the usages defined in the given vertex declaration. */
+                int location = shaderProgram.GetAttributeLocation(element.Usage);
+                adapter.EnableVertexAttribArray(location);
+            }
         }
     }
 }

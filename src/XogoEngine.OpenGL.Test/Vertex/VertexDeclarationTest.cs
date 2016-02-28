@@ -23,12 +23,15 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             vertexElements = new VertexElement[]
             {
-                new VertexElement(0, "position", VertexAttribPointerType.Float, 2, false)
+                new VertexElement(0, "position", VertexAttribPointerType.Float, 2, false),
+                new VertexElement(8, "colour", VertexAttribPointerType.Float, 4, false)
             };
             vertexDeclaration = new VertexDeclaration(20, vertexElements);
 
             shaderProgram = new Mock<IShaderProgram>();
             adapter = new Mock<IVertexArrayAdapter>();
+
+            shaderProgram.SetupGet(s => s.IsDisposed).Returns(false);
         }
 
         [Test]
@@ -66,6 +69,30 @@ namespace XogoEngine.OpenGL.Test.Vertex
 
             apply.ShouldThrow<ObjectDisposedException>()
                  .ObjectName.ShouldBe(shaderProgram.Object.GetType().FullName);
+        }
+
+        [Test]
+        public void ShaderProgramGetAttributeLocation_isInvoked_ForEachElement()
+        {
+            vertexDeclaration.Apply(adapter.Object, shaderProgram.Object);
+            foreach (var element in vertexDeclaration.Elements)
+            {
+                shaderProgram.Verify(s => s.GetAttributeLocation(element.Usage));
+            }
+        }
+
+        [Test]
+        public void AdapterEnableVertexAttribArray_IsInvokedForEachLocation_OnApply()
+        {
+            shaderProgram.Setup(s => s.GetAttributeLocation(vertexDeclaration.Elements[0].Usage))
+                         .Returns(0);
+            shaderProgram.Setup(s => s.GetAttributeLocation(vertexDeclaration.Elements[1].Usage))
+                         .Returns(1);
+
+            vertexDeclaration.Apply(adapter.Object, shaderProgram.Object);
+
+            adapter.Verify(a => a.EnableVertexAttribArray(0));
+            adapter.Verify(a => a.EnableVertexAttribArray(1));
         }
     }
 }

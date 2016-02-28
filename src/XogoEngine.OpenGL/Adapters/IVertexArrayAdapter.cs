@@ -6,5 +6,7 @@ namespace XogoEngine.OpenGL.Adapters
 
         void BindVertexArray(int handle);
         void DeleteVertexArray(int handle);
+
+        void EnableVertexAttribArray(int location);
     }
 }
