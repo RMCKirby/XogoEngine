@@ -54,8 +54,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
             Action bind = () => vertexArray.Bind();
             vertexArray.Dispose();
 
-            bind.ShouldThrow<ObjectDisposedException>()
-                .ObjectName.ShouldBe(vertexArray.GetType().FullName);
+            AssertThrowsObjectDisposedException(bind);
         }
 
         [Test]
@@ -63,6 +62,15 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             vertexArray.Bind();
             adapter.Verify(a => a.BindVertexArray(vertexArray.Handle), Times.Once);
+        }
+
+        [Test]
+        public void SetUp_Throws_ObjectDisposedException_OnDisposedInstance()
+        {
+            /*Action setUp = () => vertexArray.SetUp(null, null);
+
+            vertexArray.Dispose();
+            AssertThrowsObjectDisposedException(setUp);*/
         }
 
         [Test]
@@ -78,6 +86,13 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             vertexArray.Dispose();
             vertexArray.IsDisposed.ShouldBe(true);
+        }
+
+        private void AssertThrowsObjectDisposedException(Action action)
+        {
+            vertexArray.Dispose();
+            action.ShouldThrow<ObjectDisposedException>()
+                  .ObjectName.ShouldBe(vertexArray.GetType().FullName);
         }
 
         private struct VertexPosition : IVertexDeclarable

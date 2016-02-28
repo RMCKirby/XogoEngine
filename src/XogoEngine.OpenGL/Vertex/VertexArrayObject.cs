@@ -30,6 +30,11 @@ namespace XogoEngine.OpenGL.Vertex
             adapter.BindVertexArray(handle);
         }
 
+        public void SetUp(ShaderProgram shaderProgram, VertexDeclaration vertexDeclaration)
+        {
+            this.ThrowIfDisposed();
+        }
+
         public void Dispose()
         {
             if (isDisposed)
