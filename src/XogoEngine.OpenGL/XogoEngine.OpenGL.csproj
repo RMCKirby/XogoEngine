@@ -45,6 +45,7 @@
     <Compile Include="Shaders\Shader.cs" />
     <Compile Include="Shaders\ShaderAttribute.cs" />
     <Compile Include="Shaders\ShaderUniform.cs" />
+    <Compile Include="Shaders\IShaderProgram.cs" />
     <Compile Include="Shaders\ShaderProgram.cs" />
     <Compile Include="Shaders\ShaderProgramLinkException.cs" />
     <Compile Include="Shaders\ShaderAttributeNotFoundException.cs" />

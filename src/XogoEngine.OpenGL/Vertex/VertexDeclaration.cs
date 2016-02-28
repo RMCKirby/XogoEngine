@@ -1,3 +1,7 @@
+using System;
+using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Shaders;
+
 namespace XogoEngine.OpenGL.Vertex
 {
     public sealed class VertexDeclaration
@@ -10,5 +14,17 @@ namespace XogoEngine.OpenGL.Vertex
 
         public int Stride { get; }
         public VertexElement[] Elements { get; }
+
+        public void Apply(IVertexArrayAdapter adapter, ShaderProgram shaderProgram)
+        {
+            if (adapter == null)
+            {
+                throw new ArgumentNullException(nameof(adapter));
+            }
+            if (shaderProgram == null)
+            {
+                throw new ArgumentNullException(nameof(shaderProgram));
+            }
+        }
     }
 }
