@@ -27,4 +27,4 @@ NUGET
     coveralls.io (1.3.4)
     NUnit.Runners (2.6.4)
     OpenCover (4.6.519)
-    ReportGenerator (2.4.3)
+    ReportGenerator (2.4.4)
