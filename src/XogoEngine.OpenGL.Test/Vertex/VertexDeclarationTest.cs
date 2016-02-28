@@ -1,3 +1,4 @@
+using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
@@ -14,6 +15,8 @@ namespace XogoEngine.OpenGL.Test.Vertex
     {
         private VertexDeclaration vertexDeclaration;
         private VertexElement[] vertexElements;
+        private Mock<IShaderProgram> shaderProgram;
+        private Mock<IVertexArrayAdapter> adapter;
 
         [SetUp]
         public void SetUp()
@@ -23,6 +26,9 @@ namespace XogoEngine.OpenGL.Test.Vertex
                 new VertexElement(0, "position", VertexAttribPointerType.Float, 2, false)
             };
             vertexDeclaration = new VertexDeclaration(20, vertexElements);
+
+            shaderProgram = new Mock<IShaderProgram>();
+            adapter = new Mock<IVertexArrayAdapter>();
         }
 
         [Test]
@@ -37,7 +43,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test, TestCaseSource(nameof(ApplyNullArguments))]
         public void Apply_ThrowsArgumentNullException_OnNullArguments(
             IVertexArrayAdapter adapter,
-            ShaderProgram shaderProgram)
+            IShaderProgram shaderProgram)
         {
             Action apply = () => vertexDeclaration.Apply(adapter, shaderProgram);
             apply.ShouldThrow<ArgumentNullException>();
@@ -47,7 +53,8 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             get
             {
-                yield return new TestCaseData(null, null);
+                yield return new TestCaseData(null, shaderProgram);
+                yield return new TestCaseData(adapter, null);
             }
         }
     }

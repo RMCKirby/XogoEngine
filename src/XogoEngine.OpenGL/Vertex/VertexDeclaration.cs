@@ -15,7 +15,7 @@ namespace XogoEngine.OpenGL.Vertex
         public int Stride { get; }
         public VertexElement[] Elements { get; }
 
-        public void Apply(IVertexArrayAdapter adapter, ShaderProgram shaderProgram)
+        public void Apply(IVertexArrayAdapter adapter, IShaderProgram shaderProgram)
         {
             if (adapter == null)
             {
