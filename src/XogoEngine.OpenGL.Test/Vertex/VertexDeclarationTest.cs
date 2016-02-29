@@ -43,6 +43,12 @@ namespace XogoEngine.OpenGL.Test.Vertex
             );
         }
 
+        [Test]
+        public void VertexElementsProperty_ReturnsCopy_RatherThanActualArray()
+        {
+            vertexDeclaration.Elements.ShouldNotBeSameAs(vertexElements);
+        }
+
         [Test, TestCaseSource(nameof(ApplyNullArguments))]
         public void Apply_ThrowsArgumentNullException_OnNullArguments(
             IVertexArrayAdapter adapter,

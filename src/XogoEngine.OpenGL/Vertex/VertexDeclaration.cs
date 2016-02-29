@@ -41,6 +41,7 @@ namespace XogoEngine.OpenGL.Vertex
                  * the usages defined in the given vertex declaration. */
                 int location = shaderProgram.GetAttributeLocation(element.Usage);
                 adapter.EnableVertexAttribArray(location);
+                //TODO: cache these values
                 adapter.VertexAttribPointer(
                     location,
                     element.NumberOfComponents,
