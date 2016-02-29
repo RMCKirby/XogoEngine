@@ -79,6 +79,20 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test]
+        public void SetUp_ThrowsArgumentNullException_OnNullShaderProgram()
+        {
+            Action setUp = () => vertexArray.SetUp(null, vertex.Object.Declaration);
+            setUp.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void SetUp_ThrowsArgumentNullException_OnNullVertexDeclaration()
+        {
+            Action setUp = () => vertexArray.SetUp(shaderProgram.Object, null);
+            setUp.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
         public void AdapterDeleteVertexArray_IsInvokedOnce_OnDisposal()
         {
             vertexArray.Dispose();

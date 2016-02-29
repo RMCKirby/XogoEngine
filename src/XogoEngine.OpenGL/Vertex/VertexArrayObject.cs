@@ -33,6 +33,14 @@ namespace XogoEngine.OpenGL.Vertex
         public void SetUp(IShaderProgram shaderProgram, VertexDeclaration vertexDeclaration)
         {
             this.ThrowIfDisposed();
+            if (shaderProgram == null)
+            {
+                throw new ArgumentNullException(nameof(shaderProgram));
+            }
+            if (vertexDeclaration == null)
+            {
+                throw new ArgumentNullException(nameof(vertexDeclaration));
+            }
         }
 
         public void Dispose()
