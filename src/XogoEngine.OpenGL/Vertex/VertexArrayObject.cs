@@ -8,7 +8,7 @@ namespace XogoEngine.OpenGL.Vertex
     public sealed class VertexArrayObject : IResource<int>
     {
         private int handle;
-        private IVertexArrayAdapter adapter;
+        private readonly IVertexArrayAdapter adapter;
         private bool isDisposed = false;
 
         public VertexArrayObject(IVertexArrayAdapter adapter)

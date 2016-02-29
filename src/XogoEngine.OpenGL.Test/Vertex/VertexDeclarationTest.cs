@@ -94,5 +94,33 @@ namespace XogoEngine.OpenGL.Test.Vertex
             adapter.Verify(a => a.EnableVertexAttribArray(0));
             adapter.Verify(a => a.EnableVertexAttribArray(1));
         }
+
+        [Test]
+        public void AdapterVertexAttribPointer_IsInvokedForEachElement_OnApply()
+        {
+            var firstElement = vertexDeclaration.Elements[0];
+            var secondElement = vertexDeclaration.Elements[1];
+            shaderProgram.Setup(s => s.GetAttributeLocation(firstElement.Usage))
+                         .Returns(0);
+            shaderProgram.Setup(s => s.GetAttributeLocation(secondElement.Usage))
+                         .Returns(1);
+
+            vertexDeclaration.Apply(adapter.Object, shaderProgram.Object);
+
+            AssertVertexAttribPointerInvocation(firstElement, 0);
+            AssertVertexAttribPointerInvocation(secondElement, 1);
+        }
+
+        private void AssertVertexAttribPointerInvocation(VertexElement element, int location)
+        {
+            adapter.Verify(a => a.VertexAttribPointer(
+                location,
+                element.NumberOfComponents,
+                element.PointerType,
+                element.Normalised,
+                vertexDeclaration.Stride,
+                element.Offset
+            ));
+        }
     }
 }

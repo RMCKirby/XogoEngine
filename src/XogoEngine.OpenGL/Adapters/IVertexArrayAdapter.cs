@@ -1,3 +1,5 @@
+using OpenTK.Graphics.OpenGL4;
+
 namespace XogoEngine.OpenGL.Adapters
 {
     public interface IVertexArrayAdapter
@@ -8,5 +10,13 @@ namespace XogoEngine.OpenGL.Adapters
         void DeleteVertexArray(int handle);
 
         void EnableVertexAttribArray(int location);
+
+        void VertexAttribPointer(
+            int location,
+            int numberOfComponents,
+            VertexAttribPointerType type,
+            bool normalised,
+            int vertexStride,
+            int offset);
     }
 }

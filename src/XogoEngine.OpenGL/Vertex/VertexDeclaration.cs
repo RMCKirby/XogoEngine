@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Extensions;
 using XogoEngine.OpenGL.Shaders;
@@ -7,14 +8,19 @@ namespace XogoEngine.OpenGL.Vertex
 {
     public sealed class VertexDeclaration
     {
+        private VertexElement[] elements;
+
         public VertexDeclaration(int stride, VertexElement[] elements)
         {
             Stride = stride;
-            Elements = elements;
+            this.elements = elements;
         }
 
         public int Stride { get; }
-        public VertexElement[] Elements { get; }
+        public VertexElement[] Elements
+        {
+            get { return elements.ToArray(); }
+        }
 
         public void Apply(IVertexArrayAdapter adapter, IShaderProgram shaderProgram)
         {
@@ -35,6 +41,14 @@ namespace XogoEngine.OpenGL.Vertex
                  * the usages defined in the given vertex declaration. */
                 int location = shaderProgram.GetAttributeLocation(element.Usage);
                 adapter.EnableVertexAttribArray(location);
+                adapter.VertexAttribPointer(
+                    location,
+                    element.NumberOfComponents,
+                    element.PointerType,
+                    element.Normalised,
+                    Stride,
+                    element.Offset
+                );
             }
         }
     }
