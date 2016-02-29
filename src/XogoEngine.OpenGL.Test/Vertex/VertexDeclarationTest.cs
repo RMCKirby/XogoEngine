@@ -49,22 +49,18 @@ namespace XogoEngine.OpenGL.Test.Vertex
             vertexDeclaration.Elements.ShouldNotBeSameAs(vertexElements);
         }
 
-        [Test, TestCaseSource(nameof(ApplyNullArguments))]
-        public void Apply_ThrowsArgumentNullException_OnNullArguments(
-            IVertexArrayAdapter adapter,
-            IShaderProgram shaderProgram)
+        [Test]
+        public void Apply_ThrowsArgumentNullException_OnNullAdapter()
         {
-            Action apply = () => vertexDeclaration.Apply(adapter, shaderProgram);
+            Action apply = () => vertexDeclaration.Apply(null, shaderProgram.Object);
             apply.ShouldThrow<ArgumentNullException>();
         }
 
-        private IEnumerable<TestCaseData> ApplyNullArguments
+        [Test]
+        public void Apply_ThrowsArgumentNullException_OnNullShaderProgram()
         {
-            get
-            {
-                yield return new TestCaseData(null, shaderProgram);
-                yield return new TestCaseData(adapter, null);
-            }
+            Action apply = () => vertexDeclaration.Apply(adapter.Object, null);
+            apply.ShouldThrow<ArgumentNullException>();
         }
 
         [Test]
