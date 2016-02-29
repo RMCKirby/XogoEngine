@@ -12,7 +12,13 @@ namespace XogoEngine.OpenGL.Test.Vertex
     [TestFixture]
     internal sealed class VertexBufferTest
     {
-        private struct Vertex : IVertexDeclarable { }
+        private struct Vertex : IVertexDeclarable
+        {
+            VertexDeclaration IVertexDeclarable.Declaration
+            {
+                get { return null; }
+            }
+        }
 
         private Vertex[] vertices = new Vertex[]
         {
