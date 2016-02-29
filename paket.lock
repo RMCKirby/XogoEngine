@@ -16,7 +16,6 @@ GROUP Test
 NUGET
   remote: https://www.nuget.org/api/v2
   specs:
-    AutoFixture (3.40.0)
     Moq (4.2.1510.2205)
     NUnit (2.6.4)
     Shouldly (2.6.0)
@@ -28,4 +27,4 @@ NUGET
     coveralls.io (1.3.4)
     NUnit.Runners (2.6.4)
     OpenCover (4.6.519)
-    ReportGenerator (2.4.3)
+    ReportGenerator (2.4.4)

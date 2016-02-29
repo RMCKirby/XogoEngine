@@ -12,7 +12,15 @@ namespace XogoEngine.OpenGL.Test.Vertex
     [TestFixture]
     internal sealed class VertexBufferTest
     {
-        private VertexBuffer<int> buffer;
+        private struct Vertex : IVertexDeclarable { }
+
+        private Vertex[] vertices = new Vertex[]
+        {
+            new Vertex(),
+            new Vertex()
+        };
+
+        private VertexBuffer<Vertex> buffer;
         private Mock<IBufferAdapter> adapter;
 
         [SetUp]
@@ -21,7 +29,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
             adapter = new Mock<IBufferAdapter>();
             adapter.Setup(a => a.GenBuffer())
                    .Returns(1);
-            buffer = new VertexBuffer<int>(adapter.Object);
+            buffer = new VertexBuffer<Vertex>(adapter.Object);
         }
 
         [TearDown]
@@ -71,7 +79,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void Fill_ThrowsObjectDisposedException_OnDisposedBuffer()
         {
-            Action fill = () => buffer.Fill(new IntPtr(20), new int[] { 1 }, BufferUsageHint.StaticDraw);
+            Action fill = () => buffer.Fill(new IntPtr(20), vertices, BufferUsageHint.StaticDraw);
             buffer.Dispose();
 
             fill.ShouldThrow<ObjectDisposedException>()
@@ -81,7 +89,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void Fill_ThrowsArgumentException_OnZeroSize()
         {
-            Action fill = () => buffer.Fill(IntPtr.Zero, new int[] { 1 }, BufferUsageHint.StaticDraw);
+            Action fill = () => buffer.Fill(IntPtr.Zero, vertices, BufferUsageHint.StaticDraw);
             fill.ShouldThrow<ArgumentOutOfRangeException>().Message.ShouldContain(
                 "The size allocated to the buffer must be greater than zero"
             );
@@ -91,7 +99,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         public void BufferSize_IsStored_OnFill()
         {
             var size = new IntPtr(10);
-            buffer.Fill(size, new int[] { 1 }, BufferUsageHint.StaticDraw);
+            buffer.Fill(size, vertices, BufferUsageHint.StaticDraw);
 
             buffer.Size.ShouldBe(size);
         }
@@ -99,18 +107,17 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void AdapterBufferData_IsInvoked_OnFill()
         {
-            int[] data = { 1, 2, 3, 4 };
             var size = new IntPtr(20);
             var usageHint = BufferUsageHint.DynamicDraw;
 
-            buffer.Fill(size, data, usageHint);
-            adapter.Verify(a => a.BufferData(buffer.Target, size, data, usageHint), Times.Once);
+            buffer.Fill(size, vertices, usageHint);
+            adapter.Verify(a => a.BufferData(buffer.Target, size, vertices, usageHint), Times.Once);
         }
 
         [Test]
         public void FillPartial_ThrowsObjectDisposedException_OnDisposedBuffer()
         {
-            Action fillPartial = () => buffer.FillPartial(IntPtr.Zero, new IntPtr(10), new int[] { 1 });
+            Action fillPartial = () => buffer.FillPartial(IntPtr.Zero, new IntPtr(10), vertices);
             buffer.Dispose();
 
             fillPartial.ShouldThrow<ObjectDisposedException>()
@@ -120,7 +127,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void FillPartial_ThrowsUnallocatedBufferSizeException_WhenInvokedBeforeFill()
         {
-            Action fillPartial = () => buffer.FillPartial(IntPtr.Zero, IntPtr.Zero, new int[] { 1 });
+            Action fillPartial = () => buffer.FillPartial(IntPtr.Zero, IntPtr.Zero, vertices);
 
             fillPartial.ShouldThrow<UnallocatedBufferSizeException>().Message.ShouldContain(
                 $"The size of the buffer has not yet been allocated. Have you called Fill?"
@@ -131,7 +138,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         public void FillPartial_ThrowsArgumentOutOfRangeException_ForNegativeInputs(IntPtr offset, IntPtr size, string name)
         {
             FillBufferCorrectly();
-            Action fillPartial = () => buffer.FillPartial(offset, size, new int[] { 1 });
+            Action fillPartial = () => buffer.FillPartial(offset, size, vertices);
             fillPartial.ShouldThrow<ArgumentOutOfRangeException>()
                        .Message.ShouldContain($"{nameof(name)}");
         }
@@ -151,7 +158,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
             FillBufferCorrectly();
             IntPtr size = new IntPtr(100);
             IntPtr offset = new IntPtr(100);
-            Action fillPartial = () => buffer.FillPartial(size, offset, new int[] { 1 });
+            Action fillPartial = () => buffer.FillPartial(size, offset, vertices);
 
             fillPartial.ShouldThrow<ArgumentOutOfRangeException>().Message.ShouldContain(
                 $"The given offset : {offset} and size : {size} were outside the buffer's size"
@@ -165,7 +172,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
             FillPartialCorrectly();
 
             adapter.Verify(a => a.BufferSubData(
-                buffer.Target, new IntPtr(4), new IntPtr(4), new int[] { 1 }),
+                buffer.Target, new IntPtr(4), new IntPtr(4), vertices),
                 Times.Once
            );
         }
@@ -187,12 +194,12 @@ namespace XogoEngine.OpenGL.Test.Vertex
 
         private void FillBufferCorrectly()
         {
-            buffer.Fill(new IntPtr(10), new int[] { 1 }, BufferUsageHint.StaticDraw);
+            buffer.Fill(new IntPtr(10), vertices, BufferUsageHint.StaticDraw);
         }
 
         private void FillPartialCorrectly()
         {
-            buffer.FillPartial(new IntPtr(4), new IntPtr(4), new int[] { 1 });
+            buffer.FillPartial(new IntPtr(4), new IntPtr(4), vertices);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace XogoEngine.OpenGL.Shaders
     using AttribDictionary = Dictionary<string, ShaderAttribute>;
     using UniformDictionary = Dictionary<string, ShaderUniform>;
 
-    public sealed class ShaderProgram : IResource<int>
+    public sealed class ShaderProgram : IShaderProgram
     {
         private int handle;
         private readonly IShaderAdapter adapter;
@@ -110,6 +110,9 @@ namespace XogoEngine.OpenGL.Shaders
                     $"Uniform name : {name} could not be found for shader program Id : {handle}"
                 );
             }
+            /* Currently bufferSize is hard-coded as 200
+             * in the future we may want to query for GL_ACTIVE_UNIFORM_MAX_LENGTH
+             * and use its result instead */
             var uniform = adapter.GetActiveUniform(handle, location, 200);
             uniforms.Add(uniform.Name, uniform);
             return location;
