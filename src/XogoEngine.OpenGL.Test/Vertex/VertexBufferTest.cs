@@ -14,7 +14,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
     {
         private struct Vertex : IVertexDeclarable
         {
-            VertexDeclaration IVertexDeclarable.Declaration
+            IVertexDeclaration IVertexDeclarable.Declaration
             {
                 get { return null; }
             }

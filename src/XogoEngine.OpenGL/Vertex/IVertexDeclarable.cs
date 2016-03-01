@@ -2,6 +2,6 @@ namespace XogoEngine.OpenGL.Vertex
 {
     public interface IVertexDeclarable
     {
-        VertexDeclaration Declaration { get; }
+        IVertexDeclaration Declaration { get; }
     }
 }

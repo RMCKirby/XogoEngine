@@ -30,7 +30,7 @@ namespace XogoEngine.OpenGL.Vertex
             adapter.BindVertexArray(handle);
         }
 
-        public void SetUp(IShaderProgram shaderProgram, VertexDeclaration vertexDeclaration)
+        public void SetUp(IShaderProgram shaderProgram, IVertexDeclaration vertexDeclaration)
         {
             this.ThrowIfDisposed();
             if (shaderProgram == null)
@@ -41,6 +41,7 @@ namespace XogoEngine.OpenGL.Vertex
             {
                 throw new ArgumentNullException(nameof(vertexDeclaration));
             }
+            vertexDeclaration.Apply(adapter, shaderProgram);
         }
 
         public void Dispose()

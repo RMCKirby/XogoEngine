@@ -13,19 +13,17 @@ namespace XogoEngine.OpenGL.Test.Vertex
     {
         private VertexArrayObject vertexArray;
         private Mock<IVertexArrayAdapter> adapter;
-        private Mock<IVertexDeclarable> vertex;
+        private Mock<IVertexDeclaration> vertexDeclaration;
         private Mock<IShaderProgram> shaderProgram;
 
         [SetUp]
         public void SetUp()
         {
             adapter = new Mock<IVertexArrayAdapter>();
-            vertex = new Mock<IVertexDeclarable>();
             adapter.Setup(a => a.GenVertexArray())
                    .Returns(1);
-            vertex.SetupGet(v => v.Declaration)
-                  .Returns(new VertexDeclaration(0, null));
 
+            vertexDeclaration = new Mock<IVertexDeclaration>();
             shaderProgram = new Mock<IShaderProgram>();
 
             vertexArray = new VertexArrayObject(adapter.Object);
@@ -72,7 +70,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void SetUp_Throws_ObjectDisposedException_OnDisposedInstance()
         {
-            Action setUp = () => vertexArray.SetUp(shaderProgram.Object, vertex.Object.Declaration);
+            Action setUp = () => vertexArray.SetUp(shaderProgram.Object, vertexDeclaration.Object);
 
             vertexArray.Dispose();
             AssertThrowsObjectDisposedException(setUp);
@@ -81,7 +79,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void SetUp_ThrowsArgumentNullException_OnNullShaderProgram()
         {
-            Action setUp = () => vertexArray.SetUp(null, vertex.Object.Declaration);
+            Action setUp = () => vertexArray.SetUp(null, vertexDeclaration.Object);
             setUp.ShouldThrow<ArgumentNullException>();
         }
 
@@ -90,6 +88,13 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             Action setUp = () => vertexArray.SetUp(shaderProgram.Object, null);
             setUp.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void VertexDeclarationApply_IsInvoked_OnSetUp()
+        {
+            vertexArray.SetUp(shaderProgram.Object, vertexDeclaration.Object);
+            vertexDeclaration.Verify(v => v.Apply(adapter.Object, shaderProgram.Object), Times.Once);
         }
 
         [Test]
