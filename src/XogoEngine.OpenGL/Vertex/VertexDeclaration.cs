@@ -6,7 +6,7 @@ using XogoEngine.OpenGL.Shaders;
 
 namespace XogoEngine.OpenGL.Vertex
 {
-    public sealed class VertexDeclaration
+    public sealed class VertexDeclaration : IVertexDeclaration
     {
         private VertexElement[] elements;
 
