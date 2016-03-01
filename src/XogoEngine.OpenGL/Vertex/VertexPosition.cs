@@ -18,21 +18,19 @@ namespace XogoEngine.OpenGL.Vertex
         {
             get
             {
-                var vertexElements = new VertexElement[]
-                {
-                    new VertexElement(
-                        0,
-                        VertexElementUsage.Position,
-                        VertexAttribPointerType.Float,
-                        2,
-                        false
-                    )
-                };
-                return new VertexDeclaration(
-                    Marshal.SizeOf(default(VertexPosition)),
-                    vertexElements
-                );
+                return declaration;
             }
+        }
+
+        private static VertexDeclaration declaration;
+
+        static VertexPosition()
+        {
+            var vertexElements = new VertexElement[]
+            {
+                new VertexElement(0, VertexElementUsage.Position, VertexAttribPointerType.Float, 2, false)
+            };
+            declaration = new VertexDeclaration(Marshal.SizeOf(default(VertexPosition)), vertexElements);
         }
     }
 }
