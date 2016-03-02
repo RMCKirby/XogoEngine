@@ -13,7 +13,8 @@ namespace XogoEngine.OpenGL.Test.Vertex
     {
         private VertexArrayObject vertexArray;
         private Mock<IVertexArrayAdapter> adapter;
-        private Mock<IVertexBuffer<VertexPosition>> vertexBuffer;
+        private Mock<IVertexDeclaration> vertexDeclaration;
+        private Mock<IShaderProgram> shaderProgram;
 
         [SetUp]
         public void SetUp()
@@ -22,7 +23,9 @@ namespace XogoEngine.OpenGL.Test.Vertex
             adapter.Setup(a => a.GenVertexArray())
                    .Returns(1);
 
-            vertexBuffer = new Mock<IVertexBuffer<VertexPosition>>();
+            vertexDeclaration = new Mock<IVertexDeclaration>();
+            shaderProgram = new Mock<IShaderProgram>();
+
             vertexArray = new VertexArrayObject(adapter.Object);
         }
 
@@ -67,10 +70,31 @@ namespace XogoEngine.OpenGL.Test.Vertex
         [Test]
         public void SetUp_Throws_ObjectDisposedException_OnDisposedInstance()
         {
-            /*Action setUp = () => vertexArray.SetUp(null, null);
+            Action setUp = () => vertexArray.SetUp(shaderProgram.Object, vertexDeclaration.Object);
 
             vertexArray.Dispose();
-            AssertThrowsObjectDisposedException(setUp);*/
+            AssertThrowsObjectDisposedException(setUp);
+        }
+
+        [Test]
+        public void SetUp_ThrowsArgumentNullException_OnNullShaderProgram()
+        {
+            Action setUp = () => vertexArray.SetUp(null, vertexDeclaration.Object);
+            setUp.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void SetUp_ThrowsArgumentNullException_OnNullVertexDeclaration()
+        {
+            Action setUp = () => vertexArray.SetUp(shaderProgram.Object, null);
+            setUp.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void VertexDeclarationApply_IsInvoked_OnSetUp()
+        {
+            vertexArray.SetUp(shaderProgram.Object, vertexDeclaration.Object);
+            vertexDeclaration.Verify(v => v.Apply(adapter.Object, shaderProgram.Object), Times.Once);
         }
 
         [Test]
@@ -93,11 +117,6 @@ namespace XogoEngine.OpenGL.Test.Vertex
             vertexArray.Dispose();
             action.ShouldThrow<ObjectDisposedException>()
                   .ObjectName.ShouldBe(vertexArray.GetType().FullName);
-        }
-
-        private struct VertexPosition : IVertexDeclarable
-        {
-
         }
     }
 }

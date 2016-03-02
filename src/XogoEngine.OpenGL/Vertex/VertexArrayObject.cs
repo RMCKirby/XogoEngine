@@ -8,7 +8,7 @@ namespace XogoEngine.OpenGL.Vertex
     public sealed class VertexArrayObject : IResource<int>
     {
         private int handle;
-        private IVertexArrayAdapter adapter;
+        private readonly IVertexArrayAdapter adapter;
         private bool isDisposed = false;
 
         public VertexArrayObject(IVertexArrayAdapter adapter)
@@ -30,9 +30,18 @@ namespace XogoEngine.OpenGL.Vertex
             adapter.BindVertexArray(handle);
         }
 
-        public void SetUp(IShaderProgram shaderProgram, VertexDeclaration vertexDeclaration)
+        public void SetUp(IShaderProgram shaderProgram, IVertexDeclaration vertexDeclaration)
         {
             this.ThrowIfDisposed();
+            if (shaderProgram == null)
+            {
+                throw new ArgumentNullException(nameof(shaderProgram));
+            }
+            if (vertexDeclaration == null)
+            {
+                throw new ArgumentNullException(nameof(vertexDeclaration));
+            }
+            vertexDeclaration.Apply(adapter, shaderProgram);
         }
 
         public void Dispose()

@@ -55,12 +55,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vertex\IVertexBuffer.cs" />
     <Compile Include="Vertex\IVertexDeclarable.cs" />
+    <Compile Include="Vertex\IVertexDeclaration.cs" />
     <Compile Include="Vertex\UnallocatedBufferSizeException.cs" />
     <Compile Include="Vertex\VertexArrayObject.cs" />
     <Compile Include="Vertex\VertexBuffer.cs" />
     <Compile Include="Vertex\VertexDeclaration.cs" />
     <Compile Include="Vertex\VertexElement.cs" />
     <Compile Include="Vertex\VertexElementUsage.cs" />
+    <Compile Include="Vertex\VertexPosition.cs" />
+    <Compile Include="Vertex\VertexPositionColour.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
