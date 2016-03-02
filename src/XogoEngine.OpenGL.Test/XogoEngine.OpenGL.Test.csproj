@@ -48,6 +48,7 @@
     <Compile Include="Vertex\VertexElementTest.cs" />
     <Compile Include="Vertex\VertexElementUsageTest.cs" />
     <Compile Include="Vertex\VertexPositionTest.cs" />
+    <Compile Include="Vertex\VertexPositionColourTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="XogoEngine.OpenGL">
