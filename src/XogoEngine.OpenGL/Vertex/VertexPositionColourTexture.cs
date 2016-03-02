@@ -49,9 +49,9 @@ namespace XogoEngine.OpenGL.Vertex
             unchecked
             {
                 int hash = 17;
-                hash = hash * 23 + Position.GetHashCode();
-                hash = hash * 23 + Colour.GetHashCode();
-                hash = hash * 23 + TextureCoordinate.GetHashCode();
+                hash = hash * 23 + Position.GetFixedHashCode();
+                hash = hash * 23 + Colour.GetFixedHashCode();
+                hash = hash * 23 + TextureCoordinate.GetFixedHashCode();
                 return hash;
             }
         }

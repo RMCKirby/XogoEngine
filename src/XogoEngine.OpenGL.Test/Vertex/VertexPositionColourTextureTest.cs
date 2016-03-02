@@ -107,7 +107,7 @@ namespace XogoEngine.Test.OpenGL.Vertex
         [Test, TestCaseSource(nameof(UnequalVertices))]
         public void GetHashCode_IsNotEqual_ForUnequalVertices(VertexPositionColourTexture other)
         {
-            //vertex.GetHashCode().ShouldNotBe(other.GetHashCode());
+            vertex.GetHashCode().ShouldNotBe(other.GetHashCode());
         }
 
         private IEnumerable<TestCaseData> UnequalVertices
