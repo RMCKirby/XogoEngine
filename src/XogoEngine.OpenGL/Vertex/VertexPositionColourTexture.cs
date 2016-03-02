@@ -1,11 +1,13 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
+using System;
 using System.Runtime.InteropServices;
+using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Vertex
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct VertexPositionColourTexture : IVertexDeclarable
+    public struct VertexPositionColourTexture : IVertexDeclarable, IEquatable<VertexPositionColourTexture>
     {
         public VertexPositionColourTexture(Vector2 position, Vector4 colour, Vector2 textureCoordinate)
         {
@@ -23,6 +25,34 @@ namespace XogoEngine.OpenGL.Vertex
             get
             {
                 return declaration;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is VertexPositionColourTexture))
+            {
+                return false;
+            }
+            return Equals((VertexPositionColourTexture)obj);
+        }
+
+        public bool Equals(VertexPositionColourTexture other)
+        {
+            return Position == other.Position
+                && Colour == other.Colour
+                && TextureCoordinate == other.TextureCoordinate;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Position.GetHashCode();
+                hash = hash * 23 + Colour.GetHashCode();
+                hash = hash * 23 + TextureCoordinate.GetHashCode();
+                return hash;
             }
         }
 

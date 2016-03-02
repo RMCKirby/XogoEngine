@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ResourceExtensionsTest.cs" />
+    <Compile Include="Extensions\VectorExtensionsTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />
     <Compile Include="Shaders\ShaderAttributeTest.cs" />
     <Compile Include="Shaders\ShaderUniformTest.cs" />

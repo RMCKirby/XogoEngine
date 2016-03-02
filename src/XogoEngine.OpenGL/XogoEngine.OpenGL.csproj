@@ -42,6 +42,7 @@
     <Compile Include="Adapters\IShaderAdapter.cs" />
     <Compile Include="Adapters\IVertexArrayAdapter.cs" />
     <Compile Include="Extensions\IResourceExtensions.cs" />
+    <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="Shaders\Shader.cs" />
     <Compile Include="Shaders\ShaderAttribute.cs" />
     <Compile Include="Shaders\ShaderUniform.cs" />
