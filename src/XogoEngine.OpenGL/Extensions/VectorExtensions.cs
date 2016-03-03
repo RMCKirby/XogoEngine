@@ -1,4 +1,5 @@
 using OpenTK;
+using XogoEngine.OpenGL.Utilities;
 
 namespace XogoEngine.OpenGL.Extensions
 {
@@ -7,39 +8,12 @@ namespace XogoEngine.OpenGL.Extensions
     public static class VectorExtensions
     {
         public static int GetFixedHashCode(this Vector2 vector)
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 23 + vector.X.GetHashCode();
-                hash = hash * 23 + vector.Y.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCodeGenerator.Initialise().Hash(vector.X).Hash(vector.Y).Value;
 
         public static int GetFixedHashCode(this Vector3 vector)
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 23 + vector.X.GetHashCode();
-                hash = hash * 23 + vector.Y.GetHashCode();
-                hash = hash * 23 + vector.Z.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCodeGenerator.Initialise().Hash(vector.X).Hash(vector.Y).Hash(vector.Z).Value;
 
         public static int GetFixedHashCode(this Vector4 vector)
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 23 + vector.X.GetHashCode();
-                hash = hash * 23 + vector.Y.GetHashCode();
-                hash = hash * 23 + vector.Z.GetHashCode();
-                hash = hash * 23 + vector.W.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCodeGenerator.Initialise().Hash(vector.X).Hash(vector.Y).Hash(vector.Z).Hash(vector.W).Value;
     }
 }

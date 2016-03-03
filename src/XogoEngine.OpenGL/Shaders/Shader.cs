@@ -2,6 +2,7 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Extensions;
+using XogoEngine.OpenGL.Utilities;
 
 namespace XogoEngine.OpenGL.Shaders
 {
@@ -59,15 +60,7 @@ namespace XogoEngine.OpenGL.Shaders
         }
 
         public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                hash = hash * 23 + handle.GetHashCode();
-                hash = hash * 23 + ShaderType.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCodeGenerator.Initialise().Hash(handle).Hash(ShaderType).Value;
 
         public override string ToString()
         {

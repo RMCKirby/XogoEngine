@@ -3,13 +3,13 @@ using System;
 
 namespace XogoEngine.OpenGL.Vertex
 {
-    public interface IVertexBuffer<T> where T : struct, IVertexDeclarable
+    public interface IVertexBuffer<TVertex> where TVertex : struct, IVertexDeclarable
     {
         BufferTarget Target { get; }
         IntPtr Size { get; }
 
         void Bind();
-        void Fill(IntPtr size, T[] data, BufferUsageHint usageHint);
-        void FillPartial(IntPtr size, IntPtr offset, T[] data);
+        void Fill(IntPtr size, TVertex[] data, BufferUsageHint usageHint);
+        void FillPartial(IntPtr size, IntPtr offset, TVertex[] data);
     }
 }

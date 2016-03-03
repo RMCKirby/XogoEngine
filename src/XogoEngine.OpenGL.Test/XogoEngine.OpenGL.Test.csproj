@@ -33,6 +33,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="Shaders\" />
     <Folder Include="Properties\" />
+    <Folder Include="Utilities\" />
     <Folder Include="Vertex\" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +44,8 @@
     <Compile Include="Shaders\ShaderUniformTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\HashCodeGeneratorTest.cs" />
+    <Compile Include="Vertex\ElementBufferTest.cs" />
     <Compile Include="Vertex\VertexArrayObjectTest.cs" />
     <Compile Include="Vertex\VertexBufferTest.cs" />
     <Compile Include="Vertex\VertexDeclarationTest.cs" />

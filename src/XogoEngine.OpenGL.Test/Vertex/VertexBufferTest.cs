@@ -14,7 +14,7 @@ namespace XogoEngine.OpenGL.Test.Vertex
     {
         private struct Vertex : IVertexDeclarable
         {
-            IVertexDeclaration IVertexDeclarable.Declaration
+            public IVertexDeclaration Declaration
             {
                 get { return null; }
             }
@@ -63,6 +63,12 @@ namespace XogoEngine.OpenGL.Test.Vertex
         public void BufferTarget_ShouldBeArrayBuffer_AfterConstruction()
         {
             buffer.Target.ShouldBe(BufferTarget.ArrayBuffer);
+        }
+
+        [Test]
+        public void VertexDeclaration_OfGenericParameter_IsStored()
+        {
+            buffer.VertexDeclaration.ShouldBe(default(Vertex).Declaration);
         }
 
         [Test]

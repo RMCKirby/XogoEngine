@@ -5,10 +5,10 @@ using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Vertex
 {
-    public sealed class VertexBuffer<T> :
-        IVertexBuffer<T>,
+    public sealed class VertexBuffer<TVertex> :
+        IVertexBuffer<TVertex>,
         IResource<int>
-        where T : struct, IVertexDeclarable
+        where TVertex : struct, IVertexDeclarable
     {
         private int handle;
         private readonly IBufferAdapter adapter;
@@ -19,6 +19,7 @@ namespace XogoEngine.OpenGL.Vertex
         {
             this.adapter = adapter;
             this.handle = adapter.GenBuffer();
+            this.VertexDeclaration = default(TVertex).Declaration;
         }
 
         public int Handle { get { return handle; } }
@@ -26,13 +27,15 @@ namespace XogoEngine.OpenGL.Vertex
         public IntPtr Size { get; private set; }
         public bool IsDisposed { get { return isDisposed; } }
 
+        public IVertexDeclaration VertexDeclaration { get; }
+
         public void Bind()
         {
             this.ThrowIfDisposed();
             adapter.BindBuffer(Target, handle);
         }
 
-        public void Fill(IntPtr size, T[] data, BufferUsageHint usageHint)
+        public void Fill(IntPtr size, TVertex[] data, BufferUsageHint usageHint)
         {
             this.ThrowIfDisposed();
             if (size == IntPtr.Zero || size.ToInt32() < 0)
@@ -45,7 +48,7 @@ namespace XogoEngine.OpenGL.Vertex
             adapter.BufferData(Target, size, data, usageHint);
         }
 
-        public void FillPartial(IntPtr offset, IntPtr size, T[] data)
+        public void FillPartial(IntPtr offset, IntPtr size, TVertex[] data)
         {
             this.ThrowIfDisposed();
             if (Size == IntPtr.Zero)
