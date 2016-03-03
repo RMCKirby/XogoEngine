@@ -45,6 +45,7 @@
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HashCodeGeneratorTest.cs" />
+    <Compile Include="Vertex\ElementBufferTest.cs" />
     <Compile Include="Vertex\VertexArrayObjectTest.cs" />
     <Compile Include="Vertex\VertexBufferTest.cs" />
     <Compile Include="Vertex\VertexDeclarationTest.cs" />
