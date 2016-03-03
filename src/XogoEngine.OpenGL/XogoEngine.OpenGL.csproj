@@ -42,6 +42,7 @@
     <Compile Include="Adapters\IShaderAdapter.cs" />
     <Compile Include="Adapters\IVertexArrayAdapter.cs" />
     <Compile Include="Extensions\IResourceExtensions.cs" />
+    <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="Shaders\Shader.cs" />
     <Compile Include="Shaders\ShaderAttribute.cs" />
     <Compile Include="Shaders\ShaderUniform.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Vertex\VertexElementUsage.cs" />
     <Compile Include="Vertex\VertexPosition.cs" />
     <Compile Include="Vertex\VertexPositionColour.cs" />
+    <Compile Include="Vertex\VertexPositionColourTexture.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">

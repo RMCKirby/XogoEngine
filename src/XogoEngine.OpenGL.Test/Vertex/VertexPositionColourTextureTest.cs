@@ -1,24 +1,33 @@
 using NUnit.Framework;
+using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Vertex;
 
-namespace XogoEngine.OpenGL.Test.Vertex
+namespace XogoEngine.Test.OpenGL.Vertex
 {
     [TestFixture]
-    internal sealed class VertexPositionColourTest
+    internal sealed class VertexPositionColourTextureTest
     {
-        private VertexPositionColour vertex;
-        private static Vector2 position = Vector2.One;
-        private static Vector4 colour = Vector4.One;
+        private VertexPositionColourTexture vertex;
+        private Vector2 position;
+        private Vector4 colour;
+        private Vector2 textureCoordinate;
 
         [SetUp]
         public void SetUp()
         {
-            vertex = new VertexPositionColour(position, colour);
+            position = Vector2.Zero;
+            colour = Vector4.Zero;
+            textureCoordinate = Vector2.Zero;
+
+            vertex = new VertexPositionColourTexture(
+                position,
+                colour,
+                textureCoordinate
+            );
         }
 
         [Test]
@@ -26,22 +35,24 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             vertex.ShouldSatisfyAllConditions(
                 () => vertex.Position.ShouldBe(position),
-                () => vertex.Colour.ShouldBe(colour)
+                () => vertex.Colour.ShouldBe(colour),
+                () => vertex.TextureCoordinate.ShouldBe(textureCoordinate)
             );
         }
 
         [Test]
-        public void VertexStride_ShouldBeExpectedSize_ForDeclaration()
+        public void VertexStride_ShouldBe_ExpectedSize()
         {
-            vertex.Declaration.Stride.ShouldBe(6 * sizeof(float));
+            vertex.Declaration.Stride.ShouldBe(8 * sizeof(float));
         }
 
         [Test]
         public void VertexElements_ShouldContain_ExpectedElements()
         {
-            vertex.Declaration.Elements.Length.ShouldBe(2);
+            vertex.Declaration.Elements.Length.ShouldBe(3);
             vertex.Declaration.Elements.ShouldContain(e => e.Usage == "position");
             vertex.Declaration.Elements.ShouldContain(e => e.Usage == "colour");
+            vertex.Declaration.Elements.ShouldContain(e => e.Usage == "texCoord");
         }
 
         [Test]
@@ -49,10 +60,12 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             var position = vertex.Declaration.Elements.Single(e => e.Usage == "position");
             var colour = vertex.Declaration.Elements.Single(e => e.Usage == "colour");
+            var textureCoordinate = vertex.Declaration.Elements.Single(e => e.Usage == "texCoord");
 
             var pointerType = VertexAttribPointerType.Float;
             AssertVertexElementProperties(position, 0, pointerType, 2, false);
             AssertVertexElementProperties(colour, 8, pointerType, 4, false);
+            AssertVertexElementProperties(textureCoordinate, 24, pointerType, 2, false);
         }
 
         [Test]
@@ -62,19 +75,19 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test, TestCaseSource(nameof(UnequalVertices))]
-        public void TypeEquals_ReturnsFalse_OnUnequalVertex(VertexPositionColour other)
+        public void TypeEquals_ReturnsFalse_OnUnequalVertices(VertexPositionColourTexture other)
         {
             vertex.Equals(other).ShouldBeFalse();
         }
 
         [Test, TestCaseSource(nameof(UnequalVertices))]
-        public void ObjectEquals_ReturnsFalse_OnUnequalVertex(object other)
+        public void ObjectEquals_ReturnsFalse_OnUnequalVertices(object other)
         {
             vertex.Equals(other).ShouldBeFalse();
         }
 
         [Test, TestCaseSource(nameof(EqualVertex))]
-        public void TypeEquals_ReturnsTrue_OnEqualVertex(VertexPositionColour other)
+        public void TypeEquals_ReturnsTrue_OnEqualVertex(VertexPositionColourTexture other)
         {
             vertex.Equals(other).ShouldBeTrue();
         }
@@ -86,37 +99,37 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test, TestCaseSource(nameof(EqualVertex))]
-        public void EqualsOperator_ReturnsTrue_OnEqualVertex(VertexPositionColour other)
+        public void EqualsOperator_ReturnsTrue_OnEqualVertex(VertexPositionColourTexture other)
         {
             (vertex == other).ShouldBeTrue();
         }
 
         [Test, TestCaseSource(nameof(UnequalVertices))]
-        public void EqualsOperator_ReturnsFalse_OnUnequalVertex(VertexPositionColour other)
+        public void EqualsOperator_ReturnsFalse_OnUnequalVertices(VertexPositionColourTexture other)
         {
             (vertex == other).ShouldBeFalse();
         }
 
         [Test, TestCaseSource(nameof(UnequalVertices))]
-        public void NotEqualsOperator_ReturnsTrue_OnUnequalVertex(VertexPositionColour other)
+        public void NotEqualsOperator_ReturnsTrue_OnUnequalVertices(VertexPositionColourTexture other)
         {
             (vertex != other).ShouldBeTrue();
         }
 
         [Test, TestCaseSource(nameof(EqualVertex))]
-        public void NotEqualsOperator_ReturnsFalse_OnEqualVertex(VertexPositionColour other)
+        public void NotEqualsOperator_ReturnsFalse_OnEqualVertex(VertexPositionColourTexture other)
         {
             (vertex != other).ShouldBeFalse();
         }
 
         [Test, TestCaseSource(nameof(EqualVertex))]
-        public void HashCodes_ShouldBeEqual_ForEqualVertices(VertexPositionColour other)
+        public void GetHashcode_IsEqual_ForEqualVertices(VertexPositionColourTexture other)
         {
             vertex.GetHashCode().ShouldBe(other.GetHashCode());
         }
 
         [Test, TestCaseSource(nameof(UnequalVertices))]
-        public void HashCodes_ShouldNotBeEqual_ForUnequalVertices(VertexPositionColour other)
+        public void GetHashCode_IsNotEqual_ForUnequalVertices(VertexPositionColourTexture other)
         {
             vertex.GetHashCode().ShouldNotBe(other.GetHashCode());
         }
@@ -125,13 +138,20 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             get
             {
-                yield return new TestCaseData(new VertexPositionColour(
-                    new Vector2(10, 5),
-                    colour
+                yield return new TestCaseData(new VertexPositionColourTexture(
+                    Vector2.One,
+                    vertex.Colour,
+                    vertex.TextureCoordinate
                 ));
-                yield return new TestCaseData(new VertexPositionColour(
-                    position,
-                    Vector4.UnitW
+                yield return new TestCaseData(new VertexPositionColourTexture(
+                    vertex.Position,
+                    Vector4.One,
+                    vertex.TextureCoordinate
+                ));
+                yield return new TestCaseData(new VertexPositionColourTexture(
+                    vertex.Position,
+                    vertex.Colour,
+                    Vector2.One
                 ));
             }
         }
@@ -140,9 +160,10 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             get
             {
-                yield return new TestCaseData(new VertexPositionColour(
-                    position,
-                    colour
+                yield return new TestCaseData(new VertexPositionColourTexture(
+                    vertex.Position,
+                    vertex.Colour,
+                    vertex.TextureCoordinate
                 ));
             }
         }

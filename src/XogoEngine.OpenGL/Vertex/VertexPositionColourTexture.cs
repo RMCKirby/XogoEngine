@@ -7,16 +7,18 @@ using XogoEngine.OpenGL.Extensions;
 namespace XogoEngine.OpenGL.Vertex
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct VertexPositionColour : IVertexDeclarable, IEquatable<VertexPositionColour>
+    public struct VertexPositionColourTexture : IVertexDeclarable, IEquatable<VertexPositionColourTexture>
     {
-        public VertexPositionColour(Vector2 position, Vector4 colour)
+        public VertexPositionColourTexture(Vector2 position, Vector4 colour, Vector2 textureCoordinate)
         {
             Position = position;
             Colour = colour;
+            TextureCoordinate = textureCoordinate;
         }
 
         public Vector2 Position { get; }
         public Vector4 Colour { get; }
+        public Vector2 TextureCoordinate { get; }
 
         public IVertexDeclaration Declaration
         {
@@ -28,25 +30,26 @@ namespace XogoEngine.OpenGL.Vertex
 
         public override bool Equals(object obj)
         {
-            if (!(obj is VertexPositionColour))
+            if (!(obj is VertexPositionColourTexture))
             {
                 return false;
             }
-            return Equals((VertexPositionColour)obj);
+            return Equals((VertexPositionColourTexture)obj);
         }
 
-        public bool Equals(VertexPositionColour other)
+        public bool Equals(VertexPositionColourTexture other)
         {
             return Position == other.Position
-                && Colour == other.Colour;
+                && Colour == other.Colour
+                && TextureCoordinate == other.TextureCoordinate;
         }
 
-        public static bool operator == (VertexPositionColour left, VertexPositionColour right)
+        public static bool operator == (VertexPositionColourTexture left, VertexPositionColourTexture right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator != (VertexPositionColour left, VertexPositionColour right)
+        public static bool operator != (VertexPositionColourTexture left, VertexPositionColourTexture right)
         {
             return !left.Equals(right);
         }
@@ -58,20 +61,23 @@ namespace XogoEngine.OpenGL.Vertex
                 int hash = 17;
                 hash = hash * 23 + Position.GetFixedHashCode();
                 hash = hash * 23 + Colour.GetFixedHashCode();
+                hash = hash * 23 + TextureCoordinate.GetFixedHashCode();
                 return hash;
             }
         }
 
         private static VertexDeclaration declaration;
 
-        static VertexPositionColour()
+        static VertexPositionColourTexture()
         {
-            var vertexElements = new VertexElement[]
+            var stride = Marshal.SizeOf(default(VertexPositionColourTexture));
+            var elements = new VertexElement[]
             {
                 new VertexElement(0, VertexElementUsage.Position, VertexAttribPointerType.Float, 2, false),
-                new VertexElement(8, VertexElementUsage.Colour, VertexAttribPointerType.Float, 4, false)
+                new VertexElement(8, VertexElementUsage.Colour, VertexAttribPointerType.Float, 4, false),
+                new VertexElement(24, VertexElementUsage.TexCoord, VertexAttribPointerType.Float, 2, false)
             };
-            declaration = new VertexDeclaration(Marshal.SizeOf(default(VertexPositionColour)), vertexElements);
+            declaration = new VertexDeclaration(stride, elements);
         }
     }
 }
