@@ -32,5 +32,11 @@ namespace XogoEngine.OpenGL.Test.Vertex
                 () => elementBuffer.Target.ShouldBe(BufferTarget.ElementArrayBuffer)
             );
         }
+
+        [Test]
+        public void AdapterGenBuffer_IsInvoked_OnConstruction()
+        {
+            adapter.Verify(a => a.GenBuffer(), Times.Once);
+        }
     }
 }
