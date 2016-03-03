@@ -2,6 +2,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Runtime.InteropServices;
+using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Vertex
 {
@@ -52,7 +53,7 @@ namespace XogoEngine.OpenGL.Vertex
             unchecked
             {
                 int hash = 17;
-                hash = hash * 23 + Position.GetHashCode();
+                hash = hash * 23 + Position.GetFixedHashCode();
                 return hash;
             }
         }
