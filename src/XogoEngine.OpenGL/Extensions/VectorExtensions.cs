@@ -1,4 +1,5 @@
 using OpenTK;
+using XogoEngine.OpenGL.Utilities;
 
 namespace XogoEngine.OpenGL.Extensions
 {
@@ -6,43 +7,13 @@ namespace XogoEngine.OpenGL.Extensions
      * see: https://github.com/opentk/opentk/issues/355 */
     public static class VectorExtensions
     {
-        private const int HashCodeMultiplier = 37;
-        private const int HashCodeInitialiser = 17;
-
         public static int GetFixedHashCode(this Vector2 vector)
-        {
-            unchecked
-            {
-                int hash = HashCodeInitialiser;
-                hash = hash * HashCodeMultiplier + vector.X.GetHashCode();
-                hash = hash * HashCodeMultiplier + vector.Y.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCodeGenerator.Initialise().Hash(vector.X).Hash(vector.Y).Value;
 
         public static int GetFixedHashCode(this Vector3 vector)
-        {
-            unchecked
-            {
-                int hash = HashCodeInitialiser;
-                hash = hash * HashCodeMultiplier + vector.X.GetHashCode();
-                hash = hash * HashCodeMultiplier + vector.Y.GetHashCode();
-                hash = hash * HashCodeMultiplier + vector.Z.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCodeGenerator.Initialise().Hash(vector.X).Hash(vector.Y).Hash(vector.Z).Value;
 
         public static int GetFixedHashCode(this Vector4 vector)
-        {
-            unchecked
-            {
-                int hash = HashCodeInitialiser;
-                hash = hash * HashCodeMultiplier + vector.X.GetHashCode();
-                hash = hash * HashCodeMultiplier + vector.Y.GetHashCode();
-                hash = hash * HashCodeMultiplier + vector.Z.GetHashCode();
-                hash = hash * HashCodeMultiplier + vector.W.GetHashCode();
-                return hash;
-            }
-        }
+            => HashCodeGenerator.Initialise().Hash(vector.X).Hash(vector.Y).Hash(vector.Z).Hash(vector.W).Value;
     }
 }
