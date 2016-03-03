@@ -41,15 +41,8 @@ namespace XogoEngine.OpenGL.Vertex
                 && Colour == other.Colour;
         }
 
-        public static bool operator == (VertexPositionColour left, VertexPositionColour right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator != (VertexPositionColour left, VertexPositionColour right)
-        {
-            return !left.Equals(right);
-        }
+        public static bool operator ==(VertexPositionColour left, VertexPositionColour right) => left.Equals(right);
+        public static bool operator !=(VertexPositionColour left, VertexPositionColour right) => !left.Equals(right);
 
         public override int GetHashCode()
         {

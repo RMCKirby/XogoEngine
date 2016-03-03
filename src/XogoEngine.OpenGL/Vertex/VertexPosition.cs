@@ -33,20 +33,10 @@ namespace XogoEngine.OpenGL.Vertex
             return Equals((VertexPosition)obj);
         }
 
-        public bool Equals(VertexPosition other)
-        {
-            return Position == other.Position;
-        }
+        public bool Equals(VertexPosition other) => Position == other.Position;
 
-        public static bool operator == (VertexPosition left, VertexPosition right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator != (VertexPosition left, VertexPosition right)
-        {
-            return !left.Equals(right);
-        }
+        public static bool operator ==(VertexPosition left, VertexPosition right) => left.Equals(right);
+        public static bool operator !=(VertexPosition left, VertexPosition right) => !left.Equals(right);
 
         public override int GetHashCode()
         {
