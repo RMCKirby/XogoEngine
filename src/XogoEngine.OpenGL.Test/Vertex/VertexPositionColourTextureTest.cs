@@ -99,6 +99,30 @@ namespace XogoEngine.Test.OpenGL.Vertex
         }
 
         [Test, TestCaseSource(nameof(EqualVertex))]
+        public void EqualsOperator_ReturnsTrue_OnEqualVertex(VertexPositionColourTexture other)
+        {
+            (vertex == other).ShouldBeTrue();
+        }
+
+        [Test, TestCaseSource(nameof(UnequalVertices))]
+        public void EqualsOperator_ReturnsFalse_OnUnequalVertices(VertexPositionColourTexture other)
+        {
+            (vertex == other).ShouldBeFalse();
+        }
+
+        [Test, TestCaseSource(nameof(UnequalVertices))]
+        public void NotEqualsOperator_ReturnsTrue_OnUnequalVertices(VertexPositionColourTexture other)
+        {
+            (vertex != other).ShouldBeTrue();
+        }
+
+        [Test, TestCaseSource(nameof(EqualVertex))]
+        public void NotEqualsOperator_ReturnsFalse_OnEqualVertex(VertexPositionColourTexture other)
+        {
+            (vertex != other).ShouldBeFalse();
+        }
+
+        [Test, TestCaseSource(nameof(EqualVertex))]
         public void GetHashcode_IsEqual_ForEqualVertices(VertexPositionColourTexture other)
         {
             vertex.GetHashCode().ShouldBe(other.GetHashCode());

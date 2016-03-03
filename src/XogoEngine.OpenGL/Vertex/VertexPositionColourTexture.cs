@@ -44,6 +44,16 @@ namespace XogoEngine.OpenGL.Vertex
                 && TextureCoordinate == other.TextureCoordinate;
         }
 
+        public static bool operator == (VertexPositionColourTexture left, VertexPositionColourTexture right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator != (VertexPositionColourTexture left, VertexPositionColourTexture right)
+        {
+            return !left.Equals(right);
+        }
+
         public override int GetHashCode()
         {
             unchecked
