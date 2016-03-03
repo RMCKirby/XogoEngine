@@ -34,6 +34,7 @@
     <Folder Include="Extensions\" />
     <Folder Include="Shaders\" />
     <Folder Include="Properties\" />
+    <Folder Include="Utilities\" />
     <Folder Include="Vertex\" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +55,7 @@
     <Compile Include="Shaders\ShaderCompilationException.cs" />
     <Compile Include="Shaders\ProgramNotLinkedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\HashCodeGenerator.cs" />
     <Compile Include="Vertex\IVertexBuffer.cs" />
     <Compile Include="Vertex\IVertexDeclarable.cs" />
     <Compile Include="Vertex\IVertexDeclaration.cs" />
