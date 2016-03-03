@@ -19,12 +19,15 @@ namespace XogoEngine.OpenGL.Vertex
         {
             this.adapter = adapter;
             this.handle = adapter.GenBuffer();
+            this.VertexDeclaration = default(TVertex).Declaration;
         }
 
         public int Handle { get { return handle; } }
         public BufferTarget Target { get { return BufferTarget.ArrayBuffer; } }
         public IntPtr Size { get; private set; }
         public bool IsDisposed { get { return isDisposed; } }
+
+        public IVertexDeclaration VertexDeclaration { get; }
 
         public void Bind()
         {

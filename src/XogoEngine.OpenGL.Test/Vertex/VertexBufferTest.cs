@@ -66,6 +66,12 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test]
+        public void VertexDeclaration_OfGenericParameter_IsStored()
+        {
+            buffer.VertexDeclaration.ShouldBe(default(Vertex).Declaration);
+        }
+
+        [Test]
         public void Bind_ThrowsObjectDisposedException_OnDisposedBuffer()
         {
             Action bind = () => buffer.Bind();
