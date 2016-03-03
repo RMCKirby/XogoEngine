@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Shouldly;
+using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -11,20 +12,18 @@ namespace XogoEngine.OpenGL.Test.Vertex
     internal sealed class VertexPositionTest
     {
         private VertexPosition vertex;
+        private static Vector2 position = Vector2.One;
 
         [SetUp]
         public void SetUp()
         {
-            vertex = new VertexPosition(new Vector2(5, 10));
+            vertex = new VertexPosition(position);
         }
 
         [Test]
         public void VertexPosition_ShouldEqual_InjectedVector()
         {
-            vertex.ShouldSatisfyAllConditions(
-                () => vertex.Position.X.ShouldBe(5),
-                () => vertex.Position.Y.ShouldBe(10)
-            );
+            vertex.Position.ShouldBe(position);
         }
 
         [Test]
@@ -46,6 +45,88 @@ namespace XogoEngine.OpenGL.Test.Vertex
                 () => positionElement.NumberOfComponents.ShouldBe(2),
                 () => positionElement.Normalised.ShouldBe(false)
             );
+        }
+
+        [Test]
+        public void ObjectEquals_ReturnsFalse_OnNullReference()
+        {
+            vertex.Equals(null).ShouldBeFalse();
+        }
+
+        [Test, TestCaseSource(nameof(UnequalVertex))]
+        public void TypeEquals_ReturnsFalse_OnUnequalVertex(VertexPosition other)
+        {
+            vertex.Equals(other).ShouldBeFalse();
+        }
+
+        [Test, TestCaseSource(nameof(UnequalVertex))]
+        public void ObjectEquals_ReturnsFalse_OnUnequalVertex(object other)
+        {
+            vertex.Equals(other).ShouldBeFalse();
+        }
+
+        [Test, TestCaseSource(nameof(EqualVertex))]
+        public void TypeEquals_ReturnsTrue_OnEqualVertex(VertexPosition other)
+        {
+            vertex.Equals(other).ShouldBeTrue();
+        }
+
+        [Test, TestCaseSource(nameof(EqualVertex))]
+        public void ObjectEquals_ReturnsTrue_OnEqualVertex(object other)
+        {
+            vertex.Equals(other).ShouldBeTrue();
+        }
+
+        [Test, TestCaseSource(nameof(EqualVertex))]
+        public void EqualsOperator_ReturnsTrue_OnEqualVertex(VertexPosition other)
+        {
+            (vertex == other).ShouldBeTrue();
+        }
+
+        [Test, TestCaseSource(nameof(UnequalVertex))]
+        public void EqualsOperator_ReturnsFalse_OnUnequalVertex(VertexPosition other)
+        {
+            (vertex == other).ShouldBeFalse();
+        }
+
+        [Test, TestCaseSource(nameof(UnequalVertex))]
+        public void NotEqualsOperator_ReturnsTrue_OnUnequalVertex(VertexPosition other)
+        {
+            (vertex != other).ShouldBeTrue();
+        }
+
+        [Test, TestCaseSource(nameof(EqualVertex))]
+        public void NotEqualsOperator_ReturnsFalse_OnEqualVertex(VertexPosition other)
+        {
+            (vertex != other).ShouldBeFalse();
+        }
+
+        [Test, TestCaseSource(nameof(EqualVertex))]
+        public void HashCodes_ShouldBeEqual_ForEqualVertices(VertexPosition other)
+        {
+            vertex.GetHashCode().ShouldBe(other.GetHashCode());
+        }
+
+        [Test, TestCaseSource(nameof(UnequalVertex))]
+        public void HashCodes_ShouldNotBeEqual_ForUnequalVertices(VertexPosition other)
+        {
+            vertex.GetHashCode().ShouldNotBe(other.GetHashCode());
+        }
+
+        private IEnumerable<TestCaseData> UnequalVertex
+        {
+            get
+            {
+                yield return new TestCaseData(new VertexPosition(new Vector2(10, 5)));
+            }
+        }
+
+        private IEnumerable<TestCaseData> EqualVertex
+        {
+            get
+            {
+                yield return new TestCaseData(new VertexPosition(position));
+            }
         }
     }
 }

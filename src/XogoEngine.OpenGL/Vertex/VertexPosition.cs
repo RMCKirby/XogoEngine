@@ -1,11 +1,12 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
+using System;
 using System.Runtime.InteropServices;
 
 namespace XogoEngine.OpenGL.Vertex
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct VertexPosition : IVertexDeclarable
+    public struct VertexPosition : IVertexDeclarable, IEquatable<VertexPosition>
     {
         public VertexPosition(Vector2 position)
         {
@@ -19,6 +20,40 @@ namespace XogoEngine.OpenGL.Vertex
             get
             {
                 return declaration;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is VertexPosition))
+            {
+                return false;
+            }
+            return Equals((VertexPosition)obj);
+        }
+
+        public bool Equals(VertexPosition other)
+        {
+            return Position == other.Position;
+        }
+
+        public static bool operator == (VertexPosition left, VertexPosition right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator != (VertexPosition left, VertexPosition right)
+        {
+            return !left.Equals(right);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + Position.GetHashCode();
+                return hash;
             }
         }
 
