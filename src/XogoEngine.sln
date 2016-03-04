@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XogoEngine", "XogoEngine\XogoEngine.csproj", "{E94F316A-DED5-4388-8C32-BAD692762619}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XogoEngine.Test", "XogoEngine.Test\XogoEngine.Test.csproj", "{72237384-B4C4-452D-B97A-CC4554E373B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E94F316A-DED5-4388-8C32-BAD692762619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E94F316A-DED5-4388-8C32-BAD692762619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E94F316A-DED5-4388-8C32-BAD692762619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E94F316A-DED5-4388-8C32-BAD692762619}.Release|Any CPU.Build.0 = Release|Any CPU
+        {72237384-B4C4-452D-B97A-CC4554E373B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {72237384-B4C4-452D-B97A-CC4554E373B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {72237384-B4C4-452D-B97A-CC4554E373B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {72237384-B4C4-452D-B97A-CC4554E373B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = XogoEngine.csproj
+	EndGlobalSection
+EndGlobal
