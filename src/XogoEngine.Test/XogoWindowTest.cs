@@ -11,14 +11,14 @@ namespace XogoEngine.Test
     [TestFixture]
     internal sealed class XogoWindowTest
     {
-        private XogoWindow window;
+        private TestWindow window;
         private Mock<IGameWindow> gameWindow;
 
         [SetUp]
         public void SetUp()
         {
             gameWindow = new Mock<IGameWindow>();
-            window = new XogoWindow(gameWindow.Object);
+            window = new TestWindow(gameWindow.Object);
         }
 
         [Test]
@@ -37,9 +37,26 @@ namespace XogoEngine.Test
             gameWindow.Verify(g => g.Run(), Times.Once);
         }
 
+        [Test]
+        public void Load_IsInvoked_OnGameWindowLoadEvent()
+        {
+            bool invoked = false;
+            window.LoadAction = () => invoked = true;
+
+            gameWindow.Raise(g => g.Load += null, EventArgs.Empty);
+            invoked.ShouldBeTrue();
+        }
+
         private sealed class TestWindow : XogoWindow
         {
+            public Action LoadAction = delegate { };
+
             public TestWindow(IGameWindow window) : base(window) { }
+
+            protected override void Load()
+            {
+                LoadAction();
+            }
         }
     }
 }

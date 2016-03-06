@@ -5,20 +5,28 @@ namespace XogoEngine
 {
     public class XogoWindow
     {
-        private readonly IGameWindow window;
+        private readonly IGameWindow gameWindow;
 
-        internal XogoWindow(IGameWindow window)
+        internal XogoWindow(IGameWindow gameWindow)
         {
-            if (window == null)
+            if (gameWindow == null)
             {
-                throw new ArgumentNullException(nameof(window));
+                throw new ArgumentNullException(nameof(gameWindow));
             }
-            this.window = window;
+            this.gameWindow = gameWindow;
+            AddEventHandles();
         }
+
+        protected virtual void Load() { }
 
         public void Run()
         {
-            window.Run();
+            gameWindow.Run();
+        }
+
+        private void AddEventHandles()
+        {
+            gameWindow.Load += (sender, e) => Load();
         }
     }
 }
