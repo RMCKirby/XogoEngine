@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Richard Kirby")]
 [assembly: AssemblyVersion("0.0.1")]
 [assembly: AssemblyInformationalVersion("0.0.1")]
+[assembly: InternalsVisibleTo("XogoEngine.Test")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
