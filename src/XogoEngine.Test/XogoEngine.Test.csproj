@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BCCF66DB-AF1E-4C62-BCCE-B26C4CE9630B}</ProjectGuid>
+    <ProjectGuid>{72237384-B4C4-452D-B97A-CC4554E373B1}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>XogoEngine.OpenGL.Test</RootNamespace>
-    <AssemblyName>XogoEngine.OpenGL.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>XogoEngine.Test</RootNamespace>
+    <AssemblyName>XogoEngine.Test</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -15,7 +14,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\test\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -24,42 +23,21 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\test\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Shaders\" />
-    <Folder Include="Properties\" />
-    <Folder Include="Utilities\" />
-    <Folder Include="Vertex\" />
+    <Folder Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ResourceExtensionsTest.cs" />
-    <Compile Include="Extensions\VectorExtensionsTest.cs" />
-    <Compile Include="Shaders\ShaderTest.cs" />
-    <Compile Include="Shaders\ShaderAttributeTest.cs" />
-    <Compile Include="Shaders\ShaderUniformTest.cs" />
-    <Compile Include="Shaders\ShaderProgramTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\HashCodeGeneratorTest.cs" />
-    <Compile Include="Vertex\ElementBufferTest.cs" />
-    <Compile Include="Vertex\VertexArrayObjectTest.cs" />
-    <Compile Include="Vertex\VertexBufferTest.cs" />
-    <Compile Include="Vertex\VertexDeclarationTest.cs" />
-    <Compile Include="Vertex\VertexElementTest.cs" />
-    <Compile Include="Vertex\VertexElementUsageTest.cs" />
-    <Compile Include="Vertex\VertexPositionTest.cs" />
-    <Compile Include="Vertex\VertexPositionColourTest.cs" />
-    <Compile Include="Vertex\VertexPositionColourTextureTest.cs" />
+    <Compile Include="XogoWindowTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="XogoEngine.OpenGL">
-      <HintPath>..\..\build\XogoEngine.OpenGL.dll</HintPath>
+    <Reference Include="XogoEngine">
+      <HintPath>..\..\build\XogoEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
       <ItemGroup>

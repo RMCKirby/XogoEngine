@@ -13,9 +13,11 @@ let coverageFile = coverageDir + "code-coverage.xml"
 
 let xogoGlProject     = "src/XogoEngine.OpenGL/XogoEngine.OpenGL.csproj"
 let xogoGlTestProject = "src/XogoEngine.OpenGL.Test/XogoEngine.OpenGL.Test.csproj"
+let xogoProject       = "src/XogoEngine/XogoEngine.csproj"
+let xogoTestProject   = "src/XogoEngine.Test/XogoEngine.Test.csproj"
 
-let coreProjects = [xogoGlProject]
-let testProjects = [xogoGlTestProject]
+let coreProjects = [xogoGlProject; xogoProject]
+let testProjects = [xogoGlTestProject; xogoTestProject]
 
 Target "Clean" (fun _ ->
     CleanDirs [buildDir; testDir; reportDir; coverageDir]
