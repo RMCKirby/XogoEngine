@@ -53,7 +53,7 @@ namespace XogoEngine.Test
             bool invoked = false;
             window.UpdateAction = () => invoked = true;
 
-            gameWindow.Raise(g => g.UpdateFrame += null, new FrameEventArgs(60));
+            gameWindow.Raise(g => g.UpdateFrame += null, new FrameEventArgs());
             invoked.ShouldBeTrue();
         }
 
@@ -63,8 +63,15 @@ namespace XogoEngine.Test
             bool invoked = false;
             window.RenderAction = () => invoked = true;
 
-            gameWindow.Raise(g => g.RenderFrame += null, new FrameEventArgs(60));
+            gameWindow.Raise(g => g.RenderFrame += null, new FrameEventArgs());
             invoked.ShouldBeTrue();
+        }
+
+        [Test]
+        public void GameWindowSwapBuffers_IsInvoked_OnRender()
+        {
+            gameWindow.Raise(g => g.RenderFrame += null, new FrameEventArgs());
+            gameWindow.Verify(g => g.SwapBuffers());
         }
 
         [Test]

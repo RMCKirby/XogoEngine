@@ -32,7 +32,10 @@ namespace XogoEngine
             gameWindow.Load += (sender, e) => Load();
             gameWindow.Unload += (sender, e) => Unload();
             gameWindow.UpdateFrame += (sender, e) => Update(e.Time);
-            gameWindow.RenderFrame += (sender, e) => Render(e.Time);
+            gameWindow.RenderFrame += (sender, e) => {
+                Render(e.Time);
+                gameWindow.SwapBuffers();
+            };
         }
     }
 }
