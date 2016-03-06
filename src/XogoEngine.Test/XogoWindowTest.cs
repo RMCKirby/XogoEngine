@@ -58,6 +58,16 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void Render_isInvoked_OnGameWindowRender()
+        {
+            bool invoked = false;
+            window.RenderAction = () => invoked = true;
+
+            gameWindow.Raise(g => g.RenderFrame += null, new FrameEventArgs(60));
+            invoked.ShouldBeTrue();
+        }
+
+        [Test]
         public void Unload_isInvoked_OnGameWindow()
         {
             bool invoked = false;
@@ -71,6 +81,7 @@ namespace XogoEngine.Test
         {
             public Action LoadAction = delegate { };
             public Action UpdateAction = delegate { };
+            public Action RenderAction = delegate { };
             public Action UnloadAction = delegate { };
 
             public TestWindow(IGameWindow window) : base(window) { }
@@ -83,6 +94,11 @@ namespace XogoEngine.Test
             protected override void Update(double delta)
             {
                 UpdateAction();
+            }
+
+            protected override void Render(double delta)
+            {
+                RenderAction();
             }
 
             protected override void Unload()

@@ -19,6 +19,7 @@ namespace XogoEngine
 
         protected virtual void Load() { }
         protected virtual void Update(double delta) { }
+        protected virtual void Render(double delta) { }
         protected virtual void Unload() { }
 
         public void Run()
@@ -31,6 +32,7 @@ namespace XogoEngine
             gameWindow.Load += (sender, e) => Load();
             gameWindow.Unload += (sender, e) => Unload();
             gameWindow.UpdateFrame += (sender, e) => Update(e.Time);
+            gameWindow.RenderFrame += (sender, e) => Render(e.Time);
         }
     }
 }
