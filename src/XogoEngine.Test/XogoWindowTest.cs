@@ -47,15 +47,31 @@ namespace XogoEngine.Test
             invoked.ShouldBeTrue();
         }
 
+        [Test]
+        public void Unload_isInvoked_OnGameWindow()
+        {
+            bool invoked = false;
+            window.UnloadAction = () => invoked = true;
+
+            gameWindow.Raise(g => g.Unload += null, EventArgs.Empty);
+            invoked.ShouldBeTrue();
+        }
+
         private sealed class TestWindow : XogoWindow
         {
             public Action LoadAction = delegate { };
+            public Action UnloadAction = delegate { };
 
             public TestWindow(IGameWindow window) : base(window) { }
 
             protected override void Load()
             {
                 LoadAction();
+            }
+
+            protected override void Unload()
+            {
+                UnloadAction();
             }
         }
     }

@@ -18,6 +18,7 @@ namespace XogoEngine
         }
 
         protected virtual void Load() { }
+        protected virtual void Unload() { }
 
         public void Run()
         {
@@ -27,6 +28,7 @@ namespace XogoEngine
         private void AddEventHandles()
         {
             gameWindow.Load += (sender, e) => Load();
+            gameWindow.Unload += (sender, e) => Unload();
         }
     }
 }
