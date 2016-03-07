@@ -12,6 +12,14 @@ namespace XogoEngine
 
         private bool isDisposed = false;
 
+        public XogoWindow(int width, int height)
+        {
+            /* need to chain to internal constructor here, with concrete instances
+             * once they are in place */
+            Width = width;
+            Height = height;
+        }
+
         internal XogoWindow(IGameWindow gameWindow, IGladapter adapter)
         {
             if (gameWindow == null)
@@ -27,6 +35,16 @@ namespace XogoEngine
             AddEventHandles();
         }
 
+        public int Width
+        {
+            get { return gameWindow.Width; }
+            set { gameWindow.Width = value; }
+        }
+        public int Height
+        {
+            get { return gameWindow.Height; }
+            set { gameWindow.Height = value; }
+        }
         public bool IsDisposed { get { return isDisposed; } }
 
         protected virtual void Load() { }
@@ -36,12 +54,27 @@ namespace XogoEngine
 
         public void Run()
         {
+            ThrowIfDisposed();
             gameWindow.Run();
         }
 
         public void Dispose()
         {
+            if (isDisposed)
+            {
+                return;
+            }
+            Dispose(true);
+            isDisposed = true;
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                gameWindow.Dispose();
+            }
         }
 
         private void AddEventHandles()
@@ -54,6 +87,14 @@ namespace XogoEngine
                 Render(e.Time);
                 gameWindow.SwapBuffers();
             };
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (isDisposed)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
         }
     }
 }

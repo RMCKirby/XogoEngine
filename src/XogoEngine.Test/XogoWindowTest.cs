@@ -5,7 +5,6 @@ using System;
 using OpenTK;
 using OpenTK.Platform;
 using OpenTK.Graphics.OpenGL4;
-using XogoEngine;
 using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.Test
@@ -50,10 +49,34 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void WidthProperty_ReturnsExpected_Value()
+        {
+            gameWindow.SetupGet(g => g.Width).Returns(300);
+            window.Width.ShouldBe(300);
+        }
+
+        [Test]
+        public void HeightProperty_ReturnsExpectedValue()
+        {
+            gameWindow.SetupGet(g => g.Height).Returns(400);
+            window.Height.ShouldBe(400);
+        }
+
+        [Test]
         public void GameWindowRun_isInvoked_OnRun()
         {
             window.Run();
             gameWindow.Verify(g => g.Run(), Times.Once);
+        }
+
+        [Test]
+        public void Run_ThrowsObjectDisposedException_OnDisposedWindow()
+        {
+            Action run = () => window.Run();
+            window.Dispose();
+
+            run.ShouldThrow<ObjectDisposedException>()
+               .ObjectName.ShouldBe(window.GetType().FullName);
         }
 
         [Test]
@@ -111,9 +134,18 @@ namespace XogoEngine.Test
         }
 
         [Test]
-        public void GameWindow_ShouldBeDisposed_OnDisposal()
+        public void Window_ShouldBeDisposed_AfterDisposal()
         {
+            window.Dispose();
+            window.IsDisposed.ShouldBeTrue();
+        }
 
+        [Test]
+        public void GameWindow_ShouldBeDisposedOnce_OnDisposal()
+        {
+            window.Dispose();
+            window.Dispose();
+            gameWindow.Verify(g => g.Dispose(), Times.Once);
         }
 
         private sealed class TestWindow : XogoWindow
