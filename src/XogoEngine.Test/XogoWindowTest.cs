@@ -63,6 +63,20 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void GameWindowWidth_ShouldBeModified_OnWidthAccessor()
+        {
+            window.Width = 600;
+            gameWindow.VerifySet(g => g.Width = 600, Times.Once);
+        }
+
+        [Test]
+        public void GameWindowHeight_ShouldBeModified_OnHeightAccessor()
+        {
+            window.Height = 800;
+            gameWindow.VerifySet(g => g.Height = 800, Times.Once);
+        }
+
+        [Test]
         public void GameWindowRun_isInvoked_OnRun()
         {
             window.Run();
