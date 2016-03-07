@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.IO.Abstractions;
 using XogoEngine.OpenGL.Adapters;
 
@@ -33,6 +34,10 @@ namespace XogoEngine.Graphics
             if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path))
             {
                 throw new ArgumentException("The given source string was null, empty or whitespace");
+            }
+            if (!fileSystem.File.Exists(path))
+            {
+                throw new FileNotFoundException(path);
             }
         }
     }

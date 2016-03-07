@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Abstractions;
 using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
@@ -52,6 +53,14 @@ namespace XogoEngine.Test.Graphics
                 yield return new TestCaseData("    ");
                 yield return new TestCaseData(null);
             }
+        }
+
+        [Test]
+        public void Load_ThrowsFileNotFoundException_OnMissingFile()
+        {
+            fileSystem.Setup(f => f.File.Exists(It.IsAny<string>()))
+                      .Returns(false);
+            Assert.Throws<FileNotFoundException>(() => loader.Load("resources/texture.png"));
         }
     }
 }
