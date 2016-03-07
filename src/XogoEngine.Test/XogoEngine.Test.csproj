@@ -28,10 +28,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Properties\AssemblyInfo.cs" />
+    <Folder Include="Graphics\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="XogoWindowTest.cs" />
+    <Compile Include="Graphics\TextureLoaderTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="XogoEngine">
