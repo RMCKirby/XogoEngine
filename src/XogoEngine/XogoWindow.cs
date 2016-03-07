@@ -12,12 +12,13 @@ namespace XogoEngine
 
         private bool isDisposed = false;
 
-        public XogoWindow(int width, int height)
+        public XogoWindow(int width, int height, string title)
         {
             /* need to chain to internal constructor here, with concrete instances
              * once they are in place */
             Width = width;
             Height = height;
+            Title = title;
         }
 
         internal XogoWindow(IGameWindow gameWindow, IGladapter adapter)
@@ -44,6 +45,11 @@ namespace XogoEngine
         {
             get { return gameWindow.Height; }
             set { gameWindow.Height = value; }
+        }
+        public string Title
+        {
+            get { return gameWindow.Title; }
+            set { gameWindow.Title = value; }
         }
         public bool IsDisposed { get { return isDisposed; } }
 

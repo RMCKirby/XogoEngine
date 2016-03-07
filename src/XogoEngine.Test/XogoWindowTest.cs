@@ -77,6 +77,20 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void TitleProperty_ReturnsExpected_Value()
+        {
+            gameWindow.SetupGet(g => g.Title).Returns("window");
+            window.Title.ShouldBe("window");
+        }
+
+        [Test]
+        public void GameWindowTitle_ShouldBeModified_OnTitleAccessor()
+        {
+            window.Title = "get to the chopper!";
+            gameWindow.VerifySet(g => g.Title = "get to the chopper!", Times.Once);
+        }
+
+        [Test]
         public void GameWindowRun_isInvoked_OnRun()
         {
             window.Run();
