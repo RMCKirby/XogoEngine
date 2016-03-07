@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="XogoWindowTest.cs" />
+    <Compile Include="Graphics\TextureTest.cs" />
     <Compile Include="Graphics\TextureLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

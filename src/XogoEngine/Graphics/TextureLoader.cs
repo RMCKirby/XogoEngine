@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.Abstractions;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.Graphics
@@ -28,6 +29,7 @@ namespace XogoEngine.Graphics
         {
             ValidatePath(path);
             int textureHandle = adapter.CreateTexture();
+            adapter.Bind(TextureTarget.Texture2D, textureHandle);
         }
 
         private void ValidatePath(string path)

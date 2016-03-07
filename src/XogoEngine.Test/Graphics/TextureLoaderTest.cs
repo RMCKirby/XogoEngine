@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
 
@@ -70,6 +71,16 @@ namespace XogoEngine.Test.Graphics
         {
             loader.Load("resources/my-texture.png");
             adapter.Verify(a => a.CreateTexture(), Times.Once);
+        }
+
+        [Test]
+        public void AdapterBindTexture_IsInvoked_OnLoad()
+        {
+            int handle = 1;
+            adapter.Setup(a => a.CreateTexture()).Returns(handle);
+            
+            loader.Load("resources/texture.png");
+            adapter.Verify(a => a.Bind(TextureTarget.Texture2D, handle), Times.Once);
         }
     }
 }
