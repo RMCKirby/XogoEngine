@@ -2,6 +2,7 @@ using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.IO.Abstractions;
 using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
@@ -35,6 +36,22 @@ namespace XogoEngine.Test.Graphics
         {
             Action construct = () => new TextureLoader(adapter.Object, null);
             construct.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test, TestCaseSource(nameof(InvalidPathArguments))]
+        public void Load_ThrowsArgumentException_OnInvalidPathArgument(string path)
+        {
+            Assert.Throws<ArgumentException>(() => loader.Load(path));
+        }
+
+        private IEnumerable<TestCaseData> InvalidPathArguments
+        {
+            get
+            {
+                yield return new TestCaseData("");
+                yield return new TestCaseData("    ");
+                yield return new TestCaseData(null);
+            }
         }
     }
 }

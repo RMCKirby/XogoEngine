@@ -22,5 +22,18 @@ namespace XogoEngine.Graphics
             this.adapter = adapter;
             this.fileSystem = fileSystem;
         }
+
+        public void Load(string path)
+        {
+            ValidatePath(path);
+        }
+
+        private void ValidatePath(string path)
+        {
+            if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("The given source string was null, empty or whitespace");
+            }
+        }
     }
 }
