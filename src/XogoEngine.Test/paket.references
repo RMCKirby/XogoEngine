@@ -5,3 +5,4 @@ group Test
 
 group Core
     OpenTK
+    System.IO.Abstractions

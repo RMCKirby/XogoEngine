@@ -2,6 +2,7 @@ group Core
     source https://nuget.org/api/v2
 
     nuget OpenTK = 1.1.1589.5942
+    nuget System.IO.Abstractions ~> 2.0
 
 group Test
     source https://nuget.org/api/v2

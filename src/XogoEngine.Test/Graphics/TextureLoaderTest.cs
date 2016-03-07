@@ -1,5 +1,8 @@
+using Moq;
 using NUnit.Framework;
 using Shouldly;
+using System.IO.Abstractions;
+using XogoEngine.Graphics;
 
 namespace XogoEngine.Test.Graphics
 {
@@ -7,6 +10,8 @@ namespace XogoEngine.Test.Graphics
     internal sealed class TextureLoaderTest
     {
         private TextureLoader loader;
+        private Mock<ITextureAdapter> adapter;
+        private Mock<IFileSystem> fileSystem;
 
         [SetUp]
         public void SetUp()

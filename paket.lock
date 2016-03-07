@@ -11,6 +11,7 @@ NUGET
   remote: https://www.nuget.org/api/v2
   specs:
     OpenTK (1.1.1589.5942)
+    System.IO.Abstractions (2.0.0.124)
 
 GROUP Test
 NUGET
