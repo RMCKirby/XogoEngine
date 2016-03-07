@@ -11,7 +11,16 @@ namespace XogoEngine.Graphics
 
         internal TextureLoader(ITextureAdapter adapter, IFileSystem fileSystem)
         {
-            
+            if (adapter == null)
+            {
+                throw new ArgumentNullException(nameof(adapter));
+            }
+            if (fileSystem == null)
+            {
+                throw new ArgumentNullException(nameof(fileSystem));
+            }
+            this.adapter = adapter;
+            this.fileSystem = fileSystem;
         }
     }
 }
