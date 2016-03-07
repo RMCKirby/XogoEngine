@@ -70,15 +70,15 @@ namespace XogoEngine.Test.Graphics
         public void AdapterCreateTexture_IsInvoked_OnLoad()
         {
             loader.Load("resources/my-texture.png");
-            adapter.Verify(a => a.CreateTexture(), Times.Once);
+            adapter.Verify(a => a.GenTexture(), Times.Once);
         }
 
         [Test]
         public void AdapterBindTexture_IsInvoked_OnLoad()
         {
             int handle = 1;
-            adapter.Setup(a => a.CreateTexture()).Returns(handle);
-            
+            adapter.Setup(a => a.GenTexture()).Returns(handle);
+
             loader.Load("resources/texture.png");
             adapter.Verify(a => a.Bind(TextureTarget.Texture2D, handle), Times.Once);
         }
