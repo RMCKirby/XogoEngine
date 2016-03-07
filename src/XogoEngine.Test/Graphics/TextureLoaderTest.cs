@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Shouldly;
 using System.IO.Abstractions;
 using XogoEngine.Graphics;
+using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.Test.Graphics
 {
