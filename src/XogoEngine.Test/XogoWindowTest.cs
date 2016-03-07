@@ -4,7 +4,9 @@ using Shouldly;
 using System;
 using OpenTK;
 using OpenTK.Platform;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine;
+using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.Test
 {
@@ -13,21 +15,32 @@ namespace XogoEngine.Test
     {
         private TestWindow window;
         private Mock<IGameWindow> gameWindow;
+        private Mock<IGladapter> adapter;
 
         [SetUp]
         public void SetUp()
         {
             gameWindow = new Mock<IGameWindow>();
-            window = new TestWindow(gameWindow.Object);
+            adapter = new Mock<IGladapter>();
+            window = new TestWindow(gameWindow.Object, adapter.Object);
         }
 
         [Test]
         public void InternalConstructor_ThrowsArgumentNullException_OnNullWindow()
         {
             GameWindow nullWindow = null;
-            Action construct = () => new XogoWindow(nullWindow);
+            Action construct = () => new XogoWindow(nullWindow, adapter.Object);
 
             construct.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
+        public void InternalConstructor_ThrowsArgumentNullException_OnNullAdapter()
+        {
+            IGladapter nullAdapter = null;
+            Action construct = () => new XogoWindow(gameWindow.Object, nullAdapter);
+
+            construct.ShouldThrow<ArgumentNullException>();
         }
 
         [Test]
@@ -68,6 +81,13 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void AdapterClear_IsInvokedAsExpected_OnRender()
+        {
+            gameWindow.Raise(g => g.RenderFrame += null, new FrameEventArgs());
+            adapter.Verify(a => a.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+        }
+
+        [Test]
         public void GameWindowSwapBuffers_IsInvoked_OnRender()
         {
             gameWindow.Raise(g => g.RenderFrame += null, new FrameEventArgs());
@@ -91,7 +111,8 @@ namespace XogoEngine.Test
             public Action RenderAction = delegate { };
             public Action UnloadAction = delegate { };
 
-            public TestWindow(IGameWindow window) : base(window) { }
+            public TestWindow(IGameWindow window, IGladapter adapter)
+                : base(window, adapter) { }
 
             protected override void Load()
             {
