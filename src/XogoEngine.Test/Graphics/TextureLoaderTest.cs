@@ -22,6 +22,8 @@ namespace XogoEngine.Test.Graphics
         {
             adapter = new Mock<ITextureAdapter>();
             fileSystem = new Mock<IFileSystem>();
+            fileSystem.Setup(f => f.File.Exists(It.IsAny<string>())).Returns(true);
+
             loader = new TextureLoader(adapter.Object, fileSystem.Object);
         }
 
@@ -61,6 +63,13 @@ namespace XogoEngine.Test.Graphics
             fileSystem.Setup(f => f.File.Exists(It.IsAny<string>()))
                       .Returns(false);
             Assert.Throws<FileNotFoundException>(() => loader.Load("resources/texture.png"));
+        }
+
+        [Test]
+        public void AdapterCreateTexture_IsInvoked_OnLoad()
+        {
+            loader.Load("resources/my-texture.png");
+            adapter.Verify(a => a.CreateTexture(), Times.Once);
         }
     }
 }

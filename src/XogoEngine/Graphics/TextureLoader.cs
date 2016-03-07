@@ -27,6 +27,7 @@ namespace XogoEngine.Graphics
         public void Load(string path)
         {
             ValidatePath(path);
+            int textureHandle = adapter.CreateTexture();
         }
 
         private void ValidatePath(string path)

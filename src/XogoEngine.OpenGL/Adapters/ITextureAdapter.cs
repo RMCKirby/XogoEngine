@@ -4,6 +4,6 @@ namespace XogoEngine.OpenGL.Adapters
 {
     public interface ITextureAdapter
     {
-        
+        int CreateTexture();
     }
 }
