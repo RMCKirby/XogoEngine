@@ -26,6 +26,12 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void Window_IsNotDisposed_AfterConstruction()
+        {
+            window.IsDisposed.ShouldBeFalse();
+        }
+
+        [Test]
         public void InternalConstructor_ThrowsArgumentNullException_OnNullWindow()
         {
             GameWindow nullWindow = null;
@@ -102,6 +108,12 @@ namespace XogoEngine.Test
 
             gameWindow.Raise(g => g.Unload += null, EventArgs.Empty);
             invoked.ShouldBeTrue();
+        }
+
+        [Test]
+        public void GameWindow_ShouldBeDisposed_OnDisposal()
+        {
+
         }
 
         private sealed class TestWindow : XogoWindow

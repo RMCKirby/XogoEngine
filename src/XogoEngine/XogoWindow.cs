@@ -5,10 +5,12 @@ using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine
 {
-    public class XogoWindow
+    public class XogoWindow : IDisposable
     {
         private readonly IGameWindow gameWindow;
         private readonly IGladapter adapter;
+
+        private bool isDisposed = false;
 
         internal XogoWindow(IGameWindow gameWindow, IGladapter adapter)
         {
@@ -25,6 +27,8 @@ namespace XogoEngine
             AddEventHandles();
         }
 
+        public bool IsDisposed { get { return isDisposed; } }
+
         protected virtual void Load() { }
         protected virtual void Update(double delta) { }
         protected virtual void Render(double delta) { }
@@ -33,6 +37,11 @@ namespace XogoEngine
         public void Run()
         {
             gameWindow.Run();
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
 
         private void AddEventHandles()
