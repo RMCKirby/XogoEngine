@@ -38,6 +38,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="XogoEngine.OpenGL">
       <HintPath>..\..\build\XogoEngine.OpenGL</HintPath>
     </Reference>

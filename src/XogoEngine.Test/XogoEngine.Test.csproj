@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="assets\" />
     <Folder Include="Graphics\" />
     <Folder Include="Properties\" />
   </ItemGroup>
@@ -36,6 +37,11 @@
     <Compile Include="Graphics\TextureTest.cs" />
     <Compile Include="Graphics\TextureLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\link-sprite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="XogoEngine">

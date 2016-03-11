@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.IO;
 using System.IO.Abstractions;
 using OpenTK.Graphics.OpenGL4;
@@ -30,6 +31,8 @@ namespace XogoEngine.Graphics
             ValidatePath(path);
             int textureHandle = adapter.GenTexture();
             adapter.Bind(TextureTarget.Texture2D, textureHandle);
+
+            var bitmap = Bitmap.FromFile(path);
         }
 
         private void ValidatePath(string path)

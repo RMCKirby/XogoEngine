@@ -18,12 +18,15 @@ namespace XogoEngine.Test.Graphics
         private Mock<ITextureAdapter> adapter;
         private Mock<IFileSystem> fileSystem;
 
+        private static string texturePath = "assets/link-sprite.png";
+
         [SetUp]
         public void SetUp()
         {
             adapter = new Mock<ITextureAdapter>();
             fileSystem = new Mock<IFileSystem>();
-            fileSystem.Setup(f => f.File.Exists(It.IsAny<string>())).Returns(true);
+            fileSystem.Setup(f => f.File.Exists(It.IsAny<string>()))
+                      .Returns(true);
 
             loader = new TextureLoader(adapter.Object, fileSystem.Object);
         }
@@ -63,13 +66,13 @@ namespace XogoEngine.Test.Graphics
         {
             fileSystem.Setup(f => f.File.Exists(It.IsAny<string>()))
                       .Returns(false);
-            Assert.Throws<FileNotFoundException>(() => loader.Load("resources/texture.png"));
+            Assert.Throws<FileNotFoundException>(() => loader.Load(texturePath));
         }
 
         [Test]
         public void AdapterCreateTexture_IsInvoked_OnLoad()
         {
-            loader.Load("resources/my-texture.png");
+            loader.Load(texturePath);
             adapter.Verify(a => a.GenTexture(), Times.Once);
         }
 
@@ -79,8 +82,14 @@ namespace XogoEngine.Test.Graphics
             int handle = 1;
             adapter.Setup(a => a.GenTexture()).Returns(handle);
 
-            loader.Load("resources/texture.png");
+            loader.Load(texturePath);
             adapter.Verify(a => a.Bind(TextureTarget.Texture2D, handle), Times.Once);
+        }
+
+        [Test]
+        public void Load_ReturnsExpected_Texture()
+        {
+
         }
     }
 }
