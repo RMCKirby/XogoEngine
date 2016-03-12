@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="XogoWindow.cs" />
     <Compile Include="Graphics\Colour4.cs" />
+    <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\ITexture.cs" />
     <Compile Include="Graphics\Texture.cs" />
