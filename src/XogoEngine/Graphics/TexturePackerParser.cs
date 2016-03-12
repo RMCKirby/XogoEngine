@@ -18,8 +18,15 @@ namespace XogoEngine.Graphics
             var xml = XDocument.Load(dataFilePath);
             var atlasDetails = new {
                 Width = (int)xml.Element("TextureAtlas").Attribute("width"),
-                Height = (int)xml.Element("TextureAtlas").Attribute("height")
+                Height = (int)xml.Element("TextureAtlas").Attribute("height"),
+                TextureRegions = from s in xml.Root.Descendants("sprite")
+                    select new {
+                        X = s.Attribute("x"),
+                        Y = s.Attribute("y")
+                    }
             };
+
+            var textureAtlas = new TextureAtlas(atlasDetails.Width, atlasDetails.Height);
 
             return new TextureAtlas(atlasDetails.Width, atlasDetails.Height);
         }

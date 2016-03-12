@@ -34,6 +34,7 @@ namespace XogoEngine.Test.Graphics
             var atlas = parser.Parse(dataFilePath);
             atlas.Width.ShouldBe(111);
             atlas.Height.ShouldBe(29);
+            
         }
     }
 }

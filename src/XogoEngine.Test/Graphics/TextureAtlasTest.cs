@@ -33,5 +33,14 @@ namespace XogoEngine.Test.Graphics
             Action add = () => atlas.Add(null);
             add.ShouldThrow<ArgumentNullException>();
         }
+
+        [Test]
+        public void Add_InsertsTextureRegion_ToInternalArray()
+        {
+            atlas.Add(new TextureRegion(2, 3, 20, 40));
+            atlas.TextureRegions.ShouldContain(
+                r => r.X == 2 && r.Y == 3 && r.Width == 20 && r.Height == 40
+            );
+        }
     }
 }
