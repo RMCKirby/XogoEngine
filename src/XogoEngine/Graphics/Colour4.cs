@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using XogoEngine.OpenGL.Utilities;
 
 namespace XogoEngine.Graphics
 {
@@ -43,5 +44,8 @@ namespace XogoEngine.Graphics
 
         public static bool operator ==(Colour4 left, Colour4 right) => left.Equals(right);
         public static bool operator !=(Colour4 left, Colour4 right) => !left.Equals(right);
+
+        public override int GetHashCode()
+            => HashCodeGenerator.Initialise().Hash(R).Hash(G).Hash(B).Hash(A).Value;
     }
 }

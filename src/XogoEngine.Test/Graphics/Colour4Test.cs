@@ -84,6 +84,18 @@ namespace XogoEngine.Test.Graphics
             (colour != other).ShouldBeFalse();
         }
 
+        [Test, TestCaseSource(nameof(EqualColour))]
+        public void HashCodes_AreEqual_ForEqualColours(Colour4 other)
+        {
+            colour.GetHashCode().ShouldBe(other.GetHashCode());
+        }
+
+        [Test, TestCaseSource(nameof(UnequalColours))]
+        public void HashCodes_AreNotEqual_ForUnequalColours(Colour4 other)
+        {
+            colour.GetHashCode().ShouldNotBe(other.GetHashCode());
+        }
+
         private IEnumerable<TestCaseData> UnequalColours
         {
             get
