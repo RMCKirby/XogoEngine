@@ -18,7 +18,7 @@ namespace XogoEngine.Test.Graphics
         [SetUp]
         public void SetUp()
         {
-            
+            parser = new TexturePackerParser();
         }
     }
 }

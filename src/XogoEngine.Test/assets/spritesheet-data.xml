@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:b4cc4b4dd4cbd979b8ae7da903b2f739:db99e2fb62208d6c7ae3c3683459ece6:e6796874c85bfdd2de6d942f68d56bb7$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+-->
+<TextureAtlas imagePath="spritesheet.png" width="111" height="29">
+    <sprite n="link-walk1.png" x="2" y="2" w="16" h="24" pX="0.5" pY="0.5"/>
+    <sprite n="link-walk2.png" x="20" y="2" w="16" h="24" pX="0.5" pY="0.5"/>
+    <sprite n="link-walk3.png" x="38" y="2" w="17" h="24" pX="0.5" pY="0.5"/>
+    <sprite n="link-walk4.png" x="57" y="2" w="16" h="24" pX="0.5" pY="0.5"/>
+    <sprite n="link-walk5.png" x="75" y="2" w="16" h="25" pX="0.5" pY="0.5"/>
+    <sprite n="link-walk6.png" x="93" y="2" w="16" h="25" pX="0.5" pY="0.5"/>
+</TextureAtlas>
