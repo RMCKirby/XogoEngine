@@ -89,7 +89,11 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void Load_ReturnsExpected_Texture()
         {
-
+            var texture = loader.Load(texturePath);
+            texture.ShouldSatisfyAllConditions(
+                () => texture.Width.ShouldBe(16),
+                () => texture.Height.ShouldBe(22)
+            );
         }
     }
 }

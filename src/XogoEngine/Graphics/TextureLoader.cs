@@ -1,7 +1,9 @@
 using System;
 using System.Drawing;
+using Imaging = System.Drawing.Imaging;
 using System.IO;
 using System.IO.Abstractions;
+using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Adapters;
 
@@ -26,13 +28,25 @@ namespace XogoEngine.Graphics
             this.fileSystem = fileSystem;
         }
 
-        public void Load(string path)
+        public Texture Load(string path)
         {
             ValidatePath(path);
             int textureHandle = adapter.GenTexture();
             adapter.Bind(TextureTarget.Texture2D, textureHandle);
 
-            var bitmap = Bitmap.FromFile(path);
+            using (var image = new Bitmap(Bitmap.FromFile(path)))
+            {
+                var data = new byte[image.Width * image.Height * 4];
+                var bitmapData = image.LockBits(
+                    new Rectangle(0, 0, image.Width, image.Height),
+                    Imaging.ImageLockMode.ReadOnly,
+                    Imaging.PixelFormat.Format32bppArgb
+                );
+                Marshal.Copy(bitmapData.Scan0, data, 0, data.Length);
+
+                var texture = new Texture(adapter, textureHandle, image.Width, image.Height, data);
+                return texture;
+            }
         }
 
         private void ValidatePath(string path)
