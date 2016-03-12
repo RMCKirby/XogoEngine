@@ -33,12 +33,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="XogoWindow.cs" />
+    <Compile Include="Graphics\Colour4.cs" />
+    <Compile Include="Graphics\SpriteSheet.cs" />
+    <Compile Include="Graphics\ITexture.cs" />
     <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Graphics\TextureAtlas.cs" />
     <Compile Include="Graphics\TextureLoader.cs" />
+    <Compile Include="Graphics\TexturePackerParser.cs" />
+    <Compile Include="Graphics\TextureRegion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="XogoEngine.OpenGL">

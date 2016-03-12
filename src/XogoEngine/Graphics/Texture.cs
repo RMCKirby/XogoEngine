@@ -5,7 +5,7 @@ using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.Graphics
 {
-    public sealed class Texture : IDisposable
+    public sealed class Texture : ITexture
     {
         private int handle;
         private int width;

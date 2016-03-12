@@ -65,7 +65,7 @@ namespace XogoEngine.Graphics
         {
             if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path))
             {
-                throw new ArgumentException("The given source string was null, empty or whitespace");
+                throw new ArgumentException("The given path string was null, empty or whitespace");
             }
             if (!fileSystem.File.Exists(path))
             {

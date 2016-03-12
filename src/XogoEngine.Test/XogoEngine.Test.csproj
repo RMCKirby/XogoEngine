@@ -34,12 +34,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="XogoWindowTest.cs" />
+    <Compile Include="Graphics\Colour4Test.cs" />
+    <Compile Include="Graphics\SpriteSheetTest.cs" />
     <Compile Include="Graphics\TextureTest.cs" />
+    <Compile Include="Graphics\TextureAtlasTest.cs" />
     <Compile Include="Graphics\TextureLoaderTest.cs" />
+    <Compile Include="Graphics\TexturePackerParserTest.cs" />
+    <Compile Include="Graphics\TextureRegionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\link-sprite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\spritesheet-data.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
