@@ -43,6 +43,18 @@ namespace XogoEngine.Graphics
                     Imaging.PixelFormat.Format32bppArgb
                 );
                 Marshal.Copy(bitmapData.Scan0, data, 0, data.Length);
+                adapter.TexImage2D(
+                    TextureTarget.Texture2D,
+                    0,
+                    PixelInternalFormat.Rgba,
+                    bitmapData.Width,
+                    bitmapData.Height,
+                    0,
+                    PixelFormat.Bgra,
+                    PixelType.UnsignedByte,
+                    bitmapData.Scan0
+                );
+                image.UnlockBits(bitmapData);
 
                 var texture = new Texture(adapter, textureHandle, image.Width, image.Height, data);
                 return texture;

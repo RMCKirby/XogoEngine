@@ -87,6 +87,23 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void AdapterTexImage2D_IsInvoked_OnLoad()
+        {
+            var texture = loader.Load(texturePath);
+            adapter.Verify(a => a.TexImage2D(
+                texture.Target,
+                0,
+                PixelInternalFormat.Rgba,
+                texture.Width,
+                texture.Height,
+                0,
+                PixelFormat.Bgra,
+                PixelType.UnsignedByte,
+                It.IsAny<IntPtr>()
+            ));
+        }
+
+        [Test]
         public void Load_ReturnsExpected_Texture()
         {
             var texture = loader.Load(texturePath);
