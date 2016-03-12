@@ -39,6 +39,7 @@
     <Compile Include="Graphics\TextureAtlasTest.cs" />
     <Compile Include="Graphics\TextureLoaderTest.cs" />
     <Compile Include="Graphics\TexturePackerParserTest.cs" />
+    <Compile Include="Graphics\TextureRegionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

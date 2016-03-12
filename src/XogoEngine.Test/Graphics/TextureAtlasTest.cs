@@ -12,10 +12,15 @@ namespace XogoEngine.Test.Graphics
     {
         private TextureAtlas atlas;
 
+        [SetUp]
+        public void SetUp()
+        {
+            atlas = new TextureAtlas(200, 400);
+        }
+
         [Test]
         public void Constructor_CorrectlyInitialises_Instance()
         {
-            atlas = new TextureAtlas(200, 400);
             atlas.ShouldSatisfyAllConditions(
                 () => atlas.Width.ShouldBe(200),
                 () => atlas.Height.ShouldBe(400)
@@ -25,7 +30,8 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void Add_ThrowsArgumentNullException_OnNullTextureRegion()
         {
-            
+            Action add = () => atlas.Add(null);
+            add.ShouldThrow<ArgumentNullException>();
         }
     }
 }

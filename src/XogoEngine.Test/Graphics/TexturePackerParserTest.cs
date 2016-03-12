@@ -20,5 +20,11 @@ namespace XogoEngine.Test.Graphics
         {
             parser = new TexturePackerParser();
         }
+
+        [Test]
+        public void Parse_ReturnsExpected_TextureAtlas()
+        {
+            
+        }
     }
 }

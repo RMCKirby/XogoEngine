@@ -13,5 +13,13 @@ namespace XogoEngine.Graphics
 
         public int Width { get; }
         public int Height { get; }
+
+        public void Add(TextureRegion textureRegion)
+        {
+            if (textureRegion == null)
+            {
+                throw new ArgumentNullException(nameof(textureRegion));
+            }
+        }
     }
 }
