@@ -47,5 +47,7 @@ namespace XogoEngine.Graphics
 
         public override int GetHashCode()
             => HashCodeGenerator.Initialise().Hash(R).Hash(G).Hash(B).Hash(A).Value;
+
+        public override string ToString() => $"[Colour4 : R={R}, G={G}, B={B}, A={A}]";
     }
 }

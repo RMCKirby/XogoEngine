@@ -96,6 +96,13 @@ namespace XogoEngine.Test.Graphics
             colour.GetHashCode().ShouldNotBe(other.GetHashCode());
         }
 
+        [Test]
+        public void ToString_ReturnsExpected_String()
+        {
+            string expected = $"[Colour4 : R={colour.R}, G={colour.G}, B={colour.B}, A={colour.A}]";
+            colour.ToString().ShouldBe(expected);
+        }
+
         private IEnumerable<TestCaseData> UnequalColours
         {
             get
