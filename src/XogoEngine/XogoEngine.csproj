@@ -36,6 +36,7 @@
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\ITexture.cs" />
     <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Graphics\TextureAtlas.cs" />
     <Compile Include="Graphics\TextureLoader.cs" />
     <Compile Include="Graphics\TexturePackerParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
