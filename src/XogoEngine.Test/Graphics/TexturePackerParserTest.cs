@@ -47,6 +47,8 @@ namespace XogoEngine.Test.Graphics
             );
         }
 
+        /* Should probably remove these tests now that we fully test through the public
+        * API of XogoEngine.Graphics.SpriteSheet */
         private IEnumerable<TestCaseData> ExpectedTextureRegions
         {
             get
