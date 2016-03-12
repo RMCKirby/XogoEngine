@@ -82,6 +82,53 @@ namespace XogoEngine.Test.Graphics
             }
         }
 
+        [Test, TestCaseSource(nameof(InvalidIndexes))]
+        public void GetRegion_ThrowsIndexOutOfRangeException_OnInvalidIndex(int index)
+        {
+            Action get = () => spriteSheet.GetRegion(index);
+            get.ShouldThrow<IndexOutOfRangeException>();
+        }
+
+        [Test, TestCaseSource(nameof(InvalidIndexes))]
+        public void GetRegionIndexer_ThrowsIndexOutOfRangeException_OnInvalidIndex(int index)
+        {
+            Action get = () => { var region = spriteSheet[index]; };
+            get.ShouldThrow<IndexOutOfRangeException>();
+        }
+
+        private IEnumerable<TestCaseData> InvalidIndexes
+        {
+            get
+            {
+                yield return new TestCaseData(-1);
+                yield return new TestCaseData(100000);
+            }
+        }
+
+        [Test]
+        public void GetRegion_Returns_ExpectedRegion()
+        {
+            var region = spriteSheet.GetRegion(0);
+            AssertExpectedRegion(region);
+        }
+
+        [Test]
+        public void GetRegionIndexer_Returns_ExpectedRegion()
+        {
+            var region = spriteSheet[0];
+            AssertExpectedRegion(region);
+        }
+
+        private void AssertExpectedRegion(TextureRegion region)
+        {
+            region.ShouldSatisfyAllConditions(
+                () => region.X.ShouldBe(2),
+                () => region.Y.ShouldBe(2),
+                () => region.Width.ShouldBe(16),
+                () => region.Height.ShouldBe(24)
+            );
+        }
+
         [Test]
         public void SpriteSheet_isDisposed_AfterDisposal()
         {

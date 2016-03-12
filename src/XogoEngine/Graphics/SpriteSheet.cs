@@ -26,7 +26,18 @@ namespace XogoEngine.Graphics
         {
             get { return textureAtlas.TextureRegions.ToArray(); }
         }
-        public bool IsDisposed { get { return isDisposed; } }
+        public bool IsDisposed => isDisposed;
+
+        public TextureRegion GetRegion(int index)
+        {
+            if (index < 0 || index > TextureRegions.Length)
+            {
+                throw new IndexOutOfRangeException(nameof(index) + $" : {index}");
+            }
+            return TextureRegions[index];
+        }
+
+        public TextureRegion this[int index] => GetRegion(index);
 
         public void Dispose()
         {
