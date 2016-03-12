@@ -30,3 +30,4 @@ paket.exe
 .fake
 FSI-ASSEMBLY.dll.mdb
 
+.vagrant

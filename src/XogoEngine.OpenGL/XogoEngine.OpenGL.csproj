@@ -40,7 +40,9 @@
   <ItemGroup>
     <Compile Include="IResource.cs" />
     <Compile Include="Adapters\IBufferAdapter.cs" />
+    <Compile Include="Adapters\IGlAdapter.cs" />
     <Compile Include="Adapters\IShaderAdapter.cs" />
+    <Compile Include="Adapters\ITextureAdapter.cs" />
     <Compile Include="Adapters\IVertexArrayAdapter.cs" />
     <Compile Include="Extensions\IResourceExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />

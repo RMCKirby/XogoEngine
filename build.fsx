@@ -49,7 +49,7 @@ Target "UnitTest" (fun _ ->
 )
 
 Target "UnitTest_WithCoverage" (fun _ ->
-    "/noshadow " + testDir + "XogoEngine.OpenGL.Test.dll "
+    "/noshadow " + testDir + "XogoEngine.OpenGL.Test.dll " + testDir + "XogoEngine.Test.dll"
         |> OpenCover (fun p ->
             {p with
                 ExePath = "packages/tools/OpenCover/tools/OpenCover.Console.exe"
