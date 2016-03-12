@@ -21,14 +21,19 @@ namespace XogoEngine.Graphics
                 Height = (int)xml.Element("TextureAtlas").Attribute("height"),
                 TextureRegions = from s in xml.Root.Descendants("sprite")
                     select new {
-                        X = s.Attribute("x"),
-                        Y = s.Attribute("y")
+                        X = (int)s.Attribute("x"),
+                        Y = (int)s.Attribute("y"),
+                        Width = (int)s.Attribute("w"),
+                        Height = (int)s.Attribute("h")
                     }
             };
 
             var textureAtlas = new TextureAtlas(atlasDetails.Width, atlasDetails.Height);
-
-            return new TextureAtlas(atlasDetails.Width, atlasDetails.Height);
+            foreach (var region in atlasDetails.TextureRegions)
+            {
+                textureAtlas.Add(new TextureRegion(region.X, region.Y, region.Width, region.Height));
+            }
+            return textureAtlas;
         }
     }
 }

@@ -29,12 +29,36 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
-        public void Parse_ReturnsExpected_TextureAtlas()
+        public void Parse_ReturnsExpected_TextureAtlasDimensions()
         {
             var atlas = parser.Parse(dataFilePath);
             atlas.Width.ShouldBe(111);
             atlas.Height.ShouldBe(29);
-            
+        }
+
+        [Test, TestCaseSource(nameof(ExpectedTextureRegions))]
+        public void Parse_ReturnsExpected_TextureRegions(TextureRegion expected)
+        {
+            var atlas = parser.Parse(dataFilePath);
+            atlas.TextureRegions.ShouldContain(r =>
+                r.X == expected.X &&
+                r.Y == expected.Y &&
+                r.Width == expected.Width &&
+                r.Height == expected.Height
+            );
+        }
+
+        private IEnumerable<TestCaseData> ExpectedTextureRegions
+        {
+            get
+            {
+                yield return new TestCaseData(new TextureRegion(2, 2, 16, 24));
+                yield return new TestCaseData(new TextureRegion(20, 2, 16, 24));
+                yield return new TestCaseData(new TextureRegion(38, 2, 17, 24));
+                yield return new TestCaseData(new TextureRegion(57, 2, 16, 24));
+                yield return new TestCaseData(new TextureRegion(75, 2, 16, 25));
+                yield return new TestCaseData(new TextureRegion(93, 2, 16, 25));
+            }
         }
     }
 }
