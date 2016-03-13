@@ -50,7 +50,7 @@ namespace XogoEngine.Graphics
 
         public override string ToString()
         {
-            return string.Format("[Colour4 : R={0}, G={1}, B={2}, A={3}]", R, G, B, A);
+            return $"[Colour4 : R={R}, G={G}, B={B}, A={A}]";
         }
 
         /***********************************************
