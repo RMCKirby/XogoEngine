@@ -5,7 +5,10 @@ using XogoEngine.OpenGL.Extensions;
 
 namespace XogoEngine.OpenGL.Vertex
 {
-    public sealed class ElementBuffer<T> : IResource<int> where T : struct
+    public sealed class ElementBuffer<T> :
+        IElementBuffer<T>,
+        IResource<int>
+        where T : struct
     {
         private int handle;
         private readonly IBufferAdapter adapter;
@@ -18,10 +21,10 @@ namespace XogoEngine.OpenGL.Vertex
             this.handle = adapter.GenBuffer();
         }
 
-        public int Handle { get { return handle; } }
-        public BufferTarget Target { get { return BufferTarget.ElementArrayBuffer; } }
+        public int Handle => handle;
+        public BufferTarget Target => BufferTarget.ElementArrayBuffer;
         public IntPtr Size { get; private set; }
-        public bool IsDisposed { get { return isDisposed; } }
+        public bool IsDisposed => isDisposed;
 
         public void Bind()
         {
