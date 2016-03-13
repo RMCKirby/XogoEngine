@@ -44,5 +44,13 @@ namespace XogoEngine.Graphics
         public IVertexBuffer<VertexPositionColourTexture> Vbo => vbo;
         public IElementBuffer<ushort> Ebo => ebo;
         public IDrawAdapter Adapter => adapter;
+
+        public void Render(int indiceCount)
+        {
+            shaderProgram.Use();
+            texture.Bind();
+            vao.Bind();
+            adapter.DrawElements(BeginMode.Triangles, indiceCount, DrawElementsType.UnsignedShort, 0);
+        }
     }
 }

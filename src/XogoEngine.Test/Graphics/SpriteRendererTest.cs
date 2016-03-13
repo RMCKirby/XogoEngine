@@ -2,6 +2,7 @@ using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Shaders;
@@ -135,6 +136,39 @@ namespace XogoEngine.Test.OpenGL
                 () => renderer.Ebo.ShouldBe(elementBuffer.Object),
                 () => renderer.Adapter.ShouldBe(adapter.Object)
             );
+        }
+
+        [Test]
+        public void Texture_IsBound_OnDrawCall()
+        {
+            renderer.Render(10);
+            texture.Verify(t => t.Bind(), Times.Once);
+        }
+
+        [Test]
+        public void ShaderProgram_IsApplied_OnDrawCall()
+        {
+            renderer.Render(10);
+            shaderProgram.Verify(s => s.Use(), Times.Once);
+        }
+
+        [Test]
+        public void VertexArray_IsBound_OnDrawCall()
+        {
+            renderer.Render(10);
+            vertexArray.Verify(v => v.Bind(), Times.Once);
+        }
+
+        [Test]
+        public void AdapterDrawElements_IsInvoked_OnDrawCall()
+        {
+            renderer.Render(10);
+            adapter.Verify(a => a.DrawElements(
+                BeginMode.Triangles,
+                10,
+                DrawElementsType.UnsignedShort,
+                0
+            ));
         }
     }
 }

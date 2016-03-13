@@ -8,5 +8,7 @@ namespace XogoEngine.Graphics
         int Width { get; }
         int Height { get; }
         bool IsDisposed { get; }
+
+        void Bind();
     }
 }
