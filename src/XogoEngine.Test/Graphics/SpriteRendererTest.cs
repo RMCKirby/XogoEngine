@@ -26,6 +26,14 @@ namespace XogoEngine.Test.OpenGL
             vertexArray = new Mock<IVertexArrayObject>();
             vertexBuffer = new Mock<IVertexBuffer<VertexPositionColourTexture>>();
             elementBuffer = new Mock<IElementBuffer<ushort>>();
+
+            renderer = new SpriteRenderer(
+                shaderProgram.Object,
+                texture.Object,
+                vertexArray.Object,
+                vertexBuffer.Object,
+                elementBuffer.Object
+            );
         }
 
         [Test]
@@ -91,6 +99,18 @@ namespace XogoEngine.Test.OpenGL
                 null
             );
             construct.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void Constructor_CorrectlyInitialises_Instance()
+        {
+            renderer.ShouldSatisfyAllConditions(
+                () => renderer.ShaderProgram.ShouldBe(shaderProgram.Object),
+                () => renderer.Texture.ShouldBe(texture.Object),
+                () => renderer.Vao.ShouldBe(vertexArray.Object),
+                () => renderer.Vbo.ShouldBe(vertexBuffer.Object),
+                () => renderer.Ebo.ShouldBe(elementBuffer.Object)
+            );
         }
     }
 }

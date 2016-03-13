@@ -8,6 +8,12 @@ namespace XogoEngine.Graphics
 {
     internal class SpriteRenderer
     {
+        private readonly IShaderProgram shaderProgram;
+        private readonly ITexture texture;
+        private readonly IVertexArrayObject vao;
+        private readonly IVertexBuffer<VertexPositionColourTexture> vbo;
+        private readonly IElementBuffer<ushort> ebo;
+
         public SpriteRenderer(
             IShaderProgram shaderProgram,
             ITexture texture,
@@ -20,6 +26,18 @@ namespace XogoEngine.Graphics
             vao.ThrowIfNull(nameof(vao));
             vbo.ThrowIfNull(nameof(vbo));
             ebo.ThrowIfNull(nameof(ebo));
+
+            this.shaderProgram = shaderProgram;
+            this.texture = texture;
+            this.vao = vao;
+            this.vbo = vbo;
+            this.ebo = ebo;
         }
+
+        public IShaderProgram ShaderProgram => shaderProgram;
+        public ITexture Texture => texture;
+        public IVertexArrayObject Vao => vao;
+        public IVertexBuffer<VertexPositionColourTexture> Vbo => vbo;
+        public IElementBuffer<ushort> Ebo => ebo;
     }
 }
