@@ -15,7 +15,11 @@ namespace XogoEngine.Graphics
             IVertexBuffer<VertexPositionColourTexture> vbo,
             IElementBuffer<ushort> ebo)
         {
-
+            shaderProgram.ThrowIfNull(nameof(shaderProgram));
+            texture.ThrowIfNull(nameof(texture));
+            vao.ThrowIfNull(nameof(vao));
+            vbo.ThrowIfNull(nameof(vbo));
+            ebo.ThrowIfNull(nameof(ebo));
         }
     }
 }
