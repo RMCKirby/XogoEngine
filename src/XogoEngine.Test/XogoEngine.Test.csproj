@@ -36,6 +36,7 @@
     <Compile Include="XogoWindowTest.cs" />
     <Compile Include="Graphics\Colour4Test.cs" />
     <Compile Include="Graphics\SpriteTest.cs" />
+    <Compile Include="Graphics\SpriteBatchTest.cs" />
     <Compile Include="Graphics\SpriteSheetTest.cs" />
     <Compile Include="Graphics\TextureTest.cs" />
     <Compile Include="Graphics\TextureAtlasTest.cs" />
