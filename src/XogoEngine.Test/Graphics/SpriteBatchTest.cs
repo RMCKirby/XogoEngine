@@ -87,6 +87,21 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void Add_ThrowsBatchSizeExceededException_OnAddingTooManySprites()
+        {
+            const int batchSize = 100;
+            for (int i = 0; i < batchSize; i++)
+            {
+                var sprite = new Sprite(spriteSheet.Object.GetRegion(0), i, i);
+                spriteBatch.Add(sprite);
+            }
+            var illegalSprite = new Sprite(spriteSheet.Object.GetRegion(0), 101, 101);
+            Action add = () => spriteBatch.Add(illegalSprite);
+
+            add.ShouldThrow<SpriteBatchSizeExceededException>();
+        }
+
+        [Test]
         public void Spritebatch_IsNotDisposed_AfterConstruction()
         {
             spriteBatch.IsDisposed.ShouldBeFalse();

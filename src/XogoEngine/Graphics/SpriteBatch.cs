@@ -10,6 +10,8 @@ namespace XogoEngine.Graphics
         private List<Sprite> sprites = new List<Sprite>();
         private bool isDisposed = false;
 
+        private const int BatchSize = 100;
+
         public SpriteBatch(ISpriteSheet spriteSheet)
         {
             if (spriteSheet == null)
@@ -43,6 +45,7 @@ namespace XogoEngine.Graphics
                     "The given sprite has already been added to this sprite batch"
                 );
             }
+            ValidateBatchSize();
             sprites.Add(sprite);
         }
 
@@ -74,6 +77,16 @@ namespace XogoEngine.Graphics
             spriteSheet.Dispose();
             isDisposed = true;
             GC.SuppressFinalize(this);
+        }
+
+        private void ValidateBatchSize()
+        {
+            if (sprites.Count == BatchSize)
+            {
+                throw new SpriteBatchSizeExceededException(
+                    "The sprite batch is full. No free slots."
+                );
+            }
         }
     }
 }

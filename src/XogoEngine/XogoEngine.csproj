@@ -37,6 +37,7 @@
     <Compile Include="Graphics\DuplicateSpriteException.cs" />
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
+    <Compile Include="Graphics\SpriteBatchSizeExceededException.cs" />
     <Compile Include="Graphics\ISpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
     <Compile Include="Graphics\ITexture.cs" />
