@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using XogoEngine.Graphics;
+using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Shaders;
 using XogoEngine.OpenGL.Vertex;
 
@@ -17,6 +18,7 @@ namespace XogoEngine.Test.OpenGL
         private Mock<IVertexArrayObject> vertexArray;
         private Mock<IVertexBuffer<VertexPositionColourTexture>> vertexBuffer;
         private Mock<IElementBuffer<ushort>> elementBuffer;
+        private Mock<IDrawAdapter> adapter;
 
         [SetUp]
         public void SetUp()
@@ -26,13 +28,15 @@ namespace XogoEngine.Test.OpenGL
             vertexArray = new Mock<IVertexArrayObject>();
             vertexBuffer = new Mock<IVertexBuffer<VertexPositionColourTexture>>();
             elementBuffer = new Mock<IElementBuffer<ushort>>();
+            adapter = new Mock<IDrawAdapter>();
 
             renderer = new SpriteRenderer(
                 shaderProgram.Object,
                 texture.Object,
                 vertexArray.Object,
                 vertexBuffer.Object,
-                elementBuffer.Object
+                elementBuffer.Object,
+                adapter.Object
             );
         }
 
@@ -44,7 +48,8 @@ namespace XogoEngine.Test.OpenGL
                 texture.Object,
                 vertexArray.Object,
                 vertexBuffer.Object,
-                elementBuffer.Object
+                elementBuffer.Object,
+                adapter.Object
             );
             construct.ShouldThrow<ArgumentNullException>();
         }
@@ -57,7 +62,8 @@ namespace XogoEngine.Test.OpenGL
                 null,
                 vertexArray.Object,
                 vertexBuffer.Object,
-                elementBuffer.Object
+                elementBuffer.Object,
+                adapter.Object
             );
             construct.ShouldThrow<ArgumentNullException>();
         }
@@ -70,7 +76,8 @@ namespace XogoEngine.Test.OpenGL
                 texture.Object,
                 null,
                 vertexBuffer.Object,
-                elementBuffer.Object
+                elementBuffer.Object,
+                adapter.Object
             );
             construct.ShouldThrow<ArgumentNullException>();
         }
@@ -83,7 +90,8 @@ namespace XogoEngine.Test.OpenGL
                 texture.Object,
                 vertexArray.Object,
                 null,
-                elementBuffer.Object
+                elementBuffer.Object,
+                adapter.Object
             );
             construct.ShouldThrow<ArgumentNullException>();
         }
@@ -96,6 +104,21 @@ namespace XogoEngine.Test.OpenGL
                 texture.Object,
                 vertexArray.Object,
                 vertexBuffer.Object,
+                null,
+                adapter.Object
+            );
+            construct.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void Constructor_ThrowsArgumentNullException_OnNullAdapter()
+        {
+            Action construct = () => new SpriteRenderer(
+                shaderProgram.Object,
+                texture.Object,
+                vertexArray.Object,
+                vertexBuffer.Object,
+                elementBuffer.Object,
                 null
             );
             construct.ShouldThrow<ArgumentNullException>();
@@ -109,7 +132,8 @@ namespace XogoEngine.Test.OpenGL
                 () => renderer.Texture.ShouldBe(texture.Object),
                 () => renderer.Vao.ShouldBe(vertexArray.Object),
                 () => renderer.Vbo.ShouldBe(vertexBuffer.Object),
-                () => renderer.Ebo.ShouldBe(elementBuffer.Object)
+                () => renderer.Ebo.ShouldBe(elementBuffer.Object),
+                () => renderer.Adapter.ShouldBe(adapter.Object)
             );
         }
     }

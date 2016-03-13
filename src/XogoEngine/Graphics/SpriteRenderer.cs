@@ -13,25 +13,29 @@ namespace XogoEngine.Graphics
         private readonly IVertexArrayObject vao;
         private readonly IVertexBuffer<VertexPositionColourTexture> vbo;
         private readonly IElementBuffer<ushort> ebo;
+        private readonly IDrawAdapter adapter;
 
         public SpriteRenderer(
             IShaderProgram shaderProgram,
             ITexture texture,
             IVertexArrayObject vao,
             IVertexBuffer<VertexPositionColourTexture> vbo,
-            IElementBuffer<ushort> ebo)
+            IElementBuffer<ushort> ebo,
+            IDrawAdapter adapter)
         {
             shaderProgram.ThrowIfNull(nameof(shaderProgram));
             texture.ThrowIfNull(nameof(texture));
             vao.ThrowIfNull(nameof(vao));
             vbo.ThrowIfNull(nameof(vbo));
             ebo.ThrowIfNull(nameof(ebo));
+            adapter.ThrowIfNull(nameof(adapter));
 
             this.shaderProgram = shaderProgram;
             this.texture = texture;
             this.vao = vao;
             this.vbo = vbo;
             this.ebo = ebo;
+            this.adapter = adapter;
         }
 
         public IShaderProgram ShaderProgram => shaderProgram;
@@ -39,5 +43,6 @@ namespace XogoEngine.Graphics
         public IVertexArrayObject Vao => vao;
         public IVertexBuffer<VertexPositionColourTexture> Vbo => vbo;
         public IElementBuffer<ushort> Ebo => ebo;
+        public IDrawAdapter Adapter => adapter;
     }
 }
