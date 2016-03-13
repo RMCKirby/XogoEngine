@@ -16,6 +16,9 @@ namespace XogoEngine.Test.Graphics
         public void SetUp()
         {
             spriteSheet = new Mock<ISpriteSheet>();
+            spriteSheet.Setup(s => s.GetRegion(It.IsAny<int>()))
+                       .Returns(new TextureRegion(2, 2, 15, 20));
+
             spriteBatch = new SpriteBatch(spriteSheet.Object);
         }
 
@@ -36,6 +39,22 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void Add_ThrowsArgumentNullException_OnNullSprite()
+        {
+            Sprite nullSprite = null;
+            Action add = () => spriteBatch.Add(nullSprite);
+            add.ShouldThrow<ArgumentNullException>().ParamName.ShouldBe("sprite");
+        }
+
+        [Test]
+        public void Add_AddsGivenSprite_ToSpriteList()
+        {
+            Sprite sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            spriteBatch.Add(sprite);
+            spriteBatch.Sprites.ShouldContain(sprite);
+        }
+
+        [Test]
         public void Spritebatch_IsNotDisposed_AfterConstruction()
         {
             spriteBatch.IsDisposed.ShouldBeFalse();
@@ -46,6 +65,13 @@ namespace XogoEngine.Test.Graphics
         {
             spriteBatch.Dispose();
             spriteBatch.IsDisposed.ShouldBeTrue();
+        }
+
+        [Test]
+        public void SpriteSheet_IsDisposed_OnDisposal()
+        {
+            spriteBatch.Dispose();
+            spriteSheet.Verify(s => s.Dispose());
         }
     }
 }
