@@ -49,7 +49,7 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void Add_AddsGivenSprite_ToSpriteList()
         {
-            Sprite sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
             spriteBatch.Add(sprite);
             spriteBatch.Sprites.ShouldContain(sprite);
         }
@@ -57,7 +57,33 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void Add_ThrowsDuplicateSpriteException_WhenAddingTheSameSpriteAgain()
         {
-            
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            spriteBatch.Add(sprite);
+            Action addAgain = () => spriteBatch.Add(sprite);
+
+            addAgain.ShouldThrow<DuplicateSpriteException>().Message.ShouldContain(
+                "The given sprite has already been added to this sprite batch"
+            );
+        }
+
+        [Test]
+        public void Remove_ThrowsArgumentException_WhenSpriteIsNotInBatch()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            Action remove = () => spriteBatch.Remove(sprite);
+
+            remove.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
+        public void Remove_RemovesGivenSprite_FromExistingSpriteList()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            spriteBatch.Add(sprite);
+
+            spriteBatch.Sprites.ShouldContain(sprite);
+            spriteBatch.Remove(sprite);
+            spriteBatch.Sprites.ShouldNotContain(sprite);
         }
 
         [Test]

@@ -37,7 +37,32 @@ namespace XogoEngine.Graphics
             {
                 throw new ArgumentNullException(nameof(sprite));
             }
+            if (sprites.Contains(sprite))
+            {
+                throw new DuplicateSpriteException(
+                    "The given sprite has already been added to this sprite batch"
+                );
+            }
             sprites.Add(sprite);
+        }
+
+        public void Remove(params Sprite[] sprites)
+        {
+            foreach (var sprite in sprites)
+            {
+                Remove(sprite);
+            }
+        }
+
+        public void Remove(Sprite sprite)
+        {
+            if (!sprites.Contains(sprite))
+            {
+                throw new ArgumentException(
+                    nameof(sprite) + " was not found in this sprite batch"
+                );
+            }
+            sprites.Remove(sprite);
         }
 
         public void Dispose()
