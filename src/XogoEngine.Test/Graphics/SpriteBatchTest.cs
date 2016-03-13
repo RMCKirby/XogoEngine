@@ -55,6 +55,12 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void Add_ThrowsDuplicateSpriteException_WhenAddingTheSameSpriteAgain()
+        {
+            
+        }
+
+        [Test]
         public void Spritebatch_IsNotDisposed_AfterConstruction()
         {
             spriteBatch.IsDisposed.ShouldBeFalse();
