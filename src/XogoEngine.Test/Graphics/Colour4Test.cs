@@ -26,7 +26,7 @@ namespace XogoEngine.Test.Graphics
                 () => colour.R.ShouldBe(2),
                 () => colour.G.ShouldBe(3),
                 () => colour.B.ShouldBe(4),
-                () => colour.A.ShouldBe(1)
+                () => colour.A.ShouldBe(255)
             );
         }
 

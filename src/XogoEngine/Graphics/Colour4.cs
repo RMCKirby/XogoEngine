@@ -8,7 +8,7 @@ namespace XogoEngine.Graphics
     public struct Colour4 : IEquatable<Colour4>
     {
         public Colour4(float red, float green, float blue)
-            : this(red, green, blue, 1)
+            : this(red, green, blue, 255)
         {
         }
 
