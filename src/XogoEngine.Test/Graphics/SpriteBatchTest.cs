@@ -67,6 +67,13 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void Add_PreparesSpriteVertices_OnSuccessfulAdd()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            spriteBatch.Add(sprite);
+        }
+
+        [Test]
         public void Remove_ThrowsArgumentException_WhenSpriteIsNotInBatch()
         {
             var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);

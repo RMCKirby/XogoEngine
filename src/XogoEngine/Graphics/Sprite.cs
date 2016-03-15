@@ -31,7 +31,6 @@ namespace XogoEngine.Graphics
             this.width = textureRegion.Width;
             this.height = textureRegion.Height;
             this.colour = colour;
-            InitialiseVertices();
         }
 
         public int X => x;

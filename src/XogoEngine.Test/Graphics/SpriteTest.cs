@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using OpenTK;
 using XogoEngine.Graphics;
-using XogoEngine.OpenGL.Vertex;
 
 namespace XogoEngine.Test.Graphics
 {
@@ -41,48 +40,6 @@ namespace XogoEngine.Test.Graphics
                 () => sprite.Height.ShouldBe(20),
                 () => sprite.Colour.ShouldBe(Colour4.White)
             );
-        }
-
-        [Test, TestCaseSource(nameof(ExpectedVertices))]
-        public void Vertices_AreCreatedAsExpected_OnConstruction(VertexPositionColourTexture expected, int index)
-        {
-            sprite.Vertices.Length.ShouldBe(4);
-            sprite.Vertices[index].ShouldBe(expected);
-        }
-
-        private IEnumerable<TestCaseData> ExpectedVertices
-        {
-            get
-            {
-                yield return new TestCaseData(
-                    new VertexPositionColourTexture(
-                        new Vector2(textureRegion.X, textureRegion.Y),
-                        colour,
-                        new Vector2(textureRegion.X, textureRegion.Y)),
-                     0 // top left vertex
-                 );
-                yield return new TestCaseData(
-                    new VertexPositionColourTexture(
-                        new Vector2(textureRegion.X + textureRegion.Width, textureRegion.Y),
-                        colour,
-                        new Vector2(textureRegion.X + textureRegion.Width, textureRegion.Y)),
-                    1 // top right vertex
-                );
-                yield return new TestCaseData(
-                    new VertexPositionColourTexture(
-                        new Vector2(textureRegion.X + textureRegion.Width, textureRegion.Y + textureRegion.Height),
-                        colour,
-                        new Vector2(textureRegion.X + textureRegion.Width, textureRegion.Y + textureRegion.Height)),
-                    2 // bottom right
-                );
-                yield return new TestCaseData(
-                    new VertexPositionColourTexture(
-                        new Vector2(textureRegion.X, textureRegion.Y + textureRegion.Height),
-                        colour,
-                        new Vector2(textureRegion.X, textureRegion.Y + textureRegion.Height)),
-                    3 // bottom left
-                );
-            }
         }
     }
 }
