@@ -89,6 +89,7 @@ namespace XogoEngine.Graphics
             // may need a dictionary of weak references of sprites to batchIndexes
             // in the case a sprite becomes null after being added to the batch
             availableSlots.Enqueue(sprite.BatchIndex);
+            ClearSpriteData(sprite);
         }
 
         public void Dispose()
@@ -176,6 +177,14 @@ namespace XogoEngine.Graphics
             var offset = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex);
             vbo.Bind();
             vbo.FillPartial(offset, size, sprite.Vertices);
+        }
+
+        private void ClearSpriteData(Sprite sprite)
+        {
+            var size = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount);
+            var offset = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex);
+            vbo.Bind();
+            vbo.FillPartial(offset, size, new VertexPositionColourTexture[4]);
         }
     }
 }

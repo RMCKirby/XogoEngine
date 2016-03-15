@@ -196,12 +196,13 @@ namespace XogoEngine.Test.Graphics
         public void Add_UploadsGivenSpriteVertices_OnAdd()
         {
             var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
-            var spriteSize = Sprite.VertexCount * default(VertexPositionColourTexture).Declaration.Stride;
+            var spriteSize = Sprite.VertexCount * declaration.Stride;
 
             spriteBatch.Add(sprite);
             var spriteVboSize = new IntPtr(spriteSize);
             var spriteVboOffset = new IntPtr(spriteSize * sprite.BatchIndex);
 
+            vbo.Verify(v => v.Bind());
             vbo.Verify(v => v.FillPartial(spriteVboOffset, spriteVboSize, sprite.Vertices));
         }
 
@@ -223,6 +224,32 @@ namespace XogoEngine.Test.Graphics
             spriteBatch.Sprites.ShouldContain(sprite);
             spriteBatch.Remove(sprite);
             spriteBatch.Sprites.ShouldNotContain(sprite);
+        }
+
+        [Test]
+        public void Remove_ClearsSpriteVerticesFromVbo_OnSpriteRemoval()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            var spriteSize = Sprite.VertexCount * declaration.Stride;
+
+            spriteBatch.Add(sprite);
+            var spriteVboSize = new IntPtr(spriteSize);
+            var spriteVboOffset = new IntPtr(spriteSize * sprite.BatchIndex);
+
+            // essentially, overwrite the vertex data in the vbo with 4 vertices
+            // that have no alpha and are hence transparent.
+            var emptyVertex = default(VertexPositionColourTexture);
+            var emptyVertices = new VertexPositionColourTexture[]
+            {
+                emptyVertex,
+                emptyVertex,
+                emptyVertex,
+                emptyVertex
+            };
+
+            spriteBatch.Remove(sprite);
+            vbo.Verify(v => v.Bind());
+            vbo.Verify(v => v.FillPartial(spriteVboOffset, spriteVboSize, emptyVertices));
         }
 
         [Test]
