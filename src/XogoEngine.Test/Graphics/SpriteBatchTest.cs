@@ -4,6 +4,8 @@ using Shouldly;
 using System;
 using OpenTK;
 using XogoEngine.Graphics;
+using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Shaders;
 using XogoEngine.OpenGL.Vertex;
 
 namespace XogoEngine.Test.Graphics
@@ -14,6 +16,10 @@ namespace XogoEngine.Test.Graphics
         private SpriteBatch spriteBatch;
         private Mock<ISpriteSheet> spriteSheet;
         private Mock<ITexture> texture;
+        private Mock<IShaderProgram> shaderProgram;
+        private Mock<IVertexArrayObject> vao;
+        private Mock<IVertexBuffer<VertexPositionColourTexture>> vbo;
+        private Mock<IDrawAdapter> adapter;
 
         [SetUp]
         public void SetUp()
@@ -29,9 +35,20 @@ namespace XogoEngine.Test.Graphics
             spriteSheet.Setup(s => s.GetRegion(It.IsAny<int>()))
                        .Returns(textureRegion);
             spriteSheet.SetupGet(s => s.TextureRegions)
-                       .Returns(new TextureRegion[]{textureRegion});
+                       .Returns(new TextureRegion[] { textureRegion });
 
-            spriteBatch = new SpriteBatch(spriteSheet.Object);
+            shaderProgram = new Mock<IShaderProgram>();
+            vao = new Mock<IVertexArrayObject>();
+            vbo = new Mock<IVertexBuffer<VertexPositionColourTexture>>();
+            adapter = new Mock<IDrawAdapter>();
+
+            spriteBatch = new SpriteBatch(
+                spriteSheet.Object,
+                shaderProgram.Object,
+                vao.Object,
+                vbo.Object,
+                adapter.Object
+            );
         }
 
         [Test]

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
+using XogoEngine.OpenGL.Adapters;
+using XogoEngine.OpenGL.Shaders;
 using XogoEngine.OpenGL.Vertex;
 
 namespace XogoEngine.Graphics
@@ -13,16 +15,33 @@ namespace XogoEngine.Graphics
         private bool isDisposed = false;
 
         private Queue<int> availableSlots = new Queue<int>(Enumerable.Range(0, BatchSize));
+        private readonly IShaderProgram shaderProgram;
+        private readonly IVertexArrayObject vao;
+        private readonly IVertexBuffer<VertexPositionColourTexture> vbo;
+        private readonly IDrawAdapter drawAdapter;
 
         private const int BatchSize = 100;
 
         public SpriteBatch(ISpriteSheet spriteSheet)
         {
-            if (spriteSheet == null)
-            {
-                throw new ArgumentNullException(nameof(spriteSheet));
-            }
+            // TODO: chain to internal constructor once concrete implementation in place
+            spriteSheet.ThrowIfNull(nameof(spriteSheet));
             this.spriteSheet = spriteSheet;
+        }
+
+        internal SpriteBatch(
+            ISpriteSheet spriteSheet,
+            IShaderProgram shaderProgram,
+            IVertexArrayObject vao,
+            IVertexBuffer<VertexPositionColourTexture> vbo,
+            IDrawAdapter drawAdapter)
+        {
+            spriteSheet.ThrowIfNull(nameof(spriteSheet));
+            this.spriteSheet = spriteSheet;
+            this.shaderProgram = shaderProgram;
+            this.vao = vao;
+            this.vbo = vbo;
+            this.drawAdapter = drawAdapter;
         }
 
         public ISpriteSheet SpriteSheet => spriteSheet;
@@ -122,10 +141,7 @@ namespace XogoEngine.Graphics
 
         private void EnsureValidToAdd(Sprite sprite)
         {
-            if (sprite == null)
-            {
-                throw new ArgumentNullException(nameof(sprite));
-            }
+            sprite.ThrowIfNull(nameof(sprite));
             if (!spriteSheet.TextureRegions.Contains(sprite.TextureRegion))
             {
                 throw new ArgumentException(
