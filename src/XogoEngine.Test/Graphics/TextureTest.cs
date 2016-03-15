@@ -63,6 +63,13 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void AdapterBind_isInvoked_OnBind()
+        {
+            texture.Bind();
+            adapter.Verify(a => a.Bind(texture.Target, texture.Handle));
+        }
+
+        [Test]
         public void AdapterDeleteTexture_ShouldBeInvokedOnce_OnDisposal()
         {
             texture.Dispose();

@@ -32,9 +32,16 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="XogoWindow.cs" />
     <Compile Include="Graphics\Colour4.cs" />
+    <Compile Include="Graphics\DuplicateSpriteException.cs" />
+    <Compile Include="Graphics\Sprite.cs" />
+    <Compile Include="Graphics\SpriteBatch.cs" />
+    <Compile Include="Graphics\SpriteBatchSizeExceededException.cs" />
+    <Compile Include="Graphics\ISpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
+    <Compile Include="Graphics\SpriteRenderer.cs" />
     <Compile Include="Graphics\ITexture.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\TextureAtlas.cs" />
@@ -44,6 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />

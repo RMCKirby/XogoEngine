@@ -134,6 +134,18 @@ namespace XogoEngine.Test.OpenGL.Vertex
             vertex.GetHashCode().ShouldNotBe(other.GetHashCode());
         }
 
+        [Test]
+        public void ToString_ReturnsExpected_String()
+        {
+            string expected = string.Format(
+                "[VertexPositionColourTexture : Position={0}, Colour={1}, TextureCoordinate={2}]",
+                vertex.Position,
+                vertex.Colour,
+                vertex.TextureCoordinate
+            );
+            vertex.ToString().ShouldBe(expected);
+        }
+
         private IEnumerable<TestCaseData> UnequalVertices
         {
             get

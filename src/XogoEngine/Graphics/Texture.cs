@@ -39,6 +39,11 @@ namespace XogoEngine.Graphics
             get { return data.ToArray(); }
         }
 
+        public void Bind()
+        {
+            adapter.Bind(Target, handle);
+        }
+
         public void Dispose()
         {
             if (isDisposed)

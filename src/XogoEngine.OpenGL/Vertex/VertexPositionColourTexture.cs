@@ -20,13 +20,7 @@ namespace XogoEngine.OpenGL.Vertex
         public Vector4 Colour { get; }
         public Vector2 TextureCoordinate { get; }
 
-        public IVertexDeclaration Declaration
-        {
-            get
-            {
-                return declaration;
-            }
-        }
+        public IVertexDeclaration Declaration => declaration;
 
         public override bool Equals(object obj)
         {
@@ -60,6 +54,16 @@ namespace XogoEngine.OpenGL.Vertex
                 hash = hash * 23 + TextureCoordinate.GetFixedHashCode();
                 return hash;
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format(
+                "[VertexPositionColourTexture : Position={0}, Colour={1}, TextureCoordinate={2}]",
+                Position,
+                Colour,
+                TextureCoordinate
+            );
         }
 
         private static VertexDeclaration declaration;

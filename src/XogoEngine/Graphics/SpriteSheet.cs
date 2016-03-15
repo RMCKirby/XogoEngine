@@ -4,7 +4,7 @@ using System.IO;
 
 namespace XogoEngine.Graphics
 {
-    public sealed class SpriteSheet : IDisposable
+    public sealed class SpriteSheet : ISpriteSheet
     {
         private TextureAtlas textureAtlas;
         private bool isDisposed = false;

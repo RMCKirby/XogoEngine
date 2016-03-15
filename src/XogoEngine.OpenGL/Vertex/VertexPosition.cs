@@ -16,13 +16,7 @@ namespace XogoEngine.OpenGL.Vertex
 
         public Vector2 Position { get; }
 
-        public IVertexDeclaration Declaration
-        {
-            get
-            {
-                return declaration;
-            }
-        }
+        public IVertexDeclaration Declaration => declaration;
 
         public override bool Equals(object obj)
         {
@@ -46,6 +40,11 @@ namespace XogoEngine.OpenGL.Vertex
                 hash = hash * 23 + Position.GetFixedHashCode();
                 return hash;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"[VertexPosition : Position={Position}]";
         }
 
         private static VertexDeclaration declaration;

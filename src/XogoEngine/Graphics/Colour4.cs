@@ -8,7 +8,7 @@ namespace XogoEngine.Graphics
     public struct Colour4 : IEquatable<Colour4>
     {
         public Colour4(float red, float green, float blue)
-            : this(red, green, blue, 1)
+            : this(red, green, blue, 255)
         {
         }
 
@@ -50,7 +50,7 @@ namespace XogoEngine.Graphics
 
         public override string ToString()
         {
-            return string.Format("[Colour4 : R={0}, G={1}, B={2}, A={3}]", R, G, B, A);
+            return $"[Colour4 : R={R}, G={G}, B={B}, A={A}]";
         }
 
         /***********************************************
