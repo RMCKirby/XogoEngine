@@ -39,7 +39,9 @@ namespace XogoEngine.Graphics
         public int Height => height;
         public Colour4 Colour => colour;
         public TextureRegion TextureRegion => textureRegion;
+
         internal VertexPositionColourTexture[] Vertices => vertices;
+        internal int BatchIndex;
 
         internal const int VertexCount = 4;
     }

@@ -123,6 +123,16 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void Add_AssignsBatchIndex_ToSprite()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            var sprite2 = new Sprite(spriteSheet.Object.GetRegion(1), 20, 10);
+            spriteBatch.Add(sprite, sprite2);
+            sprite.BatchIndex.ShouldBe(0);
+            sprite2.BatchIndex.ShouldBe(1);
+        }
+
+        [Test]
         public void Add_ThrowsBatchSizeExceededException_OnAddingTooManySprites()
         {
             const int batchSize = 100;

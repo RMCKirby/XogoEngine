@@ -12,6 +12,8 @@ namespace XogoEngine.Graphics
         private List<Sprite> sprites = new List<Sprite>();
         private bool isDisposed = false;
 
+        private Queue<int> availableSlots = new Queue<int>(Enumerable.Range(0, BatchSize));
+
         private const int BatchSize = 100;
 
         public SpriteBatch(ISpriteSheet spriteSheet)
@@ -41,6 +43,7 @@ namespace XogoEngine.Graphics
             ValidateBatchSize();
             PrepareSpriteVertices(sprite);
             sprites.Add(sprite);
+            sprite.BatchIndex = availableSlots.Dequeue();
         }
 
         public void Remove(params Sprite[] sprites)
@@ -60,6 +63,9 @@ namespace XogoEngine.Graphics
                 );
             }
             sprites.Remove(sprite);
+            // may need a dictionary of weak references of sprites to batchIndexes
+            // in the case a sprite becomes null after being added to the batch
+            availableSlots.Enqueue(sprite.BatchIndex);
         }
 
         public void Dispose()
