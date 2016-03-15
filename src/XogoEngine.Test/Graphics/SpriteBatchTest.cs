@@ -21,11 +21,15 @@ namespace XogoEngine.Test.Graphics
             texture = new Mock<ITexture>();
             texture.SetupGet(t => t.Width).Returns(200);
             texture.SetupGet(t => t.Height).Returns(50);
+            var textureRegion = new TextureRegion(2, 2, 15, 20);
+
             spriteSheet = new Mock<ISpriteSheet>();
             spriteSheet.SetupGet(s => s.Texture)
                        .Returns(texture.Object);
             spriteSheet.Setup(s => s.GetRegion(It.IsAny<int>()))
-                       .Returns(new TextureRegion(2, 2, 15, 20));
+                       .Returns(textureRegion);
+            spriteSheet.SetupGet(s => s.TextureRegions)
+                       .Returns(new TextureRegion[]{textureRegion});
 
             spriteBatch = new SpriteBatch(spriteSheet.Object);
         }
@@ -119,6 +123,32 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void Add_ThrowsBatchSizeExceededException_OnAddingTooManySprites()
+        {
+            const int batchSize = 100;
+            for (int i = 0; i < batchSize; i++)
+            {
+                var sprite = new Sprite(spriteSheet.Object.GetRegion(0), i, i);
+                spriteBatch.Add(sprite);
+            }
+            var illegalSprite = new Sprite(spriteSheet.Object.GetRegion(0), 101, 101);
+            Action add = () => spriteBatch.Add(illegalSprite);
+
+            add.ShouldThrow<SpriteBatchSizeExceededException>();
+        }
+
+        [Test]
+        public void Add_ThrowsArgumentException_WhenGivenSpriteIsNotUsingTextureRegionFromBatch()
+        {
+            var sprite = new Sprite(new TextureRegion(1, 1, 10, 10), 20, 20);
+            Action add = () => spriteBatch.Add(sprite);
+
+            add.ShouldThrow<ArgumentException>().Message.ShouldContain(
+                "sprite must use a texture region from the batch's SpriteSheet"
+            );
+        }
+
+        [Test]
         public void Remove_ThrowsArgumentException_WhenSpriteIsNotInBatch()
         {
             var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
@@ -136,21 +166,6 @@ namespace XogoEngine.Test.Graphics
             spriteBatch.Sprites.ShouldContain(sprite);
             spriteBatch.Remove(sprite);
             spriteBatch.Sprites.ShouldNotContain(sprite);
-        }
-
-        [Test]
-        public void Add_ThrowsBatchSizeExceededException_OnAddingTooManySprites()
-        {
-            const int batchSize = 100;
-            for (int i = 0; i < batchSize; i++)
-            {
-                var sprite = new Sprite(spriteSheet.Object.GetRegion(0), i, i);
-                spriteBatch.Add(sprite);
-            }
-            var illegalSprite = new Sprite(spriteSheet.Object.GetRegion(0), 101, 101);
-            Action add = () => spriteBatch.Add(illegalSprite);
-
-            add.ShouldThrow<SpriteBatchSizeExceededException>();
         }
 
         [Test]

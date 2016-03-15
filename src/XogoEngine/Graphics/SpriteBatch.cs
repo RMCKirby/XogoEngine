@@ -37,16 +37,7 @@ namespace XogoEngine.Graphics
 
         public void Add(Sprite sprite)
         {
-            if (sprite == null)
-            {
-                throw new ArgumentNullException(nameof(sprite));
-            }
-            if (sprites.Contains(sprite))
-            {
-                throw new DuplicateSpriteException(
-                    "The given sprite has already been added to this sprite batch"
-                );
-            }
+            EnsureValidToAdd(sprite);
             ValidateBatchSize();
             PrepareSpriteVertices(sprite);
             sprites.Add(sprite);
@@ -119,6 +110,26 @@ namespace XogoEngine.Graphics
             {
                 throw new SpriteBatchSizeExceededException(
                     "The sprite batch is full. No free slots."
+                );
+            }
+        }
+
+        private void EnsureValidToAdd(Sprite sprite)
+        {
+            if (sprite == null)
+            {
+                throw new ArgumentNullException(nameof(sprite));
+            }
+            if (!spriteSheet.TextureRegions.Contains(sprite.TextureRegion))
+            {
+                throw new ArgumentException(
+                    "The given sprite must use a texture region from the batch's SpriteSheet"
+                );
+            }
+            if (sprites.Contains(sprite))
+            {
+                throw new DuplicateSpriteException(
+                    "The given sprite has already been added to this sprite batch"
                 );
             }
         }
