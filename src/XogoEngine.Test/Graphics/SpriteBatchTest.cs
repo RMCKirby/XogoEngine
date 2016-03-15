@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Shaders;
@@ -65,6 +66,19 @@ namespace XogoEngine.Test.Graphics
             spriteBatch.ShouldSatisfyAllConditions(
                 () => spriteBatch.SpriteSheet.ShouldBe(spriteSheet.Object)
             );
+        }
+
+        [Test]
+        public void VertexArrayObject_ShouldBeSetUp_OnConstruction()
+        {
+            const int batchSize = 100;
+            var vboSize = new IntPtr(batchSize * Sprite.VertexCount);
+            var vertexDeclaration = new Mock<IVertexDeclaration>();
+
+            shaderProgram.Verify(s => s.Use());
+            vao.Verify(v => v.Bind());
+            vbo.Verify(v => v.Bind());
+            vbo.Verify(v => v.Fill(vboSize, null, BufferUsageHint.DynamicDraw));
         }
 
         [Test]

@@ -7,6 +7,7 @@ namespace XogoEngine.OpenGL.Vertex
     {
         BufferTarget Target { get; }
         IntPtr Size { get; }
+        IVertexDeclaration VertexDeclaration { get; }
 
         void Bind();
         void Fill(IntPtr size, TVertex[] data, BufferUsageHint usageHint);

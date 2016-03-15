@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Shaders;
 using XogoEngine.OpenGL.Vertex;
@@ -42,6 +43,8 @@ namespace XogoEngine.Graphics
             this.vao = vao;
             this.vbo = vbo;
             this.drawAdapter = drawAdapter;
+
+            Initialise();
         }
 
         public ISpriteSheet SpriteSheet => spriteSheet;
@@ -127,6 +130,16 @@ namespace XogoEngine.Graphics
             sprite.Vertices[1] = new VertexPositionColourTexture(topRightPosition, scaledColour, topRightCoord);
             sprite.Vertices[2] = new VertexPositionColourTexture(bottomRightPosition, scaledColour, bottomRightCoord);
             sprite.Vertices[3] = new VertexPositionColourTexture(bottomLeftPosition, scaledColour, bottomLeftCoord);
+        }
+
+        private void Initialise()
+        {
+            var vboSize = new IntPtr(BatchSize * Sprite.VertexCount);
+            shaderProgram.Use();
+            vao.Bind();
+            vbo.Bind();
+            vbo.Fill(vboSize, null, BufferUsageHint.DynamicDraw);
+            vao.SetUp(shaderProgram, vbo.VertexDeclaration);
         }
 
         private void ValidateBatchSize()
