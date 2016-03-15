@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenTK;
+using XogoEngine.OpenGL.Vertex;
 
 namespace XogoEngine.Graphics
 {
@@ -46,6 +48,7 @@ namespace XogoEngine.Graphics
                 );
             }
             ValidateBatchSize();
+            PrepareSpriteVertices(sprite);
             sprites.Add(sprite);
         }
 
@@ -77,6 +80,37 @@ namespace XogoEngine.Graphics
             spriteSheet.Dispose();
             isDisposed = true;
             GC.SuppressFinalize(this);
+        }
+
+        private void PrepareSpriteVertices(Sprite sprite)
+        {
+            /* Take the sprite's texture region and scale each corner according
+            * to the whole texture atlas width/height so that they fall in the
+            * range 0-1 (to match the expectations of OpenGL) */
+            float scaledWidth = 1.0f / spriteSheet.Texture.Width;
+            float scaledHeight = 1.0f / spriteSheet.Texture.Height;
+            var region = sprite.TextureRegion;
+
+            /* TextureRegion x,y refer to bottom left position of the quad
+            * whereas, OpenGL coordinate system has (0,0) at the upper-left */
+            var topLeftCoord = new Vector2(region.X * scaledWidth, (region.Y + region.Height) * scaledHeight);
+            var topRightCoord = new Vector2((region.X + region.Width) * scaledWidth, (region.Y + region.Height) * scaledHeight);
+            var bottomRightCoord = new Vector2((region.X + region.Width) * scaledWidth, region.Y * scaledHeight);
+            var bottomLeftCoord = new Vector2(region.X * scaledWidth, region.Y * scaledHeight);
+
+            // Scale the sprite's colour to fall in the range 0-1
+            var sColour = sprite.Colour;
+            var scaledColour = new Vector4(sColour.R / 255, sColour.G / 255, sColour.B / 255, sColour.A / 255);
+
+            var topLeftPosition = new Vector2(sprite.X, sprite.Y + scaledHeight);
+            var topRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y + scaledHeight);
+            var bottomRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y);
+            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y);
+
+            sprite.Vertices[0] = new VertexPositionColourTexture(topLeftPosition, scaledColour, topLeftCoord);
+            sprite.Vertices[1] = new VertexPositionColourTexture(topRightPosition, scaledColour, topRightCoord);
+            sprite.Vertices[2] = new VertexPositionColourTexture(bottomRightPosition, scaledColour, bottomRightCoord);
+            sprite.Vertices[3] = new VertexPositionColourTexture(bottomLeftPosition, scaledColour, bottomLeftCoord);
         }
 
         private void ValidateBatchSize()

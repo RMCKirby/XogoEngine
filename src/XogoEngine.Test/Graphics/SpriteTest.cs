@@ -41,5 +41,11 @@ namespace XogoEngine.Test.Graphics
                 () => sprite.Colour.ShouldBe(Colour4.White)
             );
         }
+
+        [Test]
+        public void Sprite_ShouldHave_FourVertices()
+        {
+            sprite.Vertices.Length.ShouldBe(4);
+        }
     }
 }

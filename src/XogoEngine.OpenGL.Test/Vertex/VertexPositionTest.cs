@@ -113,6 +113,13 @@ namespace XogoEngine.OpenGL.Test.Vertex
             vertex.GetHashCode().ShouldNotBe(other.GetHashCode());
         }
 
+        [Test]
+        public void ToString_Returns_ExpectedString()
+        {
+            string expected = $"[VertexPosition : Position={vertex.Position}]";
+            vertex.ToString().ShouldBe(expected);
+        }
+
         private IEnumerable<TestCaseData> UnequalVertex
         {
             get

@@ -18,13 +18,7 @@ namespace XogoEngine.OpenGL.Vertex
         public Vector2 Position { get; }
         public Vector4 Colour { get; }
 
-        public IVertexDeclaration Declaration
-        {
-            get
-            {
-                return declaration;
-            }
-        }
+        public IVertexDeclaration Declaration => declaration;
 
         public override bool Equals(object obj)
         {
@@ -53,6 +47,11 @@ namespace XogoEngine.OpenGL.Vertex
                 hash = hash * 23 + Colour.GetFixedHashCode();
                 return hash;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"[VertexPositionColour : Position={Position}, Colour={Colour}]";;
         }
 
         private static VertexDeclaration declaration;
