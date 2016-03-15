@@ -66,6 +66,7 @@ namespace XogoEngine.Graphics
             PrepareSpriteVertices(sprite);
             sprites.Add(sprite);
             sprite.BatchIndex = availableSlots.Dequeue();
+            UploadSpriteVertices(sprite);
         }
 
         public void Remove(params Sprite[] sprites)
@@ -167,6 +168,14 @@ namespace XogoEngine.Graphics
                     "The given sprite has already been added to this sprite batch"
                 );
             }
+        }
+
+        private void UploadSpriteVertices(Sprite sprite)
+        {
+            var size = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount);
+            var offset = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex);
+            vbo.Bind();
+            vbo.FillPartial(offset, size, sprite.Vertices);
         }
     }
 }

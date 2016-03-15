@@ -22,6 +22,8 @@ namespace XogoEngine.Test.Graphics
         private Mock<IVertexBuffer<VertexPositionColourTexture>> vbo;
         private Mock<IDrawAdapter> adapter;
 
+        private static IVertexDeclaration declaration = default(VertexPositionColourTexture).Declaration;
+
         [SetUp]
         public void SetUp()
         {
@@ -41,6 +43,7 @@ namespace XogoEngine.Test.Graphics
             shaderProgram = new Mock<IShaderProgram>();
             vao = new Mock<IVertexArrayObject>();
             vbo = new Mock<IVertexBuffer<VertexPositionColourTexture>>();
+            vbo.SetupGet(v => v.VertexDeclaration).Returns(declaration);
             adapter = new Mock<IDrawAdapter>();
 
             spriteBatch = new SpriteBatch(
@@ -73,12 +76,12 @@ namespace XogoEngine.Test.Graphics
         {
             const int batchSize = 100;
             var vboSize = new IntPtr(batchSize * Sprite.VertexCount);
-            var vertexDeclaration = new Mock<IVertexDeclaration>();
 
             shaderProgram.Verify(s => s.Use());
             vao.Verify(v => v.Bind());
             vbo.Verify(v => v.Bind());
             vbo.Verify(v => v.Fill(vboSize, null, BufferUsageHint.DynamicDraw));
+            vao.Verify(v => v.SetUp(shaderProgram.Object, vbo.Object.VertexDeclaration));
         }
 
         [Test]
@@ -187,6 +190,19 @@ namespace XogoEngine.Test.Graphics
             add.ShouldThrow<ArgumentException>().Message.ShouldContain(
                 "sprite must use a texture region from the batch's SpriteSheet"
             );
+        }
+
+        [Test]
+        public void Add_UploadsGivenSpriteVertices_OnAdd()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            var spriteSize = Sprite.VertexCount * default(VertexPositionColourTexture).Declaration.Stride;
+
+            spriteBatch.Add(sprite);
+            var spriteVboSize = new IntPtr(spriteSize);
+            var spriteVboOffset = new IntPtr(spriteSize * sprite.BatchIndex);
+
+            vbo.Verify(v => v.FillPartial(spriteVboOffset, spriteVboSize, sprite.Vertices));
         }
 
         [Test]
