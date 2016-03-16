@@ -271,5 +271,26 @@ namespace XogoEngine.Test.Graphics
             spriteBatch.Dispose();
             spriteSheet.Verify(s => s.Dispose());
         }
+
+        [Test]
+        public void ShaderProgram_IsDisposed_OnDisposal()
+        {
+            spriteBatch.Dispose();
+            shaderProgram.Verify(s => s.Dispose());
+        }
+
+        [Test]
+        public void VertexArrayObject_IsDisposed_OnDisposal()
+        {
+            spriteBatch.Dispose();
+            vao.Verify(v => v.Dispose());
+        }
+
+        [Test]
+        public void VertexBuffer_IsDisposed_OnDisposal()
+        {
+            spriteBatch.Dispose();
+            vbo.Verify(v => v.Dispose());
+        }
     }
 }

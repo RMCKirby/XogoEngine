@@ -98,6 +98,9 @@ namespace XogoEngine.Graphics
             {
                 return;
             }
+            shaderProgram?.Dispose();
+            vao?.Dispose();
+            vbo?.Dispose();
             spriteSheet?.Dispose();
             isDisposed = true;
             GC.SuppressFinalize(this);
