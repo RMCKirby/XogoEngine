@@ -255,6 +255,36 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void ShaderProgram_IsUsed_OnDraw()
+        {
+            shaderProgram.ResetCalls();
+            spriteBatch.Draw();
+            shaderProgram.Verify(s => s.Use(), Times.Once);
+        }
+
+        [Test]
+        public void Texture_IsBound_OnDraw()
+        {
+            spriteBatch.Draw();
+            texture.Verify(t => t.Bind(), Times.Once);
+        }
+
+        [Test]
+        public void VertexArrayObject_IsBound_OnDrawCall()
+        {
+            vao.ResetCalls();
+            spriteBatch.Draw();
+            vao.Verify(v => v.Bind(), Times.Once);
+        }
+
+        [Test]
+        public void AdapterDrawArrays_IsInvokedAsExpected_OnDraw()
+        {
+            spriteBatch.Draw();
+            adapter.Verify(a => a.DrawArrays(PrimitiveType.Quads, 0, 400));
+        }
+
+        [Test]
         public void Spritebatch_IsNotDisposed_AfterConstruction()
         {
             spriteBatch.IsDisposed.ShouldBeFalse();
