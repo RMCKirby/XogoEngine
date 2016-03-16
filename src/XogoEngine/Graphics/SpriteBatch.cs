@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -39,6 +40,10 @@ namespace XogoEngine.Graphics
         {
             spriteSheet.ThrowIfNull(nameof(spriteSheet));
             this.spriteSheet = spriteSheet;
+            Debug.Assert(shaderProgram != null, $"{nameof(shaderProgram)} was null in SpriteBatch");
+            Debug.Assert(vao != null, $"{nameof(vao)} was null in SpriteBatch");
+            Debug.Assert(vbo != null, $"{nameof(vbo)} was null ins SpriteBatch");
+            Debug.Assert(drawAdapter != null, $"{nameof(drawAdapter)} was null in SpriteBatch");
             this.shaderProgram = shaderProgram;
             this.vao = vao;
             this.vbo = vbo;
