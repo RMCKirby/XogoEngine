@@ -1,5 +1,6 @@
 using Moq;
 using NUnit.Framework;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Shouldly;
 using System;
@@ -263,6 +264,38 @@ namespace XogoEngine.OpenGL.Test.Shaders
             GivenProgramHasUniform("projection", expectedLocation);
 
             program.GetUniformLocation("projection").ShouldBe(expectedLocation);
+        }
+
+        [Test]
+        public void SetMatrix4_ThrowsArgumentNullException_OnNullUniform()
+        {
+            ShaderUniform uniform = null;
+            Action action = () => program.SetMatrix4(uniform, Matrix4.Identity, false);
+
+            action.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void SetMatrix4_ThrowsArgumentException_OnUniformNotInShaderProgram()
+        {
+            var uniform = new ShaderUniform("mvp", 4, 16, ActiveUniformType.FloatMat4);
+            Action action = () => program.SetMatrix4(uniform, Matrix4.Identity, false);
+
+            action.ShouldThrow<ArgumentException>().Message.ShouldContain(
+                "The given uniform must be in the invoking shader program"
+            );
+        }
+
+        [Test]
+        public void SetMatrix4_ThrowsArgumentException_OnNonMatrix4Uniform()
+        {
+            GivenProgramHasUniform("light");
+            var uniform = new ShaderUniform("light", 2, 8, ActiveUniformType.DoubleVec2);
+            Action action = () => program.SetMatrix4(uniform, Matrix4.Identity, false);
+
+            action.ShouldThrow<ArgumentException>().Message.ShouldContain(
+                $"The given uniform must be of type {nameof(ActiveUniformType.FloatMat4)}"
+            );
         }
 
         private void GivenProgramHasUniform(string name, int expectedLocation = 2)

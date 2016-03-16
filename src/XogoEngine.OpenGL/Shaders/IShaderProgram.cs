@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using OpenTK;
 
 namespace XogoEngine.OpenGL.Shaders
 {
@@ -17,5 +18,7 @@ namespace XogoEngine.OpenGL.Shaders
         void Use();
         void DetachShaders();
         void DeleteShaders();
+
+        void SetMatrix4(ShaderUniform uniform, Matrix4 matrix, bool transpose);
     }
 }

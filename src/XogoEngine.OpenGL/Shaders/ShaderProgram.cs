@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Extensions;
@@ -136,6 +137,26 @@ namespace XogoEngine.OpenGL.Shaders
         {
             this.ThrowIfDisposed();
             attachedShaders.ForEach((s) => s?.Dispose());
+        }
+
+        public void SetMatrix4(ShaderUniform uniform, Matrix4 matrix, bool transpose)
+        {
+            if (uniform == null)
+            {
+                throw new ArgumentNullException(nameof(uniform));
+            }
+            if (!uniforms.ContainsKey(uniform.Name))
+            {
+                throw new ArgumentException(
+                    "The given uniform must be in the invoking shader program"
+                );
+            }
+            if (uniform.UniformType != ActiveUniformType.FloatMat4)
+            {
+                throw new ArgumentException(
+                    $"The given uniform must be of type {nameof(ActiveUniformType.FloatMat4)}"
+                );
+            }
         }
 
         public void Dispose()
