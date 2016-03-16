@@ -35,12 +35,12 @@ namespace XogoEngine.OpenGL.Shaders
             }
         }
 
-        public int Handle { get { return handle; } }
-        public IEnumerable<Shader> AttachedShaders { get { return attachedShaders; } }
-        public IDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
-        public IDictionary<string, ShaderUniform> Uniforms { get { return uniforms; } }
-        public bool Linked { get { return linked; } }
-        public bool IsDisposed { get { return isDisposed; } }
+        public int Handle => handle;
+        public IEnumerable<Shader> AttachedShaders => attachedShaders;
+        public IDictionary<string, ShaderAttribute> Attributes => attributes;
+        public IDictionary<string, ShaderUniform> Uniforms => uniforms;
+        public bool Linked => linked;
+        public bool IsDisposed => isDisposed;
 
         public void Attach(Shader shader)
         {
