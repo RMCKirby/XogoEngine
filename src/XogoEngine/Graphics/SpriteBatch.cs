@@ -98,7 +98,7 @@ namespace XogoEngine.Graphics
             {
                 return;
             }
-            spriteSheet.Dispose();
+            spriteSheet?.Dispose();
             isDisposed = true;
             GC.SuppressFinalize(this);
         }

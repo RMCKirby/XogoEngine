@@ -135,7 +135,7 @@ namespace XogoEngine.OpenGL.Shaders
         public void DeleteShaders()
         {
             this.ThrowIfDisposed();
-            attachedShaders.ForEach((s) => s.Dispose());
+            attachedShaders.ForEach((s) => s?.Dispose());
         }
 
         public void Dispose()
@@ -144,7 +144,7 @@ namespace XogoEngine.OpenGL.Shaders
             {
                 return;
             }
-            attachedShaders.ForEach((s) => s.Dispose());
+            attachedShaders.ForEach((s) => s?.Dispose());
             adapter.DeleteProgram(handle);
             isDisposed = true;
             GC.SuppressFinalize(this);
