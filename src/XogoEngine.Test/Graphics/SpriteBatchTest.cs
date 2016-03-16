@@ -75,7 +75,9 @@ namespace XogoEngine.Test.Graphics
         public void VertexArrayObject_ShouldBeSetUp_OnConstruction()
         {
             const int batchSize = 100;
-            var vboSize = new IntPtr(batchSize * Sprite.VertexCount);
+            var vboSize = new IntPtr(
+                batchSize * Sprite.VertexCount * declaration.Stride
+            );
 
             shaderProgram.Verify(s => s.Use());
             vao.Verify(v => v.Bind());

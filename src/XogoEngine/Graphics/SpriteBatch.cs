@@ -144,7 +144,9 @@ namespace XogoEngine.Graphics
 
         private void Initialise()
         {
-            var vboSize = new IntPtr(BatchSize * Sprite.VertexCount);
+            var vboSize = new IntPtr(
+                BatchSize * Sprite.VertexCount * vbo.VertexDeclaration.Stride
+            );
             shaderProgram.Use();
             vao.Bind();
             vbo.Bind();
@@ -182,7 +184,9 @@ namespace XogoEngine.Graphics
         private void UploadSpriteVertices(Sprite sprite)
         {
             var size = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount);
-            var offset = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex);
+            var offset = new IntPtr(
+                vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex
+            );
             vbo.Bind();
             vbo.FillPartial(offset, size, sprite.Vertices);
         }
@@ -190,7 +194,9 @@ namespace XogoEngine.Graphics
         private void ClearSpriteData(Sprite sprite)
         {
             var size = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount);
-            var offset = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex);
+            var offset = new IntPtr(
+                vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex
+            );
             vbo.Bind();
             vbo.FillPartial(offset, size, new VertexPositionColourTexture[4]);
         }
