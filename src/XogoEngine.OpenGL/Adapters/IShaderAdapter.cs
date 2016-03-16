@@ -1,3 +1,4 @@
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Shaders;
 
@@ -33,5 +34,7 @@ namespace XogoEngine.OpenGL.Adapters
 
         ShaderAttribute GetActiveAttrib(int handle, int index, int bufferSize);
         ShaderUniform GetActiveUniform(int handle, int index, int bufferSize);
+
+        void UniformMatrix4(int location, bool transpose, ref Matrix4 matrix);
     }
 }

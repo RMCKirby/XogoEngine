@@ -43,6 +43,7 @@
     <Compile Include="Shaders\ShaderAttributeTest.cs" />
     <Compile Include="Shaders\ShaderUniformTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
+    <Compile Include="Shaders\ShaderProgramExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\HashCodeGeneratorTest.cs" />
     <Compile Include="Vertex\ElementBufferTest.cs" />
