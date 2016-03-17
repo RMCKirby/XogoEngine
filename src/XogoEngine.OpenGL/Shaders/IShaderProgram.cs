@@ -19,6 +19,6 @@ namespace XogoEngine.OpenGL.Shaders
         void DetachShaders();
         void DeleteShaders();
 
-        void SetMatrix4(ShaderUniform uniform, Matrix4 matrix, bool transpose);
+        void SetMatrix4(ShaderUniform uniform, ref Matrix4 matrix, bool transpose);
     }
 }

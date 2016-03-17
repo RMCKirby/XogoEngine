@@ -269,8 +269,9 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void SetMatrix4_ThrowsArgumentNullException_OnNullUniform()
         {
+            var matrix = Matrix4.Identity;
             ShaderUniform uniform = null;
-            Action action = () => program.SetMatrix4(uniform, Matrix4.Identity, false);
+            Action action = () => program.SetMatrix4(uniform, ref matrix, false);
 
             action.ShouldThrow<ArgumentNullException>();
         }
@@ -278,8 +279,9 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void SetMatrix4_ThrowsArgumentException_OnUniformNotInShaderProgram()
         {
+            var matrix = Matrix4.Identity;
             var uniform = new ShaderUniform("mvp", 4, 16, ActiveUniformType.FloatMat4);
-            Action action = () => program.SetMatrix4(uniform, Matrix4.Identity, false);
+            Action action = () => program.SetMatrix4(uniform, ref matrix, false);
 
             action.ShouldThrow<ArgumentException>().Message.ShouldContain(
                 "The given uniform must be in the invoking shader program"
@@ -291,7 +293,8 @@ namespace XogoEngine.OpenGL.Test.Shaders
         {
             GivenProgramHasUniform("light", 2, ActiveUniformType.FloatVec2);
             var uniform = program.Uniforms["light"];
-            Action action = () => program.SetMatrix4(uniform, Matrix4.Identity, false);
+            var matrix = Matrix4.Identity;
+            Action action = () => program.SetMatrix4(uniform, ref matrix, false);
 
             action.ShouldThrow<ArgumentException>().Message.ShouldContain(
                 $"The given uniform must be of type {nameof(ActiveUniformType.FloatMat4)}"
@@ -304,7 +307,7 @@ namespace XogoEngine.OpenGL.Test.Shaders
             GivenProgramHasUniform("mvp");
             var uniform = program.Uniforms["mvp"];
             var matrix = Matrix4.Identity;
-            program.SetMatrix4(uniform, matrix, false);
+            program.SetMatrix4(uniform, ref matrix, false);
             adapter.Verify(a => a.UniformMatrix4(uniform.Location, false, ref matrix));
         }
 

@@ -139,7 +139,7 @@ namespace XogoEngine.OpenGL.Shaders
             attachedShaders.ForEach((s) => s?.Dispose());
         }
 
-        public void SetMatrix4(ShaderUniform uniform, Matrix4 matrix, bool transpose)
+        public void SetMatrix4(ShaderUniform uniform, ref Matrix4 matrix, bool transpose)
         {
             if (uniform == null)
             {

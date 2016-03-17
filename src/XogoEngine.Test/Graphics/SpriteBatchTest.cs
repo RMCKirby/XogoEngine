@@ -96,11 +96,30 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void ModelViewProjectionMatrix_IsIntialised_OnConstruction()
         {
+            var matrix = Matrix4.Identity;
             var program = shaderProgram.Object;
             shaderProgram.Verify(
-                s => s.SetMatrix4(program.Uniforms["mvp"], Matrix4.Identity, false),
+                s => s.SetMatrix4(program.Uniforms["mvp"], ref matrix, false),
                 Times.Once
             );
+        }
+
+        [Test]
+        public void SetOrthographicOffCenter_ModifiesShaderMvpMatrix_OnInvoke()
+        {
+            spriteBatch.SetOrthographicOffCenter(0, 400, 0, 300);
+
+            /* We are passing the OpenTK.Matrix4 by ref for performance reasons.
+            * Moq has the limitation that we cannot verify this argument was passed
+            * unless we have access to the same reference in this test case.
+            * We could resolve this by changing the SpriteBatch signature to take a matrix,
+            * but then we would be exposing the underlying OpenTK Matrix4 type in the engine's
+            * public API. */
+
+            // For now, let's ignore this.
+            // Potentially, given the time, we could wrap OpenTK.Matrix4 and expose that instead.
+
+            //shaderProgram.Verify(s => s.SetMatrix4());
         }
 
         [Test]

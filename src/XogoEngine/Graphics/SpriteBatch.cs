@@ -97,6 +97,16 @@ namespace XogoEngine.Graphics
             ClearSpriteData(sprite);
         }
 
+        public void SetOrthographicOffCenter(float left, float right, float bottom, float top)
+        {
+            var matrix = Matrix4.CreateOrthographicOffCenter(left, right, bottom, top, -1, 1);
+            shaderProgram.SetMatrix4(
+                shaderProgram.Uniforms["mvp"],
+                ref matrix,
+                false
+            );
+        }
+
         public void Draw()
         {
             shaderProgram.Use();
@@ -169,7 +179,8 @@ namespace XogoEngine.Graphics
             shaderProgram.GetUniformLocation("mvp");
             Debug.Assert(shaderProgram.Uniforms.ContainsKey("mvp"));
 
-            shaderProgram.SetMatrix4(shaderProgram.Uniforms["mvp"], Matrix4.Identity, false);
+            var defaultMatrix = Matrix4.Identity;
+            shaderProgram.SetMatrix4(shaderProgram.Uniforms["mvp"], ref defaultMatrix, false);
         }
 
         private void ValidateBatchSize()
