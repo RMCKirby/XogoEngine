@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 using OpenTK;
 using XogoEngine.Graphics;
 
@@ -46,6 +45,18 @@ namespace XogoEngine.Test.Graphics
         public void Sprite_ShouldHave_FourVertices()
         {
             sprite.Vertices.Length.ShouldBe(4);
+        }
+
+        [Test]
+        public void SpriteModifiedEvent_ShouldBeFired_OnSpriteModification()
+        {
+            bool invoked = false;
+            EventHandler action = (sender, e) => invoked = true;
+            sprite.SpriteModified += action;
+            sprite.Modify((s) => s.X = 50);
+
+            invoked.ShouldBeTrue();
+            sprite.SpriteModified -= action;
         }
     }
 }

@@ -33,15 +33,32 @@ namespace XogoEngine.Graphics
             this.colour = colour;
         }
 
-        public int X => x;
+        public int X
+        {
+            get { return x; }
+            set {
+                x = value;
+            }
+        }
         public int Y => y;
         public int Width => width;
         public int Height => height;
         public Colour4 Colour => colour;
         public TextureRegion TextureRegion => textureRegion;
 
+        public void Modify(Action<Sprite> action)
+        {
+            OnSpriteModified();
+        }
+
+        private void OnSpriteModified()
+        {
+            SpriteModified?.Invoke(this, EventArgs.Empty);
+        }
+
         internal VertexPositionColourTexture[] Vertices => vertices;
         internal int BatchIndex;
+        internal event EventHandler SpriteModified;
 
         internal const int VertexCount = 4;
     }
