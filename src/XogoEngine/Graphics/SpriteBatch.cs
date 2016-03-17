@@ -139,10 +139,10 @@ namespace XogoEngine.Graphics
             var sColour = sprite.Colour;
             var scaledColour = new Vector4(sColour.R / 255, sColour.G / 255, sColour.B / 255, sColour.A / 255);
 
-            var topLeftPosition = new Vector2(sprite.X, sprite.Y + scaledHeight);
-            var topRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y + scaledHeight);
-            var bottomRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y);
-            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y);
+            var bottomRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y + sprite.Height);
+            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y + sprite.Height);
 
             sprite.Vertices[0] = new VertexPositionColourTexture(topLeftPosition, scaledColour, topLeftCoord);
             sprite.Vertices[1] = new VertexPositionColourTexture(topRightPosition, scaledColour, topRightCoord);

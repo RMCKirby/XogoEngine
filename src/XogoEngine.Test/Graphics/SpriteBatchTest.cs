@@ -140,10 +140,10 @@ namespace XogoEngine.Test.Graphics
             var scaledColour = new Vector4(sColour.R / 255, sColour.G / 255, sColour.B / 255, sColour.A / 255);
 
             // expected vertex positions
-            var topLeftPosition = new Vector2(sprite.X, sprite.Y + scaledHeight);
-            var topRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y + scaledHeight);
-            var bottomRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y);
-            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y);
+            var bottomRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y + sprite.Height);
+            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y + sprite.Height);
 
             var topLeftVertex = new VertexPositionColourTexture(topLeftPosition, scaledColour, topLeftCoord);
             var topRightvertex = new VertexPositionColourTexture(topRightPosition, scaledColour, topRightCoord);
