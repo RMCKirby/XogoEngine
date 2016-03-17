@@ -289,8 +289,8 @@ namespace XogoEngine.OpenGL.Test.Shaders
         [Test]
         public void SetMatrix4_ThrowsArgumentException_OnNonMatrix4Uniform()
         {
-            GivenProgramHasUniform("light");
-            var uniform = new ShaderUniform("light", 2, 8, ActiveUniformType.DoubleVec2);
+            GivenProgramHasUniform("light", 2, ActiveUniformType.FloatVec2);
+            var uniform = program.Uniforms["light"];
             Action action = () => program.SetMatrix4(uniform, Matrix4.Identity, false);
 
             action.ShouldThrow<ArgumentException>().Message.ShouldContain(
@@ -298,9 +298,22 @@ namespace XogoEngine.OpenGL.Test.Shaders
             );
         }
 
-        private void GivenProgramHasUniform(string name, int expectedLocation = 2)
+        [Test]
+        public void AdapterUniformMatrix4_IsInvoked_OnSetMatrix4()
         {
-            var uniform = new ShaderUniform(name, expectedLocation, 8, ActiveUniformType.FloatMat4);
+            GivenProgramHasUniform("mvp");
+            var uniform = program.Uniforms["mvp"];
+            var matrix = Matrix4.Identity;
+            program.SetMatrix4(uniform, matrix, false);
+            adapter.Verify(a => a.UniformMatrix4(uniform.Location, false, ref matrix));
+        }
+
+        private void GivenProgramHasUniform(
+            string name,
+            int expectedLocation = 2,
+            ActiveUniformType type = ActiveUniformType.FloatMat4)
+        {
+            var uniform = new ShaderUniform(name, expectedLocation, 8, type);
             adapter.Setup(a => a.GetUniformLocation(program.Handle, name))
                    .Returns(expectedLocation);
             adapter.Setup(a => a.GetActiveUniform(program.Handle, expectedLocation, It.IsAny<int>()))

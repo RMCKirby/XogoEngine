@@ -157,6 +157,7 @@ namespace XogoEngine.OpenGL.Shaders
                     $"The given uniform must be of type {nameof(ActiveUniformType.FloatMat4)}"
                 );
             }
+            adapter.UniformMatrix4(uniform.Location, false, ref matrix);
         }
 
         public void Dispose()
