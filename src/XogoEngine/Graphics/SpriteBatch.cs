@@ -162,13 +162,6 @@ namespace XogoEngine.Graphics
             vao.SetUp(shaderProgram, vbo.VertexDeclaration);
         }
 
-        private void InitialiseShaderUniforms()
-        {
-            Debug.Assert(shaderProgram.Uniforms.ContainsKey("mvp"));
-            var mvpUniform = shaderProgram.Uniforms["mvp"];
-            shaderProgram.SetMatrix4(mvpUniform, Matrix4.Identity, false);
-        }
-
         private void ValidateBatchSize()
         {
             if (sprites.Count == BatchSize)
