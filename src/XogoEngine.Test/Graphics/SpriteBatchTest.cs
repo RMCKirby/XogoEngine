@@ -2,6 +2,7 @@ using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.Graphics;
@@ -41,6 +42,12 @@ namespace XogoEngine.Test.Graphics
                        .Returns(new TextureRegion[] { textureRegion });
 
             shaderProgram = new Mock<IShaderProgram>();
+            var mvpUniform = new ShaderUniform("mvp", 4, 16, ActiveUniformType.FloatMat4);
+            var uniforms = new Dictionary<string, ShaderUniform>()
+            {
+                {"mvp", mvpUniform}
+            };
+            shaderProgram.SetupGet(s => s.Uniforms).Returns(uniforms);
             vao = new Mock<IVertexArrayObject>();
             vbo = new Mock<IVertexBuffer<VertexPositionColourTexture>>();
             vbo.SetupGet(v => v.VertexDeclaration).Returns(declaration);
@@ -84,6 +91,16 @@ namespace XogoEngine.Test.Graphics
             vbo.Verify(v => v.Bind());
             vbo.Verify(v => v.Fill(vboSize, null, BufferUsageHint.DynamicDraw));
             vao.Verify(v => v.SetUp(shaderProgram.Object, vbo.Object.VertexDeclaration));
+        }
+
+        [Test]
+        public void ModelViewProjectionMatrix_IsIntialised_OnConstruction()
+        {
+            var program = shaderProgram.Object;
+            shaderProgram.Verify(
+                s => s.SetMatrix4(program.Uniforms["mvp"], Matrix4.Identity, false),
+                Times.Once
+            );
         }
 
         [Test]

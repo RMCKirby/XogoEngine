@@ -159,7 +159,17 @@ namespace XogoEngine.Graphics
             vao.Bind();
             vbo.Bind();
             vbo.Fill(vboSize, null, BufferUsageHint.DynamicDraw);
+            InitialiseShaderUniforms();
             vao.SetUp(shaderProgram, vbo.VertexDeclaration);
+        }
+
+        private void InitialiseShaderUniforms()
+        {
+            // load the uniform into shaderProgram.Uniforms
+            shaderProgram.GetUniformLocation("mvp");
+            Debug.Assert(shaderProgram.Uniforms.ContainsKey("mvp"));
+
+            shaderProgram.SetMatrix4(shaderProgram.Uniforms["mvp"], Matrix4.Identity, false);
         }
 
         private void ValidateBatchSize()
