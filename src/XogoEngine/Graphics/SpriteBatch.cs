@@ -70,6 +70,7 @@ namespace XogoEngine.Graphics
             ValidateBatchSize();
             PrepareSpriteVertices(sprite);
             sprites.Add(sprite);
+            sprite.SpriteModified += HandleSpriteModified;
             sprite.BatchIndex = availableSlots.Dequeue();
             UploadSpriteVertices(sprite);
         }
@@ -208,6 +209,15 @@ namespace XogoEngine.Graphics
                     "The given sprite has already been added to this sprite batch"
                 );
             }
+        }
+
+        private void HandleSpriteModified(object sender, EventArgs args)
+        {
+            Debug.Assert(sender.GetType() == typeof(Sprite));
+
+            var sprite = (Sprite)sender;
+            PrepareSpriteVertices(sprite);
+            UploadSpriteVertices(sprite);
         }
 
         private void UploadSpriteVertices(Sprite sprite)
