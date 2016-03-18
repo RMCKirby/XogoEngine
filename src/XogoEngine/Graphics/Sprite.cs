@@ -46,11 +46,61 @@ namespace XogoEngine.Graphics
                 }
             }
         }
-        public int Y => y;
-        public int Width => width;
-        public int Height => height;
-        public Colour4 Colour => colour;
-        public TextureRegion TextureRegion => textureRegion;
+        public int Y
+        {
+            get { return y; }
+            set {
+                if (value != y)
+                {
+                    y = value;
+                    modified = true;
+                }
+            }
+        }
+        public int Width
+        {
+            get { return width; }
+            set {
+                if (value != width)
+                {
+                    width = value;
+                    modified = true;
+                }
+            }
+        }
+        public int Height
+        {
+            get { return height; }
+            set {
+                if (value != height)
+                {
+                    height = value;
+                    modified = true;
+                }
+            }
+        }
+        public Colour4 Colour
+        {
+            get { return colour; }
+            set {
+                if (value != colour)
+                {
+                    colour = value;
+                    modified = true;
+                }
+            }
+        }
+        public TextureRegion TextureRegion
+        {
+            get { return textureRegion; }
+            set {
+                if (value != textureRegion)
+                {
+                    textureRegion = value;
+                    modified = true;
+                }
+            }
+        }
 
         public void Modify(Action<Sprite> action)
         {
@@ -58,6 +108,7 @@ namespace XogoEngine.Graphics
             if (modified)
             {
                 OnSpriteModified();
+                modified = false;
             }
         }
 

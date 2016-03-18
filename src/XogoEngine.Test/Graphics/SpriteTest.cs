@@ -54,7 +54,13 @@ namespace XogoEngine.Test.Graphics
             EventHandler action = (sender, e) => invoked = true;
             sprite.SpriteModified += action;
 
-            sprite.Modify((s) => s.X = 50);
+            sprite.Modify((s) => {
+                s.X = 50;
+                s.Y = 60;
+                s.Width = 100;
+                s.Height = 200;
+                s.Colour = Colour4.SkyBlue;
+            });
 
             invoked.ShouldBeTrue();
             sprite.SpriteModified -= action;
@@ -69,7 +75,14 @@ namespace XogoEngine.Test.Graphics
             EventHandler action = (sender, e) => invoked = true;
             sprite.SpriteModified += action;
 
-            sprite.Modify((s) => s.X = 40);
+            sprite.Modify((s) => {
+                s.X = 40;
+                s.Y = 50;
+                s.Width = textureRegion.Width;
+                s.Height = textureRegion.Height;
+                s.Colour = Colour4.White;
+                s.TextureRegion = sprite.TextureRegion;
+            });
             invoked.ShouldBeFalse();
             sprite.SpriteModified -= action;
         }
