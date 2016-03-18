@@ -123,6 +123,7 @@ namespace XogoEngine.Graphics
             {
                 return;
             }
+            sprites.ForEach((s) => s.SpriteModified -= HandleSpriteModified);
             shaderProgram?.Dispose();
             vao?.Dispose();
             vbo?.Dispose();

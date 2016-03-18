@@ -367,6 +367,24 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void SpriteHandlers_AreRemovedFromBatch_OnDisposal()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            var sprite2 = new Sprite(spriteSheet.Object.GetRegion(1), 20, 10);
+            spriteBatch.Add(sprite, sprite2);
+
+            vbo.ResetCalls();
+            spriteBatch.Dispose();
+            sprite.Modify((s) => s.Width = 100);
+            sprite2.Modify((s) => s.Colour = Colour4.ForestGreen);
+
+            vbo.Verify(
+                (v) => v.FillPartial(It.IsAny<IntPtr>(), It.IsAny<IntPtr>(), It.IsAny<VertexPositionColourTexture[]>()),
+                Times.Never
+            );
+        }
+
+        [Test]
         public void SpriteSheet_IsDisposed_OnDisposal()
         {
             spriteBatch.Dispose();
