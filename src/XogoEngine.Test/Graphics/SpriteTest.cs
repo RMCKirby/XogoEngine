@@ -53,9 +53,24 @@ namespace XogoEngine.Test.Graphics
             bool invoked = false;
             EventHandler action = (sender, e) => invoked = true;
             sprite.SpriteModified += action;
+
             sprite.Modify((s) => s.X = 50);
 
             invoked.ShouldBeTrue();
+            sprite.SpriteModified -= action;
+        }
+
+        [Test]
+        public void SpriteModifiedEvent_ShouldNotBeFired_IfSpriteHasNotChanged()
+        {
+            /* for efficiency, we don't want to re-send vertices to the GPU
+            * if the modified value(s) are the same as those previous */
+            bool invoked = false;
+            EventHandler action = (sender, e) => invoked = true;
+            sprite.SpriteModified += action;
+
+            sprite.Modify((s) => s.X = 40);
+            invoked.ShouldBeFalse();
             sprite.SpriteModified -= action;
         }
     }

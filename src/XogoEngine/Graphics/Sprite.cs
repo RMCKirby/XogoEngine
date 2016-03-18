@@ -14,6 +14,8 @@ namespace XogoEngine.Graphics
         private Colour4 colour;
         private VertexPositionColourTexture[] vertices = new VertexPositionColourTexture[VertexCount];
 
+        private bool modified = false;
+
         public Sprite(TextureRegion textureRegion, int x, int y)
             : this(textureRegion, x, y, Colour4.White)
         {
@@ -37,7 +39,11 @@ namespace XogoEngine.Graphics
         {
             get { return x; }
             set {
-                x = value;
+                if (value != x)
+                {
+                    x = value;
+                    modified = true;
+                }
             }
         }
         public int Y => y;
@@ -48,7 +54,11 @@ namespace XogoEngine.Graphics
 
         public void Modify(Action<Sprite> action)
         {
-            OnSpriteModified();
+            action(this);
+            if (modified)
+            {
+                OnSpriteModified();
+            }
         }
 
         private void OnSpriteModified()
