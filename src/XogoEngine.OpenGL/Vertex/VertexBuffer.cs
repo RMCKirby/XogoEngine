@@ -6,8 +6,7 @@ using XogoEngine.OpenGL.Extensions;
 namespace XogoEngine.OpenGL.Vertex
 {
     public sealed class VertexBuffer<TVertex> :
-        IVertexBuffer<TVertex>,
-        IResource<int>
+        IVertexBuffer<TVertex>
         where TVertex : struct, IVertexDeclarable
     {
         private int handle;

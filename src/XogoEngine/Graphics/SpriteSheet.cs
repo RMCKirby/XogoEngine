@@ -45,7 +45,7 @@ namespace XogoEngine.Graphics
             {
                 return;
             }
-            Texture.Dispose();
+            Texture?.Dispose();
             isDisposed = true;
             GC.SuppressFinalize(this);
         }

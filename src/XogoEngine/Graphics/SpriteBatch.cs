@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -19,7 +20,7 @@ namespace XogoEngine.Graphics
         private readonly IShaderProgram shaderProgram;
         private readonly IVertexArrayObject vao;
         private readonly IVertexBuffer<VertexPositionColourTexture> vbo;
-        private readonly IDrawAdapter drawAdapter;
+        private readonly IDrawAdapter adapter;
 
         private const int BatchSize = 100;
 
@@ -35,14 +36,18 @@ namespace XogoEngine.Graphics
             IShaderProgram shaderProgram,
             IVertexArrayObject vao,
             IVertexBuffer<VertexPositionColourTexture> vbo,
-            IDrawAdapter drawAdapter)
+            IDrawAdapter adapter)
         {
             spriteSheet.ThrowIfNull(nameof(spriteSheet));
             this.spriteSheet = spriteSheet;
+            Debug.Assert(shaderProgram != null, $"{nameof(shaderProgram)} was null in SpriteBatch");
+            Debug.Assert(vao != null, $"{nameof(vao)} was null in SpriteBatch");
+            Debug.Assert(vbo != null, $"{nameof(vbo)} was null ins SpriteBatch");
+            Debug.Assert(adapter != null, $"{nameof(adapter)} was null in SpriteBatch");
             this.shaderProgram = shaderProgram;
             this.vao = vao;
             this.vbo = vbo;
-            this.drawAdapter = drawAdapter;
+            this.adapter = adapter;
 
             Initialise();
         }
@@ -65,6 +70,7 @@ namespace XogoEngine.Graphics
             ValidateBatchSize();
             PrepareSpriteVertices(sprite);
             sprites.Add(sprite);
+            sprite.SpriteModified += HandleSpriteModified;
             sprite.BatchIndex = availableSlots.Dequeue();
             UploadSpriteVertices(sprite);
         }
@@ -86,10 +92,29 @@ namespace XogoEngine.Graphics
                 );
             }
             sprites.Remove(sprite);
+            sprite.SpriteModified -= HandleSpriteModified;
             // may need a dictionary of weak references of sprites to batchIndexes
             // in the case a sprite becomes null after being added to the batch
             availableSlots.Enqueue(sprite.BatchIndex);
             ClearSpriteData(sprite);
+        }
+
+        public void SetOrthographicOffCenter(float left, float right, float bottom, float top)
+        {
+            var matrix = Matrix4.CreateOrthographicOffCenter(left, right, bottom, top, -1, 1);
+            shaderProgram.SetMatrix4(
+                shaderProgram.Uniforms["mvp"],
+                ref matrix,
+                false
+            );
+        }
+
+        public void Draw()
+        {
+            shaderProgram.Use();
+            spriteSheet.Texture.Bind();
+            vao.Bind();
+            adapter.DrawArrays(PrimitiveType.Quads, 0, BatchSize * Sprite.VertexCount);
         }
 
         public void Dispose()
@@ -98,7 +123,11 @@ namespace XogoEngine.Graphics
             {
                 return;
             }
-            spriteSheet.Dispose();
+            sprites.ForEach((s) => s.SpriteModified -= HandleSpriteModified);
+            shaderProgram?.Dispose();
+            vao?.Dispose();
+            vbo?.Dispose();
+            spriteSheet?.Dispose();
             isDisposed = true;
             GC.SuppressFinalize(this);
         }
@@ -123,10 +152,10 @@ namespace XogoEngine.Graphics
             var sColour = sprite.Colour;
             var scaledColour = new Vector4(sColour.R / 255, sColour.G / 255, sColour.B / 255, sColour.A / 255);
 
-            var topLeftPosition = new Vector2(sprite.X, sprite.Y + scaledHeight);
-            var topRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y + scaledHeight);
-            var bottomRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y);
-            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y);
+            var bottomRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y + sprite.Height);
+            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y + sprite.Height);
 
             sprite.Vertices[0] = new VertexPositionColourTexture(topLeftPosition, scaledColour, topLeftCoord);
             sprite.Vertices[1] = new VertexPositionColourTexture(topRightPosition, scaledColour, topRightCoord);
@@ -136,12 +165,25 @@ namespace XogoEngine.Graphics
 
         private void Initialise()
         {
-            var vboSize = new IntPtr(BatchSize * Sprite.VertexCount);
+            var vboSize = new IntPtr(
+                BatchSize * Sprite.VertexCount * vbo.VertexDeclaration.Stride
+            );
             shaderProgram.Use();
             vao.Bind();
             vbo.Bind();
             vbo.Fill(vboSize, null, BufferUsageHint.DynamicDraw);
+            InitialiseShaderUniforms();
             vao.SetUp(shaderProgram, vbo.VertexDeclaration);
+        }
+
+        private void InitialiseShaderUniforms()
+        {
+            // load the uniform into shaderProgram.Uniforms
+            shaderProgram.GetUniformLocation("mvp");
+            Debug.Assert(shaderProgram.Uniforms.ContainsKey("mvp"));
+
+            var defaultMatrix = Matrix4.Identity;
+            shaderProgram.SetMatrix4(shaderProgram.Uniforms["mvp"], ref defaultMatrix, false);
         }
 
         private void ValidateBatchSize()
@@ -171,10 +213,21 @@ namespace XogoEngine.Graphics
             }
         }
 
+        private void HandleSpriteModified(object sender, EventArgs args)
+        {
+            Debug.Assert(sender.GetType() == typeof(Sprite));
+
+            var sprite = (Sprite)sender;
+            PrepareSpriteVertices(sprite);
+            UploadSpriteVertices(sprite);
+        }
+
         private void UploadSpriteVertices(Sprite sprite)
         {
             var size = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount);
-            var offset = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex);
+            var offset = new IntPtr(
+                vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex
+            );
             vbo.Bind();
             vbo.FillPartial(offset, size, sprite.Vertices);
         }
@@ -182,7 +235,9 @@ namespace XogoEngine.Graphics
         private void ClearSpriteData(Sprite sprite)
         {
             var size = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount);
-            var offset = new IntPtr(vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex);
+            var offset = new IntPtr(
+                vbo.VertexDeclaration.Stride * Sprite.VertexCount * sprite.BatchIndex
+            );
             vbo.Bind();
             vbo.FillPartial(offset, size, new VertexPositionColourTexture[4]);
         }

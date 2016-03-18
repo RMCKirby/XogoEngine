@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 using OpenTK;
 using XogoEngine.Graphics;
 
@@ -46,6 +45,46 @@ namespace XogoEngine.Test.Graphics
         public void Sprite_ShouldHave_FourVertices()
         {
             sprite.Vertices.Length.ShouldBe(4);
+        }
+
+        [Test]
+        public void SpriteModifiedEvent_ShouldBeFired_OnSpriteModification()
+        {
+            bool invoked = false;
+            EventHandler action = (sender, e) => invoked = true;
+            sprite.SpriteModified += action;
+
+            sprite.Modify((s) => {
+                s.X = 50;
+                s.Y = 60;
+                s.Width = 100;
+                s.Height = 200;
+                s.Colour = Colour4.SkyBlue;
+            });
+
+            invoked.ShouldBeTrue();
+            sprite.SpriteModified -= action;
+        }
+
+        [Test]
+        public void SpriteModifiedEvent_ShouldNotBeFired_IfSpriteHasNotChanged()
+        {
+            /* for efficiency, we don't want to re-send vertices to the GPU
+            * if the modified value(s) are the same as those previous */
+            bool invoked = false;
+            EventHandler action = (sender, e) => invoked = true;
+            sprite.SpriteModified += action;
+
+            sprite.Modify((s) => {
+                s.X = 40;
+                s.Y = 50;
+                s.Width = textureRegion.Width;
+                s.Height = textureRegion.Height;
+                s.Colour = Colour4.White;
+                s.TextureRegion = sprite.TextureRegion;
+            });
+            invoked.ShouldBeFalse();
+            sprite.SpriteModified -= action;
         }
     }
 }

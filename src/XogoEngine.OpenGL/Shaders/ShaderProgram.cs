@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Adapters;
 using XogoEngine.OpenGL.Extensions;
@@ -35,12 +36,12 @@ namespace XogoEngine.OpenGL.Shaders
             }
         }
 
-        public int Handle { get { return handle; } }
-        public IEnumerable<Shader> AttachedShaders { get { return attachedShaders; } }
-        public IDictionary<string, ShaderAttribute> Attributes { get { return attributes; } }
-        public IDictionary<string, ShaderUniform> Uniforms { get { return uniforms; } }
-        public bool Linked { get { return linked; } }
-        public bool IsDisposed { get { return isDisposed; } }
+        public int Handle => handle;
+        public IEnumerable<Shader> AttachedShaders => attachedShaders;
+        public IDictionary<string, ShaderAttribute> Attributes => attributes;
+        public IDictionary<string, ShaderUniform> Uniforms => uniforms;
+        public bool Linked => linked;
+        public bool IsDisposed => isDisposed;
 
         public void Attach(Shader shader)
         {
@@ -135,7 +136,28 @@ namespace XogoEngine.OpenGL.Shaders
         public void DeleteShaders()
         {
             this.ThrowIfDisposed();
-            attachedShaders.ForEach((s) => s.Dispose());
+            attachedShaders.ForEach((s) => s?.Dispose());
+        }
+
+        public void SetMatrix4(ShaderUniform uniform, ref Matrix4 matrix, bool transpose)
+        {
+            if (uniform == null)
+            {
+                throw new ArgumentNullException(nameof(uniform));
+            }
+            if (!uniforms.ContainsKey(uniform.Name))
+            {
+                throw new ArgumentException(
+                    "The given uniform must be in the invoking shader program"
+                );
+            }
+            if (uniform.UniformType != ActiveUniformType.FloatMat4)
+            {
+                throw new ArgumentException(
+                    $"The given uniform must be of type {nameof(ActiveUniformType.FloatMat4)}"
+                );
+            }
+            adapter.UniformMatrix4(uniform.Location, false, ref matrix);
         }
 
         public void Dispose()
@@ -144,7 +166,7 @@ namespace XogoEngine.OpenGL.Shaders
             {
                 return;
             }
-            attachedShaders.ForEach((s) => s.Dispose());
+            attachedShaders.ForEach((s) => s?.Dispose());
             adapter.DeleteProgram(handle);
             isDisposed = true;
             GC.SuppressFinalize(this);

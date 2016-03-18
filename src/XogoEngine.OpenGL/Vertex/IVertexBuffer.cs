@@ -3,7 +3,7 @@ using System;
 
 namespace XogoEngine.OpenGL.Vertex
 {
-    public interface IVertexBuffer<TVertex> where TVertex : struct, IVertexDeclarable
+    public interface IVertexBuffer<TVertex> : IResource<int> where TVertex : struct, IVertexDeclarable
     {
         BufferTarget Target { get; }
         IntPtr Size { get; }

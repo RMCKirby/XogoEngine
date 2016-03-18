@@ -5,9 +5,7 @@ using XogoEngine.OpenGL.Shaders;
 
 namespace XogoEngine.OpenGL.Vertex
 {
-    public sealed class VertexArrayObject :
-        IVertexArrayObject,
-        IResource<int>
+    public sealed class VertexArrayObject : IVertexArrayObject
     {
         private int handle;
         private readonly IVertexArrayAdapter adapter;

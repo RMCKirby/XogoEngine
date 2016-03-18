@@ -79,7 +79,7 @@ namespace XogoEngine
         {
             if (disposing)
             {
-                gameWindow.Dispose();
+                gameWindow?.Dispose();
             }
         }
 

@@ -2,6 +2,7 @@ using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.Graphics;
@@ -41,6 +42,12 @@ namespace XogoEngine.Test.Graphics
                        .Returns(new TextureRegion[] { textureRegion });
 
             shaderProgram = new Mock<IShaderProgram>();
+            var mvpUniform = new ShaderUniform("mvp", 4, 16, ActiveUniformType.FloatMat4);
+            var uniforms = new Dictionary<string, ShaderUniform>()
+            {
+                {"mvp", mvpUniform}
+            };
+            shaderProgram.SetupGet(s => s.Uniforms).Returns(uniforms);
             vao = new Mock<IVertexArrayObject>();
             vbo = new Mock<IVertexBuffer<VertexPositionColourTexture>>();
             vbo.SetupGet(v => v.VertexDeclaration).Returns(declaration);
@@ -75,13 +82,44 @@ namespace XogoEngine.Test.Graphics
         public void VertexArrayObject_ShouldBeSetUp_OnConstruction()
         {
             const int batchSize = 100;
-            var vboSize = new IntPtr(batchSize * Sprite.VertexCount);
+            var vboSize = new IntPtr(
+                batchSize * Sprite.VertexCount * declaration.Stride
+            );
 
             shaderProgram.Verify(s => s.Use());
             vao.Verify(v => v.Bind());
             vbo.Verify(v => v.Bind());
             vbo.Verify(v => v.Fill(vboSize, null, BufferUsageHint.DynamicDraw));
             vao.Verify(v => v.SetUp(shaderProgram.Object, vbo.Object.VertexDeclaration));
+        }
+
+        [Test]
+        public void ModelViewProjectionMatrix_IsIntialised_OnConstruction()
+        {
+            var matrix = Matrix4.Identity;
+            var program = shaderProgram.Object;
+            shaderProgram.Verify(
+                s => s.SetMatrix4(program.Uniforms["mvp"], ref matrix, false),
+                Times.Once
+            );
+        }
+
+        [Test]
+        public void SetOrthographicOffCenter_ModifiesShaderMvpMatrix_OnInvoke()
+        {
+            spriteBatch.SetOrthographicOffCenter(0, 400, 0, 300);
+
+            /* We are passing the OpenTK.Matrix4 by ref for performance reasons.
+            * Moq has the limitation that we cannot verify this argument was passed
+            * unless we have access to the same reference in this test case.
+            * We could resolve this by changing the SpriteBatch signature to take a matrix,
+            * but then we would be exposing the underlying OpenTK Matrix4 type in the engine's
+            * public API. */
+
+            // For now, let's ignore this.
+            // Potentially, given the time, we could wrap OpenTK.Matrix4 and expose that instead.
+
+            //shaderProgram.Verify(s => s.SetMatrix4());
         }
 
         [Test]
@@ -138,10 +176,10 @@ namespace XogoEngine.Test.Graphics
             var scaledColour = new Vector4(sColour.R / 255, sColour.G / 255, sColour.B / 255, sColour.A / 255);
 
             // expected vertex positions
-            var topLeftPosition = new Vector2(sprite.X, sprite.Y + scaledHeight);
-            var topRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y + scaledHeight);
-            var bottomRightPosition = new Vector2(sprite.X + scaledWidth, sprite.Y);
-            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topLeftPosition = new Vector2(sprite.X, sprite.Y);
+            var topRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y);
+            var bottomRightPosition = new Vector2(sprite.X + sprite.Width, sprite.Y + sprite.Height);
+            var bottomLeftPosition = new Vector2(sprite.X, sprite.Y + sprite.Height);
 
             var topLeftVertex = new VertexPositionColourTexture(topLeftPosition, scaledColour, topLeftCoord);
             var topRightvertex = new VertexPositionColourTexture(topRightPosition, scaledColour, topRightCoord);
@@ -207,6 +245,39 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void SpriteVertices_AreReuploaded_WhenSpriteHasBeenModified()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            spriteBatch.Add(sprite);
+
+            vbo.ResetCalls();
+            sprite.Modify((s) => {
+                s.X = 80;
+                s.Y = 160;
+            });
+            vbo.Verify(
+                v => v.FillPartial(It.IsAny<IntPtr>(), It.IsAny<IntPtr>(), sprite.Vertices),
+                Times.Once
+            );
+        }
+
+        [Test]
+        public void SpriteVertices_AreNotReuploaded_OnceSpriteHasBeenRemovedFromBatch()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            spriteBatch.Add(sprite);
+
+            vbo.ResetCalls();
+            spriteBatch.Remove(sprite);
+            sprite.Modify((s) => s.X = 80);
+
+            vbo.Verify(
+                v => v.FillPartial(It.IsAny<IntPtr>(), It.IsAny<IntPtr>(), sprite.Vertices),
+                Times.Never
+            );
+        }
+
+        [Test]
         public void Remove_ThrowsArgumentException_WhenSpriteIsNotInBatch()
         {
             var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
@@ -253,6 +324,36 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void ShaderProgram_IsUsed_OnDraw()
+        {
+            shaderProgram.ResetCalls();
+            spriteBatch.Draw();
+            shaderProgram.Verify(s => s.Use(), Times.Once);
+        }
+
+        [Test]
+        public void Texture_IsBound_OnDraw()
+        {
+            spriteBatch.Draw();
+            texture.Verify(t => t.Bind(), Times.Once);
+        }
+
+        [Test]
+        public void VertexArrayObject_IsBound_OnDrawCall()
+        {
+            vao.ResetCalls();
+            spriteBatch.Draw();
+            vao.Verify(v => v.Bind(), Times.Once);
+        }
+
+        [Test]
+        public void AdapterDrawArrays_IsInvokedAsExpected_OnDraw()
+        {
+            spriteBatch.Draw();
+            adapter.Verify(a => a.DrawArrays(PrimitiveType.Quads, 0, 400));
+        }
+
+        [Test]
         public void Spritebatch_IsNotDisposed_AfterConstruction()
         {
             spriteBatch.IsDisposed.ShouldBeFalse();
@@ -266,10 +367,49 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void SpriteHandlers_AreRemovedFromBatch_OnDisposal()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            var sprite2 = new Sprite(spriteSheet.Object.GetRegion(1), 20, 10);
+            spriteBatch.Add(sprite, sprite2);
+
+            vbo.ResetCalls();
+            spriteBatch.Dispose();
+            sprite.Modify((s) => s.Width = 100);
+            sprite2.Modify((s) => s.Colour = Colour4.ForestGreen);
+
+            vbo.Verify(
+                (v) => v.FillPartial(It.IsAny<IntPtr>(), It.IsAny<IntPtr>(), It.IsAny<VertexPositionColourTexture[]>()),
+                Times.Never
+            );
+        }
+
+        [Test]
         public void SpriteSheet_IsDisposed_OnDisposal()
         {
             spriteBatch.Dispose();
             spriteSheet.Verify(s => s.Dispose());
+        }
+
+        [Test]
+        public void ShaderProgram_IsDisposed_OnDisposal()
+        {
+            spriteBatch.Dispose();
+            shaderProgram.Verify(s => s.Dispose());
+        }
+
+        [Test]
+        public void VertexArrayObject_IsDisposed_OnDisposal()
+        {
+            spriteBatch.Dispose();
+            vao.Verify(v => v.Dispose());
+        }
+
+        [Test]
+        public void VertexBuffer_IsDisposed_OnDisposal()
+        {
+            spriteBatch.Dispose();
+            vbo.Verify(v => v.Dispose());
         }
     }
 }

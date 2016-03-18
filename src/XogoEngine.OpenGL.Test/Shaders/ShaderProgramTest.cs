@@ -1,5 +1,6 @@
 using Moq;
 using NUnit.Framework;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Shouldly;
 using System;
@@ -265,9 +266,57 @@ namespace XogoEngine.OpenGL.Test.Shaders
             program.GetUniformLocation("projection").ShouldBe(expectedLocation);
         }
 
-        private void GivenProgramHasUniform(string name, int expectedLocation = 2)
+        [Test]
+        public void SetMatrix4_ThrowsArgumentNullException_OnNullUniform()
         {
-            var uniform = new ShaderUniform(name, expectedLocation, 8, ActiveUniformType.FloatMat4);
+            var matrix = Matrix4.Identity;
+            ShaderUniform uniform = null;
+            Action action = () => program.SetMatrix4(uniform, ref matrix, false);
+
+            action.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void SetMatrix4_ThrowsArgumentException_OnUniformNotInShaderProgram()
+        {
+            var matrix = Matrix4.Identity;
+            var uniform = new ShaderUniform("mvp", 4, 16, ActiveUniformType.FloatMat4);
+            Action action = () => program.SetMatrix4(uniform, ref matrix, false);
+
+            action.ShouldThrow<ArgumentException>().Message.ShouldContain(
+                "The given uniform must be in the invoking shader program"
+            );
+        }
+
+        [Test]
+        public void SetMatrix4_ThrowsArgumentException_OnNonMatrix4Uniform()
+        {
+            GivenProgramHasUniform("light", 2, ActiveUniformType.FloatVec2);
+            var uniform = program.Uniforms["light"];
+            var matrix = Matrix4.Identity;
+            Action action = () => program.SetMatrix4(uniform, ref matrix, false);
+
+            action.ShouldThrow<ArgumentException>().Message.ShouldContain(
+                $"The given uniform must be of type {nameof(ActiveUniformType.FloatMat4)}"
+            );
+        }
+
+        [Test]
+        public void AdapterUniformMatrix4_IsInvoked_OnSetMatrix4()
+        {
+            GivenProgramHasUniform("mvp");
+            var uniform = program.Uniforms["mvp"];
+            var matrix = Matrix4.Identity;
+            program.SetMatrix4(uniform, ref matrix, false);
+            adapter.Verify(a => a.UniformMatrix4(uniform.Location, false, ref matrix));
+        }
+
+        private void GivenProgramHasUniform(
+            string name,
+            int expectedLocation = 2,
+            ActiveUniformType type = ActiveUniformType.FloatMat4)
+        {
+            var uniform = new ShaderUniform(name, expectedLocation, 8, type);
             adapter.Setup(a => a.GetUniformLocation(program.Handle, name))
                    .Returns(expectedLocation);
             adapter.Setup(a => a.GetActiveUniform(program.Handle, expectedLocation, It.IsAny<int>()))
