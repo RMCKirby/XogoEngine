@@ -262,6 +262,22 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void SpriteVertices_AreNotReuploaded_OnceSpriteHasBeenRemovedFromBatch()
+        {
+            var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);
+            spriteBatch.Add(sprite);
+
+            vbo.ResetCalls();
+            spriteBatch.Remove(sprite);
+            sprite.Modify((s) => s.X = 80);
+
+            vbo.Verify(
+                v => v.FillPartial(It.IsAny<IntPtr>(), It.IsAny<IntPtr>(), sprite.Vertices),
+                Times.Never
+            );
+        }
+
+        [Test]
         public void Remove_ThrowsArgumentException_WhenSpriteIsNotInBatch()
         {
             var sprite = new Sprite(spriteSheet.Object.GetRegion(0), 10, 10);

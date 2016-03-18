@@ -92,6 +92,7 @@ namespace XogoEngine.Graphics
                 );
             }
             sprites.Remove(sprite);
+            sprite.SpriteModified -= HandleSpriteModified;
             // may need a dictionary of weak references of sprites to batchIndexes
             // in the case a sprite becomes null after being added to the batch
             availableSlots.Enqueue(sprite.BatchIndex);
