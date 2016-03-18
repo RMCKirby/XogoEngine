@@ -1,5 +1,4 @@
 using System;
-using OpenTK;
 using XogoEngine.OpenGL.Vertex;
 
 namespace XogoEngine.Graphics
