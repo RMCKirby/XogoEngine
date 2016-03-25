@@ -38,6 +38,8 @@
     <Folder Include="Vertex\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OpenGlErrorHelper.cs" />
+    <Compile Include="OpenGlException.cs" />
     <Compile Include="IResource.cs" />
     <Compile Include="Adapters\IBufferAdapter.cs" />
     <Compile Include="Adapters\BufferAdapter.cs" />
