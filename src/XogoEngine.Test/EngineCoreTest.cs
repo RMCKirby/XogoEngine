@@ -7,13 +7,13 @@ namespace XogoEngine.Test
     [TestFixture]
     internal sealed class EngineCoreTest
     {
-        [Test]
+        [Test, Ignore("Concrete adapter not yet in place")]
         public void OpenGlAdapter_ShouldNot_BeNull()
         {
             EngineCore.GlAdapter.ShouldNotBeNull();
         }
 
-        [Test]
+        [Test, Ignore("Concrete adapter not yet in place")]
         public void OpenGlAdapter_ShouldBe_OfExpectedType()
         {
             EngineCore.GlAdapter.ShouldBeOfType<IGladapter>();
