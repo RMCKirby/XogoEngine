@@ -32,6 +32,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EngineCore.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="XogoWindow.cs" />
     <Compile Include="Graphics\Colour4.cs" />
