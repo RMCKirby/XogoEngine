@@ -14,13 +14,13 @@ namespace XogoEngine.Test
     {
         private TestWindow window;
         private Mock<IGameWindow> gameWindow;
-        private Mock<IGladapter> adapter;
+        private Mock<IGlAdapter> adapter;
 
         [SetUp]
         public void SetUp()
         {
             gameWindow = new Mock<IGameWindow>();
-            adapter = new Mock<IGladapter>();
+            adapter = new Mock<IGlAdapter>();
             window = new TestWindow(gameWindow.Object, adapter.Object);
         }
 
@@ -42,7 +42,7 @@ namespace XogoEngine.Test
         [Test]
         public void InternalConstructor_ThrowsArgumentNullException_OnNullAdapter()
         {
-            IGladapter nullAdapter = null;
+            IGlAdapter nullAdapter = null;
             Action construct = () => new XogoWindow(gameWindow.Object, nullAdapter);
 
             construct.ShouldThrow<ArgumentNullException>();
@@ -183,7 +183,7 @@ namespace XogoEngine.Test
             public Action RenderAction = delegate { };
             public Action UnloadAction = delegate { };
 
-            public TestWindow(IGameWindow window, IGladapter adapter)
+            public TestWindow(IGameWindow window, IGlAdapter adapter)
                 : base(window, adapter) { }
 
             protected override void Load()

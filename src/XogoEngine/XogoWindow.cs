@@ -8,7 +8,7 @@ namespace XogoEngine
     public class XogoWindow : IDisposable
     {
         private readonly IGameWindow gameWindow;
-        private readonly IGladapter adapter;
+        private readonly IGlAdapter adapter;
 
         private bool isDisposed = false;
 
@@ -21,7 +21,7 @@ namespace XogoEngine
             Title = title;
         }
 
-        internal XogoWindow(IGameWindow gameWindow, IGladapter adapter)
+        internal XogoWindow(IGameWindow gameWindow, IGlAdapter adapter)
         {
             if (gameWindow == null)
             {

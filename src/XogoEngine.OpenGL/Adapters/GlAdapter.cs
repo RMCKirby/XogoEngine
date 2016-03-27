@@ -8,7 +8,7 @@ using XogoEngine.OpenGL.Shaders;
 namespace XogoEngine.OpenGL.Adapters
 {
     [ExcludeFromCodeCoverage]
-    public sealed class GlAdapter : IGladapter
+    public sealed class GlAdapter : IGlAdapter
     {
         private readonly IBufferAdapter bufferAdapter = new BufferAdapter();
         private readonly IDrawAdapter drawAdapter = new DrawAdapter();

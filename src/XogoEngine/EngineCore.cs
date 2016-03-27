@@ -4,8 +4,8 @@ namespace XogoEngine
 {
     internal static class EngineCore
     {
-        private static IGladapter glAdapter;
+        private static readonly IGlAdapter glAdapter = new GlAdapter();
 
-        internal static IGladapter GlAdapter => glAdapter;
+        internal static IGlAdapter GlAdapter => glAdapter;
     }
 }
