@@ -5,6 +5,7 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using System.IO.Abstractions;
 using XogoEngine.Graphics;
+using XogoEngine.Input;
 using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine
@@ -55,6 +56,20 @@ namespace XogoEngine
         }
         public bool IsDisposed => isDisposed;
         public TextureLoader TextureLoader => textureLoader;
+        public KeyboardDevice Keyboard
+        {
+            get
+            {
+                #pragma warning disable 0612
+                if (gameWindow.InputDriver.Keyboard.Count <= 0)
+                {
+                    return null;
+                }
+                var keyboard = gameWindow.InputDriver.Keyboard[0];
+                #pragma warning enable 0612
+                return new KeyboardDevice(keyboard);
+            }
+        }
 
         protected virtual void Load() { }
         protected virtual void Update(double delta) { }
