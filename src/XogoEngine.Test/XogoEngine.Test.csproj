@@ -30,6 +30,7 @@
   <ItemGroup>
     <Folder Include="assets\" />
     <Folder Include="Graphics\" />
+    <Folder Include="Input\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +46,8 @@
     <Compile Include="Graphics\TextureLoaderTest.cs" />
     <Compile Include="Graphics\TexturePackerParserTest.cs" />
     <Compile Include="Graphics\TextureRegionTest.cs" />
+    <Compile Include="Input\KeyTest.cs" />
+    <Compile Include="Input\KeyboardDeviceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
