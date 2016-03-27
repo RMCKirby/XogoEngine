@@ -44,10 +44,14 @@
     <Compile Include="Adapters\IBufferAdapter.cs" />
     <Compile Include="Adapters\BufferAdapter.cs" />
     <Compile Include="Adapters\IDrawAdapter.cs" />
+    <Compile Include="Adapters\DrawAdapter.cs" />
     <Compile Include="Adapters\IGlAdapter.cs" />
     <Compile Include="Adapters\IShaderAdapter.cs" />
+    <Compile Include="Adapters\ShaderAdapter.cs" />
     <Compile Include="Adapters\ITextureAdapter.cs" />
+    <Compile Include="Adapters\TextureAdapter.cs" />
     <Compile Include="Adapters\IVertexArrayAdapter.cs" />
+    <Compile Include="Adapters\VertexArrayAdapter.cs" />
     <Compile Include="Extensions\IResourceExtensions.cs" />
     <Compile Include="Extensions\VectorExtensions.cs" />
     <Compile Include="Shaders\Shader.cs" />
