@@ -46,6 +46,7 @@
     <Compile Include="Adapters\IDrawAdapter.cs" />
     <Compile Include="Adapters\DrawAdapter.cs" />
     <Compile Include="Adapters\IGlAdapter.cs" />
+    <Compile Include="Adapters\GlAdapter.cs" />
     <Compile Include="Adapters\IShaderAdapter.cs" />
     <Compile Include="Adapters\ShaderAdapter.cs" />
     <Compile Include="Adapters\ITextureAdapter.cs" />
