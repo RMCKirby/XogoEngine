@@ -60,6 +60,7 @@ namespace XogoEngine
         protected virtual void Update(double delta) { }
         protected virtual void Render(double delta) { }
         protected virtual void Unload() { }
+        protected virtual void Resize() { }
 
         public void Run()
         {
@@ -107,6 +108,7 @@ namespace XogoEngine
                 Render(e.Time);
                 gameWindow.SwapBuffers();
             };
+            gameWindow.Resize += (sender, e) => Resize();
         }
 
         private void ThrowIfDisposed()
