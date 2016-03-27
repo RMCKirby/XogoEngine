@@ -1,4 +1,6 @@
+using OpenTK;
 using OpenTK.Platform;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using XogoEngine.OpenGL.Adapters;
@@ -13,6 +15,7 @@ namespace XogoEngine
         private bool isDisposed = false;
 
         public XogoWindow(int width, int height, string title)
+            : this(new GameWindow(width, height, GraphicsMode.Default, title), EngineCore.GlAdapter)
         {
             /* need to chain to internal constructor here, with concrete instances
              * once they are in place */

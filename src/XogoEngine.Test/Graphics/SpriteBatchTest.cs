@@ -66,7 +66,13 @@ namespace XogoEngine.Test.Graphics
         public void Constructor_ThrowsArgumentNullException_OnNullSpriteSheet()
         {
             SpriteSheet nullSheet = null;
-            Action construct = () => new SpriteBatch(nullSheet);
+            Action construct = () => new SpriteBatch(
+                nullSheet,
+                shaderProgram.Object,
+                vao.Object,
+                vbo.Object,
+                adapter.Object
+            );
             construct.ShouldThrow<ArgumentNullException>();
         }
 
