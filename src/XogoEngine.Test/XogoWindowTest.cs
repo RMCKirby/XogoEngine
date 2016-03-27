@@ -56,6 +56,23 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void SetBackgroundColour_ThrowsObjectDisposedException_OnDisposedWindow()
+        {
+            Action set = () => window.SetBackGroundColour(Colour4.White);
+            window.Dispose();
+            set.ShouldThrow<ObjectDisposedException>();
+        }
+
+        [Test]
+        public void AdapterClearColor_IsInvoked_OnSetBackgroundColour()
+        {
+            var colour = Colour4.LightSteelBlue;
+            window.SetBackGroundColour(colour);
+
+            adapter.Verify(a => a.ClearColor(colour.R / 255, colour.G / 255, colour.B / 255, colour.A / 255));
+        }
+
+        [Test]
         public void WidthProperty_ReturnsExpected_Value()
         {
             gameWindow.SetupGet(g => g.Width).Returns(300);

@@ -20,11 +20,6 @@ namespace XogoEngine
         public XogoWindow(int width, int height, string title)
             : this(new GameWindow(width, height, GraphicsMode.Default, title), EngineCore.GlAdapter)
         {
-            /* need to chain to internal constructor here, with concrete instances
-             * once they are in place */
-            Width = width;
-            Height = height;
-            Title = title;
         }
 
         internal XogoWindow(IGameWindow gameWindow, IGlAdapter adapter)
@@ -70,6 +65,17 @@ namespace XogoEngine
         {
             ThrowIfDisposed();
             gameWindow.Run();
+        }
+
+        public void SetBackGroundColour(Colour4 colour)
+        {
+            ThrowIfDisposed();
+            adapter.ClearColor(
+                colour.R / 255,
+                colour.G / 255,
+                colour.B / 255,
+                colour.A / 255
+            );
         }
 
         public void Dispose()
