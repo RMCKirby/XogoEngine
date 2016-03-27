@@ -25,10 +25,14 @@ namespace XogoEngine.Graphics
         private const int BatchSize = 100;
 
         public SpriteBatch(ISpriteSheet spriteSheet)
+            : this(
+                spriteSheet,
+                ShaderProgramFactory.Get("sprite"),
+                new VertexArrayObject(EngineCore.GlAdapter),
+                new VertexBuffer<VertexPositionColourTexture>(EngineCore.GlAdapter),
+                EngineCore.GlAdapter
+            )
         {
-            // TODO: chain to internal constructor once concrete implementation in place
-            spriteSheet.ThrowIfNull(nameof(spriteSheet));
-            this.spriteSheet = spriteSheet;
         }
 
         internal SpriteBatch(

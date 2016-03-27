@@ -1,6 +1,10 @@
+using OpenTK;
 using OpenTK.Platform;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
+using System.IO.Abstractions;
+using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine
@@ -8,20 +12,17 @@ namespace XogoEngine
     public class XogoWindow : IDisposable
     {
         private readonly IGameWindow gameWindow;
-        private readonly IGladapter adapter;
+        private readonly IGlAdapter adapter;
+        private readonly TextureLoader textureLoader;
 
         private bool isDisposed = false;
 
         public XogoWindow(int width, int height, string title)
+            : this(new GameWindow(width, height, GraphicsMode.Default, title), EngineCore.GlAdapter)
         {
-            /* need to chain to internal constructor here, with concrete instances
-             * once they are in place */
-            Width = width;
-            Height = height;
-            Title = title;
         }
 
-        internal XogoWindow(IGameWindow gameWindow, IGladapter adapter)
+        internal XogoWindow(IGameWindow gameWindow, IGlAdapter adapter)
         {
             if (gameWindow == null)
             {
@@ -33,6 +34,7 @@ namespace XogoEngine
             }
             this.gameWindow = gameWindow;
             this.adapter = adapter;
+            textureLoader = new TextureLoader(adapter, new FileSystem());
             AddEventHandles();
         }
 
@@ -51,17 +53,30 @@ namespace XogoEngine
             get { return gameWindow.Title; }
             set { gameWindow.Title = value; }
         }
-        public bool IsDisposed { get { return isDisposed; } }
+        public bool IsDisposed => isDisposed;
+        public TextureLoader TextureLoader => textureLoader;
 
         protected virtual void Load() { }
         protected virtual void Update(double delta) { }
         protected virtual void Render(double delta) { }
         protected virtual void Unload() { }
+        protected virtual void Resize() { }
 
         public void Run()
         {
             ThrowIfDisposed();
             gameWindow.Run();
+        }
+
+        public void SetBackGroundColour(Colour4 colour)
+        {
+            ThrowIfDisposed();
+            adapter.ClearColor(
+                colour.R / 255,
+                colour.G / 255,
+                colour.B / 255,
+                colour.A / 255
+            );
         }
 
         public void Dispose()
@@ -93,6 +108,7 @@ namespace XogoEngine
                 Render(e.Time);
                 gameWindow.SwapBuffers();
             };
+            gameWindow.Resize += (sender, e) => Resize();
         }
 
         private void ThrowIfDisposed()

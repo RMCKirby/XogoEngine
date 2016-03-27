@@ -33,6 +33,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EngineCoreTest.cs" />
     <Compile Include="XogoWindowTest.cs" />
     <Compile Include="Graphics\Colour4Test.cs" />
     <Compile Include="Graphics\SpriteTest.cs" />

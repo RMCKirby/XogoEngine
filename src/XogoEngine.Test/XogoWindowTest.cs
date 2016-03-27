@@ -5,6 +5,7 @@ using System;
 using OpenTK;
 using OpenTK.Platform;
 using OpenTK.Graphics.OpenGL4;
+using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.Test
@@ -14,13 +15,13 @@ namespace XogoEngine.Test
     {
         private TestWindow window;
         private Mock<IGameWindow> gameWindow;
-        private Mock<IGladapter> adapter;
+        private Mock<IGlAdapter> adapter;
 
         [SetUp]
         public void SetUp()
         {
             gameWindow = new Mock<IGameWindow>();
-            adapter = new Mock<IGladapter>();
+            adapter = new Mock<IGlAdapter>();
             window = new TestWindow(gameWindow.Object, adapter.Object);
         }
 
@@ -42,10 +43,33 @@ namespace XogoEngine.Test
         [Test]
         public void InternalConstructor_ThrowsArgumentNullException_OnNullAdapter()
         {
-            IGladapter nullAdapter = null;
+            IGlAdapter nullAdapter = null;
             Action construct = () => new XogoWindow(gameWindow.Object, nullAdapter);
 
             construct.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void TextureLoader_IsProvided_AfterConstruction()
+        {
+            window.TextureLoader.ShouldBeOfType<TextureLoader>();
+        }
+
+        [Test]
+        public void SetBackgroundColour_ThrowsObjectDisposedException_OnDisposedWindow()
+        {
+            Action set = () => window.SetBackGroundColour(Colour4.White);
+            window.Dispose();
+            set.ShouldThrow<ObjectDisposedException>();
+        }
+
+        [Test]
+        public void AdapterClearColor_IsInvoked_OnSetBackgroundColour()
+        {
+            var colour = Colour4.LightSteelBlue;
+            window.SetBackGroundColour(colour);
+
+            adapter.Verify(a => a.ClearColor(colour.R / 255, colour.G / 255, colour.B / 255, colour.A / 255));
         }
 
         [Test]
@@ -128,12 +152,22 @@ namespace XogoEngine.Test
         }
 
         [Test]
-        public void Render_isInvoked_OnGameWindowRender()
+        public void Render_IsInvoked_OnGameWindowRender()
         {
             bool invoked = false;
             window.RenderAction = () => invoked = true;
 
             gameWindow.Raise(g => g.RenderFrame += null, new FrameEventArgs());
+            invoked.ShouldBeTrue();
+        }
+
+        [Test]
+        public void Resize_IsInvoked_OnGamewindowResize()
+        {
+            bool invoked = false;
+            window.ResizeAction = () => invoked = true;
+
+            gameWindow.Raise(g => g.Resize += null, EventArgs.Empty);
             invoked.ShouldBeTrue();
         }
 
@@ -182,8 +216,9 @@ namespace XogoEngine.Test
             public Action UpdateAction = delegate { };
             public Action RenderAction = delegate { };
             public Action UnloadAction = delegate { };
+            public Action ResizeAction = delegate { };
 
-            public TestWindow(IGameWindow window, IGladapter adapter)
+            public TestWindow(IGameWindow window, IGlAdapter adapter)
                 : base(window, adapter) { }
 
             protected override void Load()
@@ -199,6 +234,11 @@ namespace XogoEngine.Test
             protected override void Render(double delta)
             {
                 RenderAction();
+            }
+
+            protected override void Resize()
+            {
+                ResizeAction();
             }
 
             protected override void Unload()
