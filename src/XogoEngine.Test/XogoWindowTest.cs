@@ -5,6 +5,7 @@ using System;
 using OpenTK;
 using OpenTK.Platform;
 using OpenTK.Graphics.OpenGL4;
+using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine.Test
@@ -46,6 +47,12 @@ namespace XogoEngine.Test
             Action construct = () => new XogoWindow(gameWindow.Object, nullAdapter);
 
             construct.ShouldThrow<ArgumentNullException>();
+        }
+
+        [Test]
+        public void TextureLoader_IsProvided_AfterConstruction()
+        {
+            window.TextureLoader.ShouldBeOfType<TextureLoader>();
         }
 
         [Test]

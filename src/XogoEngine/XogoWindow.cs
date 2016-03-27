@@ -3,6 +3,8 @@ using OpenTK.Platform;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
+using System.IO.Abstractions;
+using XogoEngine.Graphics;
 using XogoEngine.OpenGL.Adapters;
 
 namespace XogoEngine
@@ -11,6 +13,7 @@ namespace XogoEngine
     {
         private readonly IGameWindow gameWindow;
         private readonly IGlAdapter adapter;
+        private readonly TextureLoader textureLoader;
 
         private bool isDisposed = false;
 
@@ -36,6 +39,7 @@ namespace XogoEngine
             }
             this.gameWindow = gameWindow;
             this.adapter = adapter;
+            textureLoader = new TextureLoader(adapter, new FileSystem());
             AddEventHandles();
         }
 
@@ -54,7 +58,8 @@ namespace XogoEngine
             get { return gameWindow.Title; }
             set { gameWindow.Title = value; }
         }
-        public bool IsDisposed { get { return isDisposed; } }
+        public bool IsDisposed => isDisposed;
+        public TextureLoader TextureLoader => textureLoader;
 
         protected virtual void Load() { }
         protected virtual void Update(double delta) { }
