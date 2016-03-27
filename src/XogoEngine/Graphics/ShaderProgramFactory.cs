@@ -17,7 +17,7 @@ namespace XogoEngine.Graphics
 
         private static readonly Dictionary<string, Func<IShaderProgram>> Programs = new Dictionary<string, Func<IShaderProgram>>()
         {
-            {"sprite", SpriteProgram}
+            ["sprite"] = SpriteProgram
         };
 
         private static IShaderProgram SpriteProgram()
