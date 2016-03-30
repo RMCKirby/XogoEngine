@@ -66,7 +66,7 @@ namespace XogoEngine
                     return null;
                 }
                 var keyboard = gameWindow.InputDriver.Keyboard[0];
-                #pragma warning enable 0612
+                #pragma warning restore 0612
                 return new KeyboardDevice(keyboard);
             }
         }
