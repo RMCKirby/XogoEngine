@@ -15,10 +15,6 @@ in vec2 texCoord;
 out vec4 passColour;
 out vec2 passTexCoord;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-
 uniform mat4 mvp;
 
 void main()
