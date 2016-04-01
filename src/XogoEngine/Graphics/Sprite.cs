@@ -118,7 +118,9 @@ namespace XogoEngine.Graphics
 
         internal VertexPositionColourTexture[] Vertices => vertices;
         internal int BatchIndex;
-        internal event EventHandler SpriteModified;
+
+        internal delegate void SpriteHandler(Sprite sender, EventArgs args);
+        internal event SpriteHandler SpriteModified;
 
         internal const int VertexCount = 4;
     }

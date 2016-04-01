@@ -217,13 +217,10 @@ namespace XogoEngine.Graphics
             }
         }
 
-        private void HandleSpriteModified(object sender, EventArgs args)
+        private void HandleSpriteModified(Sprite sender, EventArgs args)
         {
-            Debug.Assert(sender.GetType() == typeof(Sprite));
-
-            var sprite = (Sprite)sender;
-            PrepareSpriteVertices(sprite);
-            UploadSpriteVertices(sprite);
+            PrepareSpriteVertices(sender);
+            UploadSpriteVertices(sender);
         }
 
         private void UploadSpriteVertices(Sprite sprite)
