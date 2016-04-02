@@ -33,6 +33,7 @@ namespace XogoEngine.Graphics
             ValidatePath(path);
             int textureHandle = adapter.GenTexture();
             adapter.Bind(TextureTarget.Texture2D, textureHandle);
+            SetTextureParameters();
 
             using (var image = new Bitmap(Bitmap.FromFile(path)))
             {
@@ -59,6 +60,30 @@ namespace XogoEngine.Graphics
                 var texture = new Texture(adapter, textureHandle, image.Width, image.Height, data);
                 return texture;
             }
+        }
+
+        private void SetTextureParameters()
+        {
+            adapter.TexParameter(
+                TextureTarget.Texture2D,
+                TextureParameterName.TextureMinFilter,
+                (int)TextureMinFilter.Nearest
+            );
+            adapter.TexParameter(
+                TextureTarget.Texture2D,
+                TextureParameterName.TextureMagFilter,
+                (int)TextureMagFilter.Nearest
+            );
+            adapter.TexParameter(
+                TextureTarget.Texture2D,
+                TextureParameterName.TextureWrapS,
+                (int)TextureParameterName.ClampToEdge
+            );
+            adapter.TexParameter(
+                TextureTarget.Texture2D,
+                TextureParameterName.TextureWrapT,
+                (int)TextureParameterName.ClampToEdge
+            );
         }
 
         private void ValidatePath(string path)

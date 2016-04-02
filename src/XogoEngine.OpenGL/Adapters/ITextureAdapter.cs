@@ -9,6 +9,8 @@ namespace XogoEngine.OpenGL.Adapters
         void Bind(TextureTarget target, int handle);
         void DeleteTexture(int handle);
 
+        void TexParameter(TextureTarget target, TextureParameterName pname, int param);
+
         void TexImage2D(
             TextureTarget target,
             int level,
