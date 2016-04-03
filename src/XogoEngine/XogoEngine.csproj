@@ -47,7 +47,6 @@
     <Compile Include="Graphics\SpriteBatchSizeExceededException.cs" />
     <Compile Include="Graphics\ISpriteSheet.cs" />
     <Compile Include="Graphics\SpriteSheet.cs" />
-    <Compile Include="Graphics\SpriteRenderer.cs" />
     <Compile Include="Graphics\ITexture.cs" />
     <Compile Include="Graphics\Texture.cs" />
     <Compile Include="Graphics\TextureAtlas.cs" />

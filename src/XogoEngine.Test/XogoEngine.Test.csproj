@@ -42,7 +42,6 @@
     <Compile Include="Graphics\SpriteTest.cs" />
     <Compile Include="Graphics\SpriteBatchTest.cs" />
     <Compile Include="Graphics\SpriteSheetTest.cs" />
-    <Compile Include="Graphics\SpriteRendererTest.cs" />
     <Compile Include="Graphics\TextureTest.cs" />
     <Compile Include="Graphics\TextureAtlasTest.cs" />
     <Compile Include="Graphics\TextureLoaderTest.cs" />
