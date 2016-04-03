@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="EngineCoreTest.cs" />
     <Compile Include="XogoWindowTest.cs" />
+    <Compile Include="Graphics\AnimationTest.cs" />
     <Compile Include="Graphics\Colour4Test.cs" />
     <Compile Include="Graphics\FrameTest.cs" />
     <Compile Include="Graphics\SpriteTest.cs" />

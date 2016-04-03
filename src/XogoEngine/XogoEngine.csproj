@@ -37,6 +37,7 @@
     <Compile Include="EngineCore.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="XogoWindow.cs" />
+    <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Colour4.cs" />
     <Compile Include="Graphics\DuplicateSpriteException.cs" />
     <Compile Include="Graphics\Frame.cs" />
