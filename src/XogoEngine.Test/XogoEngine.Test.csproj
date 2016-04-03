@@ -30,6 +30,7 @@
   <ItemGroup>
     <Folder Include="assets\" />
     <Folder Include="Graphics\" />
+    <Folder Include="Graphics\Shaders\" />
     <Folder Include="Input\" />
     <Folder Include="Properties\" />
   </ItemGroup>
@@ -47,6 +48,8 @@
     <Compile Include="Graphics\TextureLoaderTest.cs" />
     <Compile Include="Graphics\TexturePackerParserTest.cs" />
     <Compile Include="Graphics\TextureRegionTest.cs" />
+    <Compile Include="Graphics\Shaders\FragmentShadersTest.cs" />
+    <Compile Include="Graphics\Shaders\VertexShadersTest.cs" />
     <Compile Include="Input\KeyTest.cs" />
     <Compile Include="Input\KeyboardDeviceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

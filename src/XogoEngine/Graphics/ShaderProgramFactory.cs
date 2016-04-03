@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.OpenGL.Shaders;
 
 namespace XogoEngine.Graphics
 {
+    [ExcludeFromCodeCoverage]
     internal static class ShaderProgramFactory
     {
         public static IShaderProgram Get(string name)
