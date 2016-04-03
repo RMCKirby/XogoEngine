@@ -39,6 +39,7 @@
     <Compile Include="XogoWindow.cs" />
     <Compile Include="Graphics\Colour4.cs" />
     <Compile Include="Graphics\DuplicateSpriteException.cs" />
+    <Compile Include="Graphics\Frame.cs" />
     <Compile Include="Graphics\ShaderProgramFactory.cs" />
     <Compile Include="Graphics\Sprite.cs" />
     <Compile Include="Graphics\SpriteBatch.cs" />
