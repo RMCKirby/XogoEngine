@@ -30,6 +30,13 @@ namespace XogoEngine.OpenGL.Adapters
             OpenGlErrorHelper.CheckGlError();
         }
 
+        public void TexParameter(TextureTarget target, TextureParameterName pname, int param)
+        {
+            GraphicsContext.Assert();
+            GL.TexParameter(target, pname, param);
+            OpenGlErrorHelper.CheckGlError();
+        }
+
         public void TexImage2D(
             TextureTarget target,
             int level,

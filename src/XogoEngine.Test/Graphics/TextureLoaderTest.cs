@@ -87,6 +87,25 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void AdapterTexParameter_IsInvokedAsExpected_OnLoad()
+        {
+            loader.Load(texturePath);
+            AssertTexParameter(TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            AssertTexParameter(TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            AssertTexParameter(TextureParameterName.TextureWrapS, (int)TextureParameterName.ClampToEdge);
+            AssertTexParameter(TextureParameterName.TextureWrapT, (int)TextureParameterName.ClampToEdge);
+        }
+
+        private void AssertTexParameter(TextureParameterName pname, int param)
+        {
+            adapter.Verify(a => a.TexParameter(
+                TextureTarget.Texture2D,
+                pname,
+                param
+            ));
+        }
+
+        [Test]
         public void AdapterTexImage2D_IsInvoked_OnLoad()
         {
             var texture = loader.Load(texturePath);

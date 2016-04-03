@@ -4,7 +4,7 @@ GROUP Build
 NUGET
   remote: https://www.nuget.org/api/v2
   specs:
-    FAKE (4.22.8)
+    FAKE (4.23)
 
 GROUP Core
 NUGET
@@ -19,7 +19,7 @@ NUGET
   specs:
     Moq (4.2.1510.2205)
     NUnit (2.6.4)
-    Shouldly (2.6.0)
+    Shouldly (2.6)
 
 GROUP Tools
 NUGET

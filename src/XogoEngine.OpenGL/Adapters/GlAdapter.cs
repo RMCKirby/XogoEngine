@@ -93,6 +93,8 @@ namespace XogoEngine.OpenGL.Adapters
             => textureAdapter.Bind(target, handle);
         public void DeleteTexture(int handle)
             => textureAdapter.DeleteTexture(handle);
+        public void TexParameter(TextureTarget target, TextureParameterName pname, int param)
+            => textureAdapter.TexParameter(target, pname, param);
         public void TexImage2D(
             TextureTarget target,
             int level,
