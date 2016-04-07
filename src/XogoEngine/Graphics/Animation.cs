@@ -8,7 +8,7 @@ namespace XogoEngine.Graphics
         private Frame[] frames;
         private Frame currentFrame;
         private int currentFrameIndex;
-        private double elapsedTime;
+        private double totalElapsedTime;
         private double totalDuration;
 
         public Animation(params Frame[] frames)
@@ -31,17 +31,23 @@ namespace XogoEngine.Graphics
 
         public Frame CurrentFrame => currentFrame;
         public double TotalDuration => totalDuration;
+        public double TotalElapsedTime => totalElapsedTime;
 
         public void Reset()
         {
+            totalElapsedTime = 0;
             currentFrameIndex = 0;
             currentFrame = frames[currentFrameIndex];
         }
 
         public void Update(double delta)
         {
-            elapsedTime += delta;
-            if (elapsedTime >= currentFrame.Duration && currentFrameIndex < frames.Length - 1)
+            totalElapsedTime += delta;
+            // get the point in the animation at which the current frame ends
+            double currentAnimationPoint = frames.Take(currentFrameIndex + 1)
+                                                 .Sum(f => f.Duration);
+
+            if (totalElapsedTime >= currentAnimationPoint && currentFrameIndex < frames.Length - 1)
             {
                 currentFrameIndex++;
                 currentFrame = frames[currentFrameIndex];

@@ -10,12 +10,19 @@ namespace XogoEngine.Test.Graphics
     internal sealed class AnimationTest
     {
         private Animation animation;
+        private Frame[] frames;
         private TextureRegion region;
 
         [SetUp]
         public void SetUp()
         {
             region = new TextureRegion(0, 0, 20, 25);
+            frames = new Frame[]
+            {
+                new Frame(region, 0.1),
+                new Frame(region, 0.2)
+            };
+            animation = new Animation(frames);
         }
 
         [Test]
@@ -52,18 +59,18 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void CurrentFrame_IsFirstFrameGiven_AfterConstruction()
         {
-            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
-            animation = new Animation(frames);
-
             animation.CurrentFrame.ShouldBe(frames[0]);
+        }
+
+        [Test]
+        public void TotalElapsedTime_IsZero_AfterConstruction()
+        {
+            animation.TotalElapsedTime.ShouldBe(0);
         }
 
         [Test]
         public void TotalAnimationDuration_ShouldBeTheSum_OfAllFrameDurations()
         {
-            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
-            animation = new Animation(frames);
-
             double expected = frames.Sum(f => f.Duration);
             animation.TotalDuration.ShouldBe(expected);
         }
@@ -71,20 +78,23 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void CurrentFrame_IsInitialFrame_AfterReset()
         {
-            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
-            animation = new Animation(frames);
-
             animation.Update(delta: 0.15);
             animation.Reset();
             animation.CurrentFrame.ShouldBe(frames[0]);
         }
 
         [Test]
+        public void TotalElapsedTime_IsZero_AfterReset()
+        {
+            animation.Update(0.25);
+            animation.TotalElapsedTime.ShouldBe(0.25);
+            animation.Reset();
+            animation.TotalElapsedTime.ShouldBe(0);
+        }
+
+        [Test]
         public void CurrentFrame_IsSwitchedToNextFrame_OnceFrameTimeHasElapsed()
         {
-            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
-            animation = new Animation(frames);
-
             animation.Update(0.1);
             animation.CurrentFrame.ShouldBe(frames[1]);
         }
@@ -92,9 +102,6 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void Update_DoesNotOverflowFrames_OnEndOfAnimation()
         {
-            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
-            animation = new Animation(frames);
-
             animation.Update(0.1);
             animation.Update(0.3);
             animation.CurrentFrame.ShouldBe(frames[1]);
