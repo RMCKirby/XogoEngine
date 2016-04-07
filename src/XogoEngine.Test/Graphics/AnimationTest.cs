@@ -10,6 +10,7 @@ namespace XogoEngine.Test.Graphics
     internal sealed class AnimationTest
     {
         private Animation animation;
+        private Animation loopingAnimation;
         private Frame[] frames;
         private TextureRegion region;
 
@@ -23,6 +24,7 @@ namespace XogoEngine.Test.Graphics
                 new Frame(region, 0.2)
             };
             animation = new Animation(frames);
+            loopingAnimation = new Animation(true, frames);
         }
 
         [Test]
@@ -66,6 +68,18 @@ namespace XogoEngine.Test.Graphics
         public void TotalElapsedTime_IsZero_AfterConstruction()
         {
             animation.TotalElapsedTime.ShouldBe(0);
+        }
+
+        [Test]
+        public void NonLoopingAnimation_IsSetToNotLoop_AfterConstruction()
+        {
+            animation.Loop.ShouldBeFalse();
+        }
+
+        [Test]
+        public void LoopingAnimation_IsSetToLoop_AfterConstruction()
+        {
+            loopingAnimation.Loop.ShouldBeTrue();
         }
 
         [Test]
