@@ -7,6 +7,8 @@ namespace XogoEngine.Graphics
     {
         private Frame[] frames;
         private Frame currentFrame;
+        private int currentFrameIndex;
+        private double elapsedTime;
         private double totalDuration;
 
         public Animation(params Frame[] frames)
@@ -29,5 +31,21 @@ namespace XogoEngine.Graphics
 
         public Frame CurrentFrame => currentFrame;
         public double TotalDuration => totalDuration;
+
+        public void Reset()
+        {
+            currentFrameIndex = 0;
+            currentFrame = frames[currentFrameIndex];
+        }
+
+        public void Update(double delta)
+        {
+            elapsedTime += delta;
+            if (elapsedTime >= currentFrame.Duration)
+            {
+                currentFrameIndex++;
+                currentFrame = frames[currentFrameIndex];
+            }
+        }
     }
 }

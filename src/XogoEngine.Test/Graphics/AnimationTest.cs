@@ -67,5 +67,26 @@ namespace XogoEngine.Test.Graphics
             double expected = frames.Sum(f => f.Duration);
             animation.TotalDuration.ShouldBe(expected);
         }
+
+        [Test]
+        public void CurrentFrame_IsInitialFrame_AfterReset()
+        {
+            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
+            animation = new Animation(frames);
+
+            animation.Update(delta: 0.15);
+            animation.Reset();
+            animation.CurrentFrame.ShouldBe(frames[0]);
+        }
+
+        [Test]
+        public void CurrentFrame_IsSwitchedToNextFrame_OnceFrameTimeHasElapsed()
+        {
+            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
+            animation = new Animation(frames);
+
+            animation.Update(0.1);
+            animation.CurrentFrame.ShouldBe(frames[1]);
+        }
     }
 }
