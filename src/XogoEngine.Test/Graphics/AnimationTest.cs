@@ -88,5 +88,16 @@ namespace XogoEngine.Test.Graphics
             animation.Update(0.1);
             animation.CurrentFrame.ShouldBe(frames[1]);
         }
+
+        [Test]
+        public void Update_DoesNotOverflowFrames_OnEndOfAnimation()
+        {
+            var frames = new Frame[] { new Frame(region, 0.1), new Frame(region, 0.2) };
+            animation = new Animation(frames);
+
+            animation.Update(0.1);
+            animation.Update(0.3);
+            animation.CurrentFrame.ShouldBe(frames[1]);
+        }
     }
 }

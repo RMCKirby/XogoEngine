@@ -41,7 +41,7 @@ namespace XogoEngine.Graphics
         public void Update(double delta)
         {
             elapsedTime += delta;
-            if (elapsedTime >= currentFrame.Duration)
+            if (elapsedTime >= currentFrame.Duration && currentFrameIndex < frames.Length - 1)
             {
                 currentFrameIndex++;
                 currentFrame = frames[currentFrameIndex];
