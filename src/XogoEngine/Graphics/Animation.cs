@@ -59,7 +59,10 @@ namespace XogoEngine.Graphics
                 currentFrameIndex++;
                 currentFrame = frames[currentFrameIndex];
             }
-            currentFrame = frames[currentFrameIndex];
+            if (totalElapsedTime >= totalDuration && loop)
+            {
+                Reset();
+            }
         }
     }
 }

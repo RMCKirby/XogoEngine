@@ -120,5 +120,16 @@ namespace XogoEngine.Test.Graphics
             animation.Update(0.3);
             animation.CurrentFrame.ShouldBe(frames[1]);
         }
+
+        [Test]
+        public void LoopingAnimation_ShouldBeResetOnUpdate_OnceTotalDurationHasElapsed()
+        {
+            loopingAnimation.CurrentFrame.ShouldBe(frames[0]);
+            loopingAnimation.Update(frames[0].Duration);
+            loopingAnimation.CurrentFrame.ShouldBe(frames[1]);
+            loopingAnimation.Update(frames[1].Duration);
+            // we should now be back to the first frame
+            loopingAnimation.CurrentFrame.ShouldBe(frames[0]);
+        }
     }
 }
