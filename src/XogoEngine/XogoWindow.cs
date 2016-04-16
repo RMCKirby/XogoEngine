@@ -60,13 +60,13 @@ namespace XogoEngine
         {
             get
             {
-                #pragma warning disable 0612
+#pragma warning disable 0612
                 if (gameWindow.InputDriver.Keyboard.Count <= 0)
                 {
                     return null;
                 }
                 var keyboard = gameWindow.InputDriver.Keyboard[0];
-                #pragma warning restore 0612
+#pragma warning restore 0612
                 return new KeyboardDevice(keyboard);
             }
         }
@@ -74,6 +74,8 @@ namespace XogoEngine
         protected virtual void Load() { }
         protected virtual void Update(double delta) { }
         protected virtual void Render(double delta) { }
+        protected virtual void KeyUp() { }
+        protected virtual void KeyDown() { }
         protected virtual void Unload() { }
         protected virtual void Resize() { }
 
@@ -123,7 +125,10 @@ namespace XogoEngine
                 Render(e.Time);
                 gameWindow.SwapBuffers();
             };
+            gameWindow.KeyUp += (sender, e) => KeyUp();
+            gameWindow.KeyDown += (sender, e) => KeyDown();
             gameWindow.Resize += (sender, e) => Resize();
+
         }
 
         private void ThrowIfDisposed()
