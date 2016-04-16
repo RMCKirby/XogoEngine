@@ -57,6 +57,7 @@
     <Compile Include="Graphics\Shaders\VertexShaders.cs" />
     <Compile Include="Input\Key.cs" />
     <Compile Include="Input\KeyboardDevice.cs" />
+    <Compile Include="Input\MouseDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
