@@ -2,6 +2,7 @@ using Moq;
 using NUnit.Framework;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using OpenTK.Audio.OpenAL;
 using XogoEngine.Audio;
 using XogoEngine.Audio.Adapters;
@@ -64,10 +65,31 @@ namespace XogoEngine.Test.Audio
             setGain.ShouldThrow<ObjectDisposedException>();
         }
 
-        [Test]
-        public void Playing_ShouldBeFalse_ByDefault()
+        [Test, TestCaseSource(nameof(NonPlayingStates))]
+        public void Playing_ShouldBeFalse_OnNonPlayingStates(ALSourceState state)
         {
+            adapter.Setup(a => a.GetSourceState(sound.SourceHandle))
+                   .Returns(state);
             sound.Playing.ShouldBeFalse();
+        }
+
+        private static IEnumerable<TestCaseData> NonPlayingStates
+        {
+            get
+            {
+                yield return new TestCaseData(ALSourceState.Initial);
+                yield return new TestCaseData(ALSourceState.Paused);
+                yield return new TestCaseData(ALSourceState.Stopped);
+            }
+        }
+
+        [Test]
+        public void Playing_ShouldBeTrue_OnAdapterQueryReturningTrue()
+        {
+            adapter.Setup(a => a.GetSourceState(sound.SourceHandle))
+                   .Returns(ALSourceState.Playing);
+
+            sound.Playing.ShouldBeTrue();
         }
 
         [Test]
@@ -76,6 +98,76 @@ namespace XogoEngine.Test.Audio
             Action getPlaying = delegate { var p = sound.Playing; };
             sound.Dispose();
             getPlaying.ShouldThrow<ObjectDisposedException>();
+        }
+
+        [Test, TestCaseSource(nameof(NonPausedStates))]
+        public void Paused_ReturnsFalse_OnNonPausedStates(ALSourceState state)
+        {
+            adapter.Setup(a => a.GetSourceState(sound.SourceHandle))
+                   .Returns(state);
+            sound.Paused.ShouldBeFalse();
+        }
+
+        private static IEnumerable<TestCaseData> NonPausedStates
+        {
+            get
+            {
+                yield return new TestCaseData(ALSourceState.Initial);
+                yield return new TestCaseData(ALSourceState.Playing);
+                yield return new TestCaseData(ALSourceState.Stopped);
+            }
+        }
+
+        [Test]
+        public void Paused_ShouldBeTrue_OnAdapterQueryReturningTrue()
+        {
+            adapter.Setup(a => a.GetSourceState(sound.SourceHandle))
+                   .Returns(ALSourceState.Paused);
+
+            sound.Paused.ShouldBeTrue();
+        }
+
+        [Test]
+        public void GetPaused_ThrowsObjectDisposedException_OnDisposedSound()
+        {
+            Action getPaused = delegate { var p = sound.Paused; };
+            sound.Dispose();
+            getPaused.ShouldThrow<ObjectDisposedException>();
+        }
+
+        [Test, TestCaseSource(nameof(NonStoppedStates))]
+        public void Stopped_ReturnsFalse_OnNonStoppedStates(ALSourceState state)
+        {
+            adapter.Setup(a => a.GetSourceState(sound.SourceHandle))
+                   .Returns(state);
+            sound.Stopped.ShouldBeFalse();
+        }
+
+        private static IEnumerable<TestCaseData> NonStoppedStates
+        {
+            get
+            {
+                yield return new TestCaseData(ALSourceState.Initial);
+                yield return new TestCaseData(ALSourceState.Playing);
+                yield return new TestCaseData(ALSourceState.Paused);
+            }
+        }
+
+        [Test]
+        public void Stopped_ShouldBeTrue_OnAdapterQueryReturningTrue()
+        {
+            adapter.Setup(a => a.GetSourceState(sound.SourceHandle))
+                   .Returns(ALSourceState.Stopped);
+
+            sound.Stopped.ShouldBeTrue();
+        }
+
+        [Test]
+        public void GetStopped_ThrowsObjectDisposedException_OnDisposedSound()
+        {
+            Action getStopped = delegate { var s = sound.Stopped; };
+            sound.Dispose();
+            getStopped.ShouldThrow<ObjectDisposedException>();
         }
 
         [Test]

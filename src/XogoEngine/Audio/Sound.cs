@@ -43,6 +43,22 @@ namespace XogoEngine.Audio
             }
         }
 
+        public bool Paused
+        {
+            get {
+                ThrowIfDisposed();
+                return adapter.GetSourceState(sourceHandle) == ALSourceState.Paused;
+            }
+        }
+
+        public bool Stopped
+        {
+            get {
+                ThrowIfDisposed();
+                return adapter.GetSourceState(sourceHandle) == ALSourceState.Stopped;
+            }
+        }
+
         public void Play()
         {
             ThrowIfDisposed();
