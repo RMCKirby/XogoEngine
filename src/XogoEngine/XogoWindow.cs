@@ -70,6 +70,20 @@ namespace XogoEngine
                 return new KeyboardDevice(keyboard);
             }
         }
+        public MouseDevice Mouse
+        {
+            get
+            {
+#pragma warning disable 0612
+                if (gameWindow.InputDriver.Mouse.Count <= 0)
+                {
+                    return null;
+                }
+                var mouse = gameWindow.InputDriver.Mouse[0];
+#pragma warning restore 0612
+                return new MouseDevice(mouse);
+            }
+        }
 
         protected virtual void Load() { }
         protected virtual void Update(double delta) { }
