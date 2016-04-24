@@ -39,6 +39,7 @@
     <Compile Include="EngineCore.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="XogoWindow.cs" />
+    <Compile Include="Audio\Sound.cs" />
     <Compile Include="Audio\Adapters\IOpenAlAdapter.cs" />
     <Compile Include="Audio\Adapters\OpenAlAdapter.cs" />>
     <Compile Include="Graphics\Animation.cs" />

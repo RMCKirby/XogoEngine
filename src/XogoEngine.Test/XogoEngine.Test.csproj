@@ -29,6 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="assets\" />
+    <Folder Include="Audio\" />
     <Folder Include="Graphics\" />
     <Folder Include="Graphics\Shaders\" />
     <Folder Include="Input\" />
@@ -37,6 +38,7 @@
   <ItemGroup>
     <Compile Include="EngineCoreTest.cs" />
     <Compile Include="XogoWindowTest.cs" />
+    <Compile Include="Audio\SoundTest.cs" />
     <Compile Include="Graphics\AnimationTest.cs" />
     <Compile Include="Graphics\Colour4Test.cs" />
     <Compile Include="Graphics\FrameTest.cs" />
