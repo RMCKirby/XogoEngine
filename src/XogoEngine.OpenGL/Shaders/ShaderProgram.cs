@@ -92,7 +92,9 @@ namespace XogoEngine.OpenGL.Shaders
              * in the future we may want to query for GL_ACTIVE_ATTRIBUTE_MAX_LENGTH
              * and use its result instead */
             var attribute = adapter.GetActiveAttrib(handle, location, 200);
-            attributes.Add(attribute.Name, attribute);
+            /* bug on my windows box where GL.GetAttribLocation returns wrong attribute
+            *  ignore for now and cross fingers... */
+            attributes.Add(name, attribute);
             return location;
         }
 

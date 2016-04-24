@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using OpenTK;
+using OpenTK.Input;
 using OpenTK.Platform;
 using OpenTK.Graphics.OpenGL4;
 using XogoEngine.Graphics;
@@ -162,6 +163,26 @@ namespace XogoEngine.Test
         }
 
         [Test]
+        public void KeyUp_IsInvoked_OnGameWindowKeyUp()
+        {
+            bool invoked = false;
+            window.KeyUpAction = () => invoked = true;
+
+            gameWindow.Raise(g => g.KeyUp += null, new KeyboardKeyEventArgs());
+            invoked.ShouldBeTrue();
+        }
+
+        [Test]
+        public void KeyDown_IsInvoked_OnGameWindowKeyDown()
+        {
+            bool invoked = false;
+            window.KeyDownAction = () => invoked = true;
+
+            gameWindow.Raise(g => g.KeyDown += null, new KeyboardKeyEventArgs());
+            invoked.ShouldBeTrue();
+        }
+
+        [Test]
         public void Resize_IsInvoked_OnGamewindowResize()
         {
             bool invoked = false;
@@ -215,6 +236,8 @@ namespace XogoEngine.Test
             public Action LoadAction = delegate { };
             public Action UpdateAction = delegate { };
             public Action RenderAction = delegate { };
+            public Action KeyUpAction = delegate { };
+            public Action KeyDownAction = delegate { };
             public Action UnloadAction = delegate { };
             public Action ResizeAction = delegate { };
 
@@ -234,6 +257,16 @@ namespace XogoEngine.Test
             protected override void Render(double delta)
             {
                 RenderAction();
+            }
+
+            protected override void KeyUp()
+            {
+                KeyUpAction();
+            }
+
+            protected override void KeyDown()
+            {
+                KeyDownAction();
             }
 
             protected override void Resize()
