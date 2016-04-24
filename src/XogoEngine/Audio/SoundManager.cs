@@ -24,6 +24,8 @@ namespace XogoEngine.Audio
             sounds.Add(name, sound);
         }
 
+        // time permiting, add remove methods.
+
         public Sound this[string name] => Get(name);
         public Sound Get(string name)
         {

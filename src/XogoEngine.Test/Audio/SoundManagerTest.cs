@@ -34,6 +34,20 @@ namespace XogoEngine.Audio
         }
 
         [Test]
+        public void Add_ThrowsArgumentException_OnExistingName()
+        {
+            var first = new Sound(adapter.Object, 1, 1);
+            var second = new Sound(adapter.Object, 2, 2);
+            Action<Sound> add = (s) => manager.Add(s, "sound1");
+
+            add(first);
+            // now adding a second time should throw...
+            Assert.Throws<ArgumentException>(() => add(second)).Message.ShouldContain(
+                "The given name: sound1 is already in use in the sound manager"
+            );
+        }
+
+        [Test]
         public void Get_ThrowsArgumentException_OnNameNotInSounds()
         {
             Action get = () => manager.Get("bad");
@@ -49,6 +63,24 @@ namespace XogoEngine.Audio
             get.ShouldThrow<ArgumentException>().Message.ShouldContain(
                 "not in the sound manager"
             );
+        }
+
+        [Test]
+        public void Get_ReturnsExpected_Sound()
+        {
+            var sound = new Sound(adapter.Object, 1, 1);
+            manager.Add(sound, "sound-effect");
+
+            manager.Get("sound-effect").ShouldBeSameAs(sound);
+        }
+
+        [Test]
+        public void IndexedGet_ReturnsExpected_Sound()
+        {
+            var sound = new Sound(adapter.Object, 1, 1);
+            manager.Add(sound, "sound-effect");
+
+            manager["sound-effect"].ShouldBeSameAs(sound);
         }
     }
 }
