@@ -23,6 +23,44 @@ namespace XogoEngine.Audio
 
         public bool IsDisposed => isDisposed;
 
+        public float Gain
+        {
+            get {
+                ThrowIfDisposed();
+                return adapter.GetGain(sourceHandle);
+            }
+            set {
+                ThrowIfDisposed();
+                adapter.Source(sourceHandle, ALSourcef.Gain, value);
+            }
+        }
+
+        public bool Playing
+        {
+            get {
+                ThrowIfDisposed();
+                return adapter.GetSourceState(sourceHandle) == ALSourceState.Playing;
+            }
+        }
+
+        public void Play()
+        {
+            ThrowIfDisposed();
+            adapter.SourcePlay(sourceHandle);
+        }
+
+        public void Pause()
+        {
+            ThrowIfDisposed();
+            adapter.SourcePause(sourceHandle);
+        }
+
+        public void Stop()
+        {
+            ThrowIfDisposed();
+            adapter.SourceStop(sourceHandle);
+        }
+
         public void Dispose()
         {
             DisposeUnmanaged();
@@ -31,7 +69,15 @@ namespace XogoEngine.Audio
 
         ~Sound()
         {
-            DisposeUnmanaged();
+            if (isDisposed)
+            {
+                return;
+            }
+            /* can't invoke adapter methods here
+             * leave to non-wrapped OpenAL calls */
+            AL.DeleteSource(sourceHandle);
+            AL.DeleteBuffer(bufferHandle);
+            isDisposed = true;
         }
 
         private void DisposeUnmanaged()
@@ -43,6 +89,14 @@ namespace XogoEngine.Audio
             adapter.DeleteSource(sourceHandle);
             adapter.DeleteBuffer(bufferHandle);
             isDisposed = true;
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (isDisposed)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
         }
     }
 }
