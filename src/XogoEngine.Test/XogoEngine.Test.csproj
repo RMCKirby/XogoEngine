@@ -40,6 +40,7 @@
     <Compile Include="XogoWindowTest.cs" />
     <Compile Include="Audio\SoundTest.cs" />
     <Compile Include="Audio\SoundLoaderTest.cs" />
+    <Compile Include="Audio\SoundManagerTest.cs" />
     <Compile Include="Graphics\AnimationTest.cs" />
     <Compile Include="Graphics\Colour4Test.cs" />
     <Compile Include="Graphics\FrameTest.cs" />

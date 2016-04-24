@@ -42,6 +42,7 @@
     <Compile Include="XogoWindow.cs" />
     <Compile Include="Audio\Sound.cs" />
     <Compile Include="Audio\SoundLoader.cs" />
+    <Compile Include="Audio\SoundManager.cs" />
     <Compile Include="Audio\Adapters\IOpenAlAdapter.cs" />
     <Compile Include="Audio\Adapters\OpenAlAdapter.cs" />>
     <Compile Include="Graphics\Animation.cs" />
