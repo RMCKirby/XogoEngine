@@ -3,9 +3,9 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using XogoEngine.Audio;
-using XogoEngine.Audio.Adapters;
+using XogoEngine.OpenAL.Adapters;
 
-namespace XogoEngine.Audio
+namespace XogoEngine.Test.Audio
 {
     [TestFixture]
     internal sealed class SoundManagerTest

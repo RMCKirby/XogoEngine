@@ -1,8 +1,8 @@
 using OpenTK.Audio.OpenAL;
 
-namespace XogoEngine.Audio.Adapters
+namespace XogoEngine.OpenAL.Adapters
 {
-    internal interface IOpenAlAdapter
+    public interface IOpenAlAdapter
     {
         int GenBuffer();
         int GenSource();

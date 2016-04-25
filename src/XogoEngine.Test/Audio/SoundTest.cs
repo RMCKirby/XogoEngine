@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using OpenTK.Audio.OpenAL;
 using XogoEngine.Audio;
-using XogoEngine.Audio.Adapters;
+using XogoEngine.OpenAL.Adapters;
 
 namespace XogoEngine.Test.Audio
 {

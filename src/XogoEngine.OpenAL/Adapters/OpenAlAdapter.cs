@@ -1,10 +1,10 @@
 using OpenTK.Audio.OpenAL;
 using System.Diagnostics.CodeAnalysis;
 
-namespace XogoEngine.Audio.Adapters
+namespace XogoEngine.OpenAL.Adapters
 {
     [ExcludeFromCodeCoverage]
-    internal sealed class OpenAlAdapter : IOpenAlAdapter
+    public sealed class OpenAlAdapter : IOpenAlAdapter
     {
         public int GenBuffer() => AL.GenBuffer();
         public int GenSource() => AL.GenSource();

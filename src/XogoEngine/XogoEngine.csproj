@@ -29,7 +29,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Audio\" />
-    <Folder Include="Audio\Adapters" />
     <Folder Include="Graphics\" />
     <Folder Include="Graphics\Shaders\" />
     <Folder Include="Graphics\Input\" />
@@ -43,8 +42,6 @@
     <Compile Include="Audio\Sound.cs" />
     <Compile Include="Audio\SoundLoader.cs" />
     <Compile Include="Audio\SoundManager.cs" />
-    <Compile Include="Audio\Adapters\IOpenAlAdapter.cs" />
-    <Compile Include="Audio\Adapters\OpenAlAdapter.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Colour4.cs" />
     <Compile Include="Graphics\DuplicateSpriteException.cs" />
@@ -77,6 +74,11 @@
   <ItemGroup>
     <Reference Include="XogoEngine.OpenGL">
       <HintPath>..\..\build\XogoEngine.OpenGL</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="XogoEngine.OpenAL">
+      <HintPath>..\..\build\XogoEngine.OpenAL</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
