@@ -1,6 +1,6 @@
 using System;
 using OpenTK.Audio.OpenAL;
-using XogoEngine.Audio.Adapters;
+using XogoEngine.OpenAL.Adapters;
 
 namespace XogoEngine.Audio
 {
