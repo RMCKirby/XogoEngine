@@ -67,8 +67,10 @@ namespace XogoEngine.Graphics
             }
             else
             {
-                OpenTK.Graphics.GraphicsContext.Assert();
-                GL.DeleteTexture(handle);
+                if (OpenTK.Graphics.GraphicsContext.CurrentContext != null)
+                {
+                    GL.DeleteTexture(handle);
+                }
             }
             isDisposed = true;
         }

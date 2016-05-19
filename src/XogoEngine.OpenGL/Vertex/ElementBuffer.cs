@@ -47,13 +47,33 @@ namespace XogoEngine.OpenGL.Vertex
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~ElementBuffer()
+        {
+            Dispose(false);
+        }
+
+        private void Dispose(bool manual)
+        {
             if (isDisposed)
             {
                 return;
             }
-            adapter.DeleteBuffer(handle);
+            if (manual)
+            {
+                adapter.DeleteBuffer(handle);
+            }
+            else
+            {
+                if (OpenTK.Graphics.GraphicsContext.CurrentContext != null)
+                {
+                    GL.DeleteBuffer(handle);
+                }
+            }
             isDisposed = true;
-            GC.SuppressFinalize(this);
         }
     }
 }
