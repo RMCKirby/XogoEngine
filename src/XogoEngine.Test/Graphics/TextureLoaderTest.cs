@@ -72,8 +72,10 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void AdapterCreateTexture_IsInvoked_OnLoad()
         {
-            loader.Load(texturePath);
-            adapter.Verify(a => a.GenTexture(), Times.Once);
+            using (var texture = loader.Load(texturePath))
+            {
+                adapter.Verify(a => a.GenTexture(), Times.Once);
+            }
         }
 
         [Test]
@@ -82,18 +84,22 @@ namespace XogoEngine.Test.Graphics
             int handle = 1;
             adapter.Setup(a => a.GenTexture()).Returns(handle);
 
-            loader.Load(texturePath);
-            adapter.Verify(a => a.Bind(TextureTarget.Texture2D, handle), Times.Once);
+            using (var texture = loader.Load(texturePath))
+            {
+                adapter.Verify(a => a.Bind(TextureTarget.Texture2D, handle), Times.Once);
+            }
         }
 
         [Test]
         public void AdapterTexParameter_IsInvokedAsExpected_OnLoad()
         {
-            loader.Load(texturePath);
-            AssertTexParameter(TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            AssertTexParameter(TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            AssertTexParameter(TextureParameterName.TextureWrapS, (int)TextureParameterName.ClampToEdge);
-            AssertTexParameter(TextureParameterName.TextureWrapT, (int)TextureParameterName.ClampToEdge);
+            using (var texture = loader.Load(texturePath))
+            {
+                AssertTexParameter(TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+                AssertTexParameter(TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                AssertTexParameter(TextureParameterName.TextureWrapS, (int)TextureParameterName.ClampToEdge);
+                AssertTexParameter(TextureParameterName.TextureWrapT, (int)TextureParameterName.ClampToEdge);
+            }
         }
 
         private void AssertTexParameter(TextureParameterName pname, int param)
@@ -108,28 +114,32 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void AdapterTexImage2D_IsInvoked_OnLoad()
         {
-            var texture = loader.Load(texturePath);
-            adapter.Verify(a => a.TexImage2D(
-                texture.Target,
-                0,
-                PixelInternalFormat.Rgba,
-                texture.Width,
-                texture.Height,
-                0,
-                PixelFormat.Bgra,
-                PixelType.UnsignedByte,
-                It.IsAny<IntPtr>()
-            ));
+            using (var texture = loader.Load(texturePath))
+            {
+                adapter.Verify(a => a.TexImage2D(
+                    texture.Target,
+                    0,
+                    PixelInternalFormat.Rgba,
+                    texture.Width,
+                    texture.Height,
+                    0,
+                    PixelFormat.Bgra,
+                    PixelType.UnsignedByte,
+                    It.IsAny<IntPtr>()
+                ));
+            }
         }
 
         [Test]
         public void Load_ReturnsExpected_Texture()
         {
-            var texture = loader.Load(texturePath);
-            texture.ShouldSatisfyAllConditions(
-                () => texture.Width.ShouldBe(16),
-                () => texture.Height.ShouldBe(22)
-            );
+            using (var texture = loader.Load(texturePath))
+            {
+                texture.ShouldSatisfyAllConditions(
+                    () => texture.Width.ShouldBe(16),
+                (   ) => texture.Height.ShouldBe(22)
+                );
+            }
         }
     }
 }
