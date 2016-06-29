@@ -86,5 +86,17 @@ namespace XogoEngine.Test.Graphics
             invoked.ShouldBeFalse();
             sprite.SpriteModified -= action;
         }
+
+        [Test]
+        public void SpriteModifiedEvent_ShouldBeFired_OnSwitchedTextureRegion()
+        {
+            bool invoked = false;
+            Sprite.SpriteHandler action = (sender, e) => invoked = true;
+            sprite.SpriteModified += action;
+
+            sprite.Modify(s => s.TextureRegion = new TextureRegion(0, 0, 50, 50));
+            invoked.ShouldBeTrue();
+            sprite.SpriteModified -= action;
+        }
     }
 }
