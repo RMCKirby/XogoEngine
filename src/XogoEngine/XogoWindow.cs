@@ -142,7 +142,6 @@ namespace XogoEngine
             gameWindow.KeyUp += (sender, e) => KeyUp();
             gameWindow.KeyDown += (sender, e) => KeyDown();
             gameWindow.Resize += (sender, e) => Resize();
-
         }
 
         private void ThrowIfDisposed()

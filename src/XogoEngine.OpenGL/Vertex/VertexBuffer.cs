@@ -21,10 +21,10 @@ namespace XogoEngine.OpenGL.Vertex
             this.VertexDeclaration = default(TVertex).Declaration;
         }
 
-        public int Handle { get { return handle; } }
-        public BufferTarget Target { get { return BufferTarget.ArrayBuffer; } }
+        public int Handle => handle;
+        public BufferTarget Target => BufferTarget.ArrayBuffer;
         public IntPtr Size { get; private set; }
-        public bool IsDisposed { get { return isDisposed; } }
+        public bool IsDisposed => isDisposed;
 
         public IVertexDeclaration VertexDeclaration { get; }
 

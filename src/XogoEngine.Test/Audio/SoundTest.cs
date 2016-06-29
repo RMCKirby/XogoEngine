@@ -197,7 +197,6 @@ namespace XogoEngine.Test.Audio
         public void Gain_ThrowsObjectDisposedException_OnDisposedSound()
         {
             sound.Dispose();
-
         }
 
         [Test]

@@ -79,32 +79,14 @@ namespace XogoEngine.Audio
 
         public void Dispose()
         {
-            DisposeUnmanaged();
-            GC.SuppressFinalize(this);
-        }
-
-        ~Sound()
-        {
-            if (isDisposed)
-            {
-                return;
-            }
-            /* can't invoke adapter methods here
-             * leave to non-wrapped OpenAL calls */
-            AL.DeleteSource(sourceHandle);
-            AL.DeleteBuffer(bufferHandle);
-            isDisposed = true;
-        }
-
-        private void DisposeUnmanaged()
-        {
             if (isDisposed)
             {
                 return;
             }
             adapter.DeleteSource(sourceHandle);
-            adapter.DeleteBuffer(bufferHandle);
+            adapter.DeleteBuffer(BufferHandle);
             isDisposed = true;
+            GC.SuppressFinalize(this);
         }
 
         private void ThrowIfDisposed()
