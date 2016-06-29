@@ -164,39 +164,14 @@ namespace XogoEngine.OpenGL.Shaders
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~ShaderProgram()
-        {
-            Dispose(false);
-        }
-
-        private void Dispose(bool manual)
-        {
             if (isDisposed)
             {
                 return;
             }
-            if (manual)
-            {
-                attachedShaders.ForEach(s => s?.Dispose());
-                adapter.DeleteProgram(handle);
-            }
-            else
-            {
-                if (OpenTK.Graphics.GraphicsContext.CurrentContext != null)
-                {
-                    attachedShaders.ForEach(s => {
-                        if (s != null) {
-                            GL.DeleteShader(s.Handle);
-                        }
-                    });
-                    GL.DeleteProgram(handle);
-                }
-            }
+            attachedShaders.ForEach(s => s?.Dispose());
+            adapter.DeleteProgram(handle);
             isDisposed = true;
+            GC.SuppressFinalize(this);
         }
 
         private void ThrowIfNull(Shader shader)

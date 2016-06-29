@@ -75,33 +75,13 @@ namespace XogoEngine.OpenGL.Shaders
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~Shader()
-        {
-            Dispose(false);
-        }
-
-        private void Dispose(bool manual)
-        {
             if (isDisposed)
             {
                 return;
             }
-            if (manual)
-            {
-                adapter.DeleteShader(handle);
-            }
-            else
-            {
-                if (GraphicsContext.CurrentContext != null)
-                {
-                    GL.DeleteShader(handle);
-                }
-            }
+            adapter.DeleteShader(handle);
             isDisposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }

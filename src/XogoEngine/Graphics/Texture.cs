@@ -46,33 +46,13 @@ namespace XogoEngine.Graphics
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~Texture()
-        {
-            Dispose(false);
-        }
-
-        private void Dispose(bool managed)
-        {
             if (isDisposed)
             {
                 return;
             }
-            if (managed)
-            {
-                adapter.DeleteTexture(handle);
-            }
-            else
-            {
-                if (OpenTK.Graphics.GraphicsContext.CurrentContext != null)
-                {
-                    GL.DeleteTexture(handle);
-                }
-            }
+            adapter.DeleteTexture(handle);
             isDisposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }
