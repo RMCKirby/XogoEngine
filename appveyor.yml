@@ -5,7 +5,7 @@ init:
     - cmd: msbuild /version
 environment:
     COVERALLS_REPO_TOKEN:
-        secure: hF+VGBO+v0/t0C87iP6s17qBQJ+4L4639I9HeOsclesKGN30S1BTZEg+abpKDPC2
+        secure: LJtAmPTMf2oAcdDxgNBN7bd9k9KVngraj8Ui7cA1lOWvaCVZKJEC+r2mSrVnNuBT
 build_script:
     - cmd: build.cmd
 after_build:
