@@ -21,10 +21,10 @@ namespace XogoEngine.OpenGL.Vertex
             this.VertexDeclaration = default(TVertex).Declaration;
         }
 
-        public int Handle { get { return handle; } }
-        public BufferTarget Target { get { return BufferTarget.ArrayBuffer; } }
+        public int Handle => handle;
+        public BufferTarget Target => BufferTarget.ArrayBuffer;
         public IntPtr Size { get; private set; }
-        public bool IsDisposed { get { return isDisposed; } }
+        public bool IsDisposed => isDisposed;
 
         public IVertexDeclaration VertexDeclaration { get; }
 
@@ -81,13 +81,30 @@ namespace XogoEngine.OpenGL.Vertex
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~VertexBuffer()
+        {
+            Dispose(false);
+        }
+
+        private void Dispose(bool manual)
+        {
             if (isDisposed)
             {
                 return;
             }
-            adapter.DeleteBuffer(handle);
+            if (!manual && OpenTK.Graphics.GraphicsContext.CurrentContext != null)
+            {
+                GL.DeleteBuffer(handle);
+            }
+            else
+            {
+                adapter.DeleteBuffer(handle);
+            }
             isDisposed = true;
-            GC.SuppressFinalize(this);
         }
     }
 }

@@ -24,6 +24,9 @@ namespace XogoEngine.Test.Graphics
         {
             adapter = new Mock<ITextureAdapter>();
             texture = new Texture(adapter.Object, handle, width, height, data);
+            /* We don't want the texture finalizer to run without an OpenGL context
+             * Otherwise the tests will fail. We are using a mock here so no memory leaks */
+            //GC.SuppressFinalize(texture);
         }
 
         [Test]

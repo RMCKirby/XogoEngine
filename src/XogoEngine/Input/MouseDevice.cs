@@ -11,8 +11,10 @@ namespace XogoEngine.Input
             this.mouseDevice = mouseDevice;
         }
 
-        public string Description => mouseDevice.Description;
         public int X => mouseDevice.X;
         public int Y => mouseDevice.Y;
+        public string Description => mouseDevice.Description;
+        public int NumberOfButtons => mouseDevice.NumberOfButtons;
+        public int NumberOfWheels => mouseDevice.NumberOfWheels;
     }
 }

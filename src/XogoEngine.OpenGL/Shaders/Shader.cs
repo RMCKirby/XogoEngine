@@ -1,3 +1,4 @@
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using XogoEngine.OpenGL.Adapters;
@@ -74,13 +75,33 @@ namespace XogoEngine.OpenGL.Shaders
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~Shader()
+        {
+            Dispose(false);
+        }
+
+        private void Dispose(bool manual)
+        {
             if (isDisposed)
             {
                 return;
             }
-            adapter.DeleteShader(handle);
+            if (manual)
+            {
+                adapter.DeleteShader(handle);
+            }
+            else
+            {
+                if (GraphicsContext.CurrentContext != null)
+                {
+                    GL.DeleteShader(handle);
+                }
+            }
             isDisposed = true;
-            GC.SuppressFinalize(this);
         }
     }
 }

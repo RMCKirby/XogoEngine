@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Audio\" />
     <Folder Include="Graphics\" />
     <Folder Include="Graphics\Shaders\" />
     <Folder Include="Graphics\Input\" />
@@ -36,7 +37,11 @@
   <ItemGroup>
     <Compile Include="EngineCore.cs" />
     <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="IIndexable.cs" />
     <Compile Include="XogoWindow.cs" />
+    <Compile Include="Audio\Sound.cs" />
+    <Compile Include="Audio\SoundLoader.cs" />
+    <Compile Include="Audio\SoundManager.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Colour4.cs" />
     <Compile Include="Graphics\DuplicateSpriteException.cs" />
@@ -71,9 +76,14 @@
       <HintPath>..\..\build\XogoEngine.OpenGL</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="XogoEngine.OpenAL">
+      <HintPath>..\..\build\XogoEngine.OpenAL</HintPath>
+    </Reference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')">
       <ItemGroup>
         <Reference Include="OpenTK">
           <HintPath>..\..\packages\core\OpenTK\lib\NET40\OpenTK.dll</HintPath>
@@ -84,7 +94,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')">
       <ItemGroup>
         <Reference Include="System.IO.Abstractions">
           <HintPath>..\..\packages\core\System.IO.Abstractions\lib\net40\System.IO.Abstractions.dll</HintPath>
