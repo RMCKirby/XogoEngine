@@ -30,6 +30,7 @@
   <ItemGroup>
     <Folder Include="Audio\" />
     <Folder Include="Graphics\" />
+    <Folder Include="Graphics\Primitives\" />
     <Folder Include="Graphics\Shaders\" />
     <Folder Include="Graphics\Input\" />
     <Folder Include="Properties\" />
@@ -58,6 +59,7 @@
     <Compile Include="Graphics\TextureLoader.cs" />
     <Compile Include="Graphics\TexturePackerParser.cs" />
     <Compile Include="Graphics\TextureRegion.cs" />
+    <Compile Include="Graphics\Primitives\LineRenderer.cs" />
     <Compile Include="Graphics\Shaders\FragmentShaders.cs" />
     <Compile Include="Graphics\Shaders\VertexShaders.cs" />
     <Compile Include="Input\Key.cs" />

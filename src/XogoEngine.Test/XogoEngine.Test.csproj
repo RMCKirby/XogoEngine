@@ -31,6 +31,7 @@
     <Folder Include="assets\" />
     <Folder Include="Audio\" />
     <Folder Include="Graphics\" />
+    <Folder Include="Graphics\Primitives\" />
     <Folder Include="Graphics\Shaders\" />
     <Folder Include="Input\" />
     <Folder Include="Properties\" />
@@ -52,6 +53,7 @@
     <Compile Include="Graphics\TextureLoaderTest.cs" />
     <Compile Include="Graphics\TexturePackerParserTest.cs" />
     <Compile Include="Graphics\TextureRegionTest.cs" />
+    <Compile Include="Graphics\Primitives\LineRendererTest.cs" />
     <Compile Include="Graphics\Shaders\FragmentShadersTest.cs" />
     <Compile Include="Graphics\Shaders\VertexShadersTest.cs" />
     <Compile Include="Input\KeyTest.cs" />
