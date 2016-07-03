@@ -31,5 +31,27 @@ void main()
 
             VertexShaders.Sprite.ShouldBe(expected);
         }
+
+        [Test]
+        public void PrimitiveVertexShader_Returns_ExpectedGlslCode()
+        {
+            string expected = @"
+#version 130
+
+in vec2 position;
+in vec4 colour;
+
+out vec4 passColour;
+
+uniform mat4 mvp;
+
+void main()
+{
+    gl_Position = mvp * vec4(position, 0.0, 1.0);
+    passColour = colour;
+}";
+
+            VertexShaders.Primitive.ShouldBe(expected);
+        }
     }
 }
