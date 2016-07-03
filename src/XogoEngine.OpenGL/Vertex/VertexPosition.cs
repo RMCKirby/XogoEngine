@@ -55,7 +55,7 @@ namespace XogoEngine.OpenGL.Vertex
             {
                 new VertexElement(0, VertexElementUsage.Position, VertexAttribPointerType.Float, 2, false)
             };
-            declaration = new VertexDeclaration(Marshal.SizeOf(default(VertexPosition)), vertexElements);
+            declaration = new VertexDeclaration(Marshal.SizeOf(typeof(VertexPosition)), vertexElements);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace XogoEngine.OpenGL.Vertex
                 new VertexElement(0, VertexElementUsage.Position, VertexAttribPointerType.Float, 2, false),
                 new VertexElement(8, VertexElementUsage.Colour, VertexAttribPointerType.Float, 4, false)
             };
-            declaration = new VertexDeclaration(Marshal.SizeOf(default(VertexPositionColour)), vertexElements);
+            declaration = new VertexDeclaration(Marshal.SizeOf(typeof(VertexPositionColour)), vertexElements);
         }
     }
 }

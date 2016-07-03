@@ -70,7 +70,7 @@ namespace XogoEngine.OpenGL.Vertex
 
         static VertexPositionColourTexture()
         {
-            var stride = Marshal.SizeOf(default(VertexPositionColourTexture));
+            var stride = Marshal.SizeOf(typeof(VertexPositionColourTexture));
             var elements = new VertexElement[]
             {
                 new VertexElement(0, VertexElementUsage.Position, VertexAttribPointerType.Float, 2, false),

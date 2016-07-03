@@ -18,7 +18,7 @@ namespace XogoEngine.OpenGL.Primitives
         public VertexPositionColour Start { get; }
         public VertexPositionColour End { get; }
 
-        public int Stride => Marshal.SizeOf<Line>();
+        public int Stride => Marshal.SizeOf(typeof(Line));
 
         public IEnumerable<VertexPositionColour> Vertices
             => new List<VertexPositionColour>() { Start, End };
