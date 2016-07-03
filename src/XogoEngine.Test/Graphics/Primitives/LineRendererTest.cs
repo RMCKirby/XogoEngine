@@ -28,6 +28,12 @@ namespace XogoEngine.Test.Graphics
         }
 
         [Test]
+        public void Renderer_IsNotDisposed_AfterConstruction()
+        {
+            renderer.IsDisposed.ShouldBeFalse();
+        }
+
+        [Test]
         public void Constructor_ThrowsArgumentNullException_OnNullDrawAdapter()
         {
             Action construct = () => new LineRenderer(null, vao.Object, vbo.Object);
@@ -85,6 +91,29 @@ namespace XogoEngine.Test.Graphics
         {
             renderer.Draw();
             adapter.Verify(a => a.DrawArrays(PrimitiveType.Lines, 0, renderer.SubmittedLineCount), Times.Once);
+        }
+
+        [Test]
+        public void DisposedFlag_ShouldBeTrue_AfterDisposal()
+        {
+            renderer.Dispose();
+            renderer.IsDisposed.ShouldBeTrue();
+        }
+
+        [Test]
+        public void VertexArrayObject_IsDisposedOnce_OnDisposal()
+        {
+            renderer.Dispose();
+            renderer.Dispose();
+            vao.Verify(v => v.Dispose(), Times.Once);
+        }
+
+        [Test]
+        public void VertexBufferObject_IsDisposedOnce_OnDisposal()
+        {
+            renderer.Dispose();
+            renderer.Dispose();
+            vbo.Verify(v => v.Dispose(), Times.Once);
         }
     }
 }
