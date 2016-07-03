@@ -8,102 +8,114 @@ using XogoEngine.OpenGL.Vertex;
 
 namespace XogoEngine.OpenGL.Test.Primitives
 {
-	[TestFixture]
-	internal sealed class LineTest
-	{
+    [TestFixture]
+    internal sealed class LineTest
+    {
         private Line line;
         private static VertexPositionColour vertex1;
         private static VertexPositionColour vertex2;
 
-		static LineTest()
-		{
+        static LineTest()
+        {
             vertex1 = new VertexPositionColour(Vector2.Zero, Vector4.Zero);
             vertex2 = new VertexPositionColour(Vector2.One, Vector4.One);
         }
 
         [SetUp]
-		public void SetUp()
-		{
+        public void SetUp()
+        {
             line = new Line(vertex1, vertex2);
         }
 
-		[Test]
-		public void Constructor_CorrectlyInitialises_Instance()
-		{
+        [Test]
+        public void Constructor_CorrectlyInitialises_Instance()
+        {
             line.ShouldSatisfyAllConditions(
                 () => line.Start.ShouldBe(vertex1),
                 () => line.End.ShouldBe(vertex2)
             );
         }
 
-		[Test]
-		public void Vertices_Return_ExpectedValues()
-		{
+        [Test]
+        public void Vertices_Return_ExpectedValues()
+        {
             line.Vertices.Count().ShouldBe(2);
             line.Vertices.ShouldContain(vertex1);
             line.Vertices.ShouldContain(vertex2);
         }
 
-		[Test]
-		public void Stride_ShouldBeSize_OfVertices()
-		{
+        [Test]
+        public void Stride_ShouldBeSize_OfVertices()
+        {
             line.Stride.ShouldBe(default(VertexPositionColour).Declaration.Stride * 2);
         }
 
-		[Test]
-		public void ObjectEquals_ReturnsFalse_OnNullReference()
-		{
+        [Test]
+        public void ObjectEquals_ReturnsFalse_OnNullReference()
+        {
             line.Equals(null).ShouldBeFalse();
         }
 
-		[Test, TestCaseSource(nameof(UnequalLines))]
-		public void ObjectEquals_ReturnsFalse_OnUnequalLine(object other)
-		{
+        [Test, TestCaseSource(nameof(UnequalLines))]
+        public void ObjectEquals_ReturnsFalse_OnUnequalLine(object other)
+        {
             line.Equals(other).ShouldBeFalse();
         }
 
-		[Test, TestCaseSource(nameof(UnequalLines))]
-		public void TypeEquals_ReturnsFalse_OnUnequalLine(Line other)
-		{
+        [Test, TestCaseSource(nameof(UnequalLines))]
+        public void TypeEquals_ReturnsFalse_OnUnequalLine(Line other)
+        {
             line.Equals(other).ShouldBeFalse();
         }
 
-		[Test, TestCaseSource(nameof(EqualLine))]
-		public void ObjectEquals_ReturnsTrue_OnEqualLine(object other)
-		{
+        [Test, TestCaseSource(nameof(EqualLine))]
+        public void ObjectEquals_ReturnsTrue_OnEqualLine(object other)
+        {
             line.Equals(other).ShouldBeTrue();
         }
 
-		[Test, TestCaseSource(nameof(EqualLine))]
-		public void TypeEquals_ReturnsTrue_OnEqualLine(Line other)
-		{
+        [Test, TestCaseSource(nameof(EqualLine))]
+        public void TypeEquals_ReturnsTrue_OnEqualLine(Line other)
+        {
             line.Equals(other).ShouldBeTrue();
         }
 
-		private static IEnumerable<TestCaseData> UnequalLines
-		{
-			get
-			{
+        [Test, TestCaseSource(nameof(EqualLine))]
+        public void HashCodes_ShouldBeEqual_ForEqualLines(Line other)
+        {
+            line.GetHashCode().ShouldBe(other.GetHashCode());
+        }
+
+        [Test, TestCaseSource(nameof(UnequalLines))]
+        public void HashCodes_ShouldNotBeEqual_ForUnequalLines(Line other)
+        {
+            line.GetHashCode().ShouldNotBe(other.GetHashCode());
+        }
+
+        private static IEnumerable<TestCaseData> UnequalLines
+        {
+            get
+            {
                 yield return new TestCaseData(new Line(
-					vertex2,
-					vertex1
-				));
-				yield return new TestCaseData(new Line(
-					vertex1,
-					new VertexPositionColour(Vector2.Zero, Vector4.UnitY)
-				));
+                    vertex2,
+                    vertex1
+                ));
+                yield return new TestCaseData(new Line(
+                    vertex1,
+                    new VertexPositionColour(Vector2.Zero, Vector4.UnitY)
+                ));
             }
-		}
+        }
 
-		private IEnumerable<TestCaseData> EqualLine
-		{
-			get
-			{
+        private IEnumerable<TestCaseData> EqualLine
+        {
+            get
+            {
                 yield return new TestCaseData(new Line(
                     vertex1,
                     vertex2
                 ));
             }
-		}
+        }
     }
 }
