@@ -23,14 +23,7 @@ namespace XogoEngine.OpenGL.Primitives
         public IEnumerable<VertexPositionColour> Vertices
             => new List<VertexPositionColour>() { Start, End };
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Line))
-            {
-                return false;
-            }
-            return Equals((Line)obj);
-        }
+        public override bool Equals(object obj) => obj is Line && Equals((Line)obj);
 
         public bool Equals(Line other) => Start == other.Start && End == other.End;
 
