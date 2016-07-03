@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Moq;
+using OpenTK.Graphics.OpenGL4;
 using Shouldly;
 using System;
 using XogoEngine.Graphics.Primitives;
@@ -50,8 +51,40 @@ namespace XogoEngine.Test.Graphics
         [Test]
         public void Draw_AddsLine_ToSubmittedLines()
         {
-            //var line = new Line(new VertexPositionColour(vect))
-            //renderer.Draw(new Line(new vertexpos))
+            var line = new Line(
+                new VertexPositionColour(5, 5, 1, 1, 1, 1),
+                new VertexPositionColour(10, 5, 1, 1, 1, 1)
+            );
+            renderer.SubmittedLineCount.ShouldBe(0);
+            renderer.Draw(line);
+            renderer.SubmittedLineCount.ShouldBe(1);
+        }
+
+        [Test]
+        public void Draw_DoesNotAddSameLineAgain_OnSecondDrawCall()
+        {
+            var line = new Line(
+                new VertexPositionColour(5, 5, 1, 1, 1, 1),
+                new VertexPositionColour(10, 5, 1, 1, 1, 1)
+            );
+            renderer.SubmittedLineCount.ShouldBe(0);
+            renderer.Draw(line);
+            renderer.Draw(line);
+            renderer.SubmittedLineCount.ShouldBe(1);
+        }
+
+        [Test]
+        public void VertexArrayObject_IsBound_OnDraw()
+        {
+            renderer.Draw();
+            vao.Verify(v => v.Bind(), Times.Once);
+        }
+
+        [Test]
+        public void AdapterDrawArrays_IsInvokedAsExpected_OnDraw()
+        {
+            renderer.Draw();
+            adapter.Verify(a => a.DrawArrays(PrimitiveType.Lines, 0, renderer.SubmittedLineCount), Times.Once);
         }
     }
 }
