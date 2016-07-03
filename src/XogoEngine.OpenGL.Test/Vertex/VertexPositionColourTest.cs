@@ -31,6 +31,16 @@ namespace XogoEngine.OpenGL.Test.Vertex
         }
 
         [Test]
+        public void FloatContructor_CorrectlyInitialises_Instance()
+        {
+            var vertex = new VertexPositionColour(10, 10, 1, 0, 0, 1);
+            vertex.ShouldSatisfyAllConditions(
+                () => vertex.Position.ShouldBe(new Vector2(10)),
+                () => vertex.Colour.ShouldBe(new Vector4(1, 0, 0, 1))
+            );
+        }
+
+        [Test]
         public void VertexStride_ShouldBeExpectedSize_ForDeclaration()
         {
             vertex.Declaration.Stride.ShouldBe(6 * sizeof(float));

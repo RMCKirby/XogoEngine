@@ -15,6 +15,10 @@ namespace XogoEngine.OpenGL.Vertex
             Colour = colour;
         }
 
+        public VertexPositionColour(float x, float y, float red, float green, float blue, float alpha)
+            : this(new Vector2(x, y), new Vector4(red, green, blue, alpha))
+        { }
+
         public Vector2 Position { get; }
         public Vector4 Colour { get; }
 
@@ -40,7 +44,7 @@ namespace XogoEngine.OpenGL.Vertex
 
         public override string ToString()
         {
-            return $"[VertexPositionColour : Position={Position}, Colour={Colour}]";;
+            return $"[VertexPositionColour : Position={Position}, Colour={Colour}]"; ;
         }
 
         private static VertexDeclaration declaration;
