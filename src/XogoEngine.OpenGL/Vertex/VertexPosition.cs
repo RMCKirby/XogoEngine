@@ -18,14 +18,7 @@ namespace XogoEngine.OpenGL.Vertex
 
         public IVertexDeclaration Declaration => declaration;
 
-        public override bool Equals(object obj)
-        {
-            if (!(obj is VertexPosition))
-            {
-                return false;
-            }
-            return Equals((VertexPosition)obj);
-        }
+        public override bool Equals(object obj) => obj is VertexPosition && Equals((VertexPosition)obj);
 
         public bool Equals(VertexPosition other) => Position == other.Position;
 

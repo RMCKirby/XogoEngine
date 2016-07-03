@@ -23,20 +23,10 @@ namespace XogoEngine.OpenGL.Vertex
         public IVertexDeclaration Declaration => declaration;
 
         public override bool Equals(object obj)
-        {
-            if (!(obj is VertexPositionColourTexture))
-            {
-                return false;
-            }
-            return Equals((VertexPositionColourTexture)obj);
-        }
+            => obj is VertexPositionColourTexture && Equals((VertexPositionColourTexture)obj);
 
         public bool Equals(VertexPositionColourTexture other)
-        {
-            return Position == other.Position
-                && Colour == other.Colour
-                && TextureCoordinate == other.TextureCoordinate;
-        }
+            => Position == other.Position && Colour == other.Colour && TextureCoordinate == other.TextureCoordinate;
 
         public static bool operator ==(VertexPositionColourTexture left, VertexPositionColourTexture right)
             => left.Equals(right);
