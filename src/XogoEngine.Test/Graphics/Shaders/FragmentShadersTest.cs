@@ -27,5 +27,23 @@ void main()
 
             FragmentShaders.Sprite.ShouldBe(expected);
         }
+
+        [Test]
+        public void PrimitiveFragmentShader_Returns_ExpectedGlslCode()
+        {
+            string expected = @"
+#version 130
+
+in vec4 passColour;
+
+out vec4 outColour;
+
+void main()
+{
+    outColour = passColour;
+}";
+
+            FragmentShaders.Primitive.ShouldBe(expected);
+        }
     }
 }
