@@ -93,6 +93,12 @@ namespace XogoEngine.Test.Graphics
             adapter.Verify(a => a.DrawArrays(PrimitiveType.Lines, 0, renderer.SubmittedLineCount), Times.Once);
         }
 
+		[Test]
+		public void Flush_DoesNotBindVertexBuffer_IfNoNewLinesSubmitted()
+		{
+			
+		}
+
         [Test]
         public void DisposedFlag_ShouldBeTrue_AfterDisposal()
         {

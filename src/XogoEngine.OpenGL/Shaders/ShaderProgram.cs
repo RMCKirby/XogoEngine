@@ -131,14 +131,14 @@ namespace XogoEngine.OpenGL.Shaders
         {
             this.ThrowIfDisposed();
             attachedShaders.ForEach(
-                (s) => adapter.DetachShader(handle, s.Handle)
+                s => adapter.DetachShader(handle, s.Handle)
             );
         }
 
         public void DeleteShaders()
         {
             this.ThrowIfDisposed();
-            attachedShaders.ForEach((s) => s?.Dispose());
+            attachedShaders.ForEach(s => s?.Dispose());
         }
 
         public void SetMatrix4(ShaderUniform uniform, ref Matrix4 matrix, bool transpose)

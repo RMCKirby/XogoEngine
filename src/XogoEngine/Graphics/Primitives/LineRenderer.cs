@@ -44,6 +44,11 @@ namespace XogoEngine.Graphics.Primitives
             adapter.DrawArrays(PrimitiveType.Lines, 0, SubmittedLineCount);
         }
 
+		public void Flush()
+		{
+			
+		}
+
         public void Dispose()
         {
             if (isDisposed)
