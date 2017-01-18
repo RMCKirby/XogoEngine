@@ -19,6 +19,7 @@ namespace XogoEngine.Graphics
         public Animation(bool loop, params Frame[] frames)
         {
             frames.ThrowIfNull(nameof(frames));
+
             if (frames.Length <= 0)
             {
                 throw new ArgumentException(

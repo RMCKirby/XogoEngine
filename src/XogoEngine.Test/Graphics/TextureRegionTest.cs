@@ -18,5 +18,14 @@ namespace XogoEngine.Test.Graphics
                 () => region.Height.ShouldBe(24)
             );
         }
+
+        [Test]
+        public void ToString_ShouldReturnExpectedString_WhenInvoked()
+        {
+            var region = new TextureRegion(10, 20, 50, 60);
+            region.ToString().ShouldBe(
+                $"[TextureRegion: X={region.X}, Y={region.Y}, Width={region.Width}, Height={region.Height}]"
+            );
+        }
     }
 }

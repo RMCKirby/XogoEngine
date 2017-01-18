@@ -14,5 +14,7 @@ namespace XogoEngine.Graphics
         public int Y { get; }
         public int Width { get; }
         public int Height { get; }
+
+        public override string ToString() => ($"[TextureRegion: X={X}, Y={Y}, Width={Width}, Height={Height}]");
     }
 }

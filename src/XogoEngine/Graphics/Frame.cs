@@ -11,5 +11,7 @@ namespace XogoEngine.Graphics
 
         public TextureRegion TextureRegion { get; }
         public double Duration { get; }
+
+        public override string ToString() => ($"[Frame: TextureRegion={TextureRegion}, Duration={Duration}]");
     }
 }
