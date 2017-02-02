@@ -12,9 +12,7 @@ namespace XogoEngine.Graphics
         private double totalDuration;
         private bool loop;
 
-        public Animation(params Frame[] frames) : this(false, frames)
-        {
-        }
+        public Animation(params Frame[] frames) : this(false, frames) { }
 
         public Animation(bool loop, params Frame[] frames)
         {
@@ -64,6 +62,18 @@ namespace XogoEngine.Graphics
             {
                 Reset();
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format(
+                "[Animation: Frames={0}, CurrentFrame={1}, TotalDuration={2}, TotalElapsedTime={3}, Loop={4}]",
+                string.Join(",", frames.ToList()),
+                currentFrame,
+                totalDuration,
+                totalElapsedTime,
+                loop
+            );
         }
     }
 }

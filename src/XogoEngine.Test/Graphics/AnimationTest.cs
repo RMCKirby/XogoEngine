@@ -131,5 +131,18 @@ namespace XogoEngine.Test.Graphics
             // we should now be back to the first frame
             loopingAnimation.CurrentFrame.ShouldBe(frames[0]);
         }
+
+        [Test]
+        public void ToString_ShouldReturnExpectedString_WhenInvoked() {
+            string expected = string.Format(
+                "[Animation: Frames={0}, CurrentFrame={1}, TotalDuration={2}, TotalElapsedTime={3}, Loop={4}]",
+                string.Join(",", frames.ToList()),
+                animation.CurrentFrame,
+                animation.TotalDuration,
+                animation.TotalElapsedTime,
+                animation.Loop
+            );
+            animation.ToString().ShouldBe(expected);
+        }
     }
 }
