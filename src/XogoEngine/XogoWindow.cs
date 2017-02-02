@@ -25,14 +25,9 @@ namespace XogoEngine
 
         internal XogoWindow(IGameWindow gameWindow, IGlAdapter adapter)
         {
-            if (gameWindow == null)
-            {
-                throw new ArgumentNullException(nameof(gameWindow));
-            }
-            if (adapter == null)
-            {
-                throw new ArgumentNullException(nameof(adapter));
-            }
+            gameWindow.ThrowIfNull(nameof(gameWindow));
+            adapter.ThrowIfNull(nameof(adapter));
+
             this.gameWindow = gameWindow;
             this.adapter = adapter;
             textureLoader = new TextureLoader(adapter, new FileSystem());
