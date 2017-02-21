@@ -14,7 +14,6 @@ namespace XogoEngine.Test.Graphics
         private SpriteSheet spriteSheet;
         private Mock<ITexture> texture;
 
-        private static string spriteSheetPath = "assets/spritesheet.png";
         private static string dataFilePath = "assets/spritesheet-data.xml";
 
         [SetUp]

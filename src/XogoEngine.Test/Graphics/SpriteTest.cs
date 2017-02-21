@@ -11,9 +11,6 @@ namespace XogoEngine.Test.Graphics
     {
         private Sprite sprite;
         private static TextureRegion textureRegion = new TextureRegion(2, 2, 15, 20);
-        private static Vector4 colour = new Vector4(
-            Colour4.White.R, Colour4.White.G, Colour4.White.B, Colour4.White.A
-        );
 
         [SetUp]
         public void SetUp()
