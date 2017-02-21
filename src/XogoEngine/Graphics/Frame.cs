@@ -5,6 +5,10 @@ namespace XogoEngine.Graphics
         public Frame(TextureRegion textureRegion, double duration)
         {
             textureRegion.ThrowIfNull(nameof(textureRegion));
+            if (duration <= 0)
+            {
+                throw new System.ArgumentOutOfRangeException(nameof(duration));
+            }
             this.TextureRegion = textureRegion;
             Duration = duration;
         }
