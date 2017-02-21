@@ -16,7 +16,7 @@ namespace XogoEngine.Graphics
 
         internal SpriteSheet(ITexture texture, string dataFilePath, TexturePackerParser parser)
         {
-            ValidateArguments(texture, dataFilePath, parser);
+            ValidateArguments(texture, dataFilePath);
             this.Texture = texture;
             this.textureAtlas = parser.Parse(dataFilePath);
         }
