@@ -55,7 +55,9 @@ namespace XogoEngine.OpenGL.Test.Vertex
         {
             buffer.ShouldSatisfyAllConditions(
                 () => buffer.Handle.ShouldBe(1),
-                () => buffer.IsDisposed.ShouldBe(false)
+                () => buffer.IsDisposed.ShouldBe(false),
+                () => buffer.VertexDeclaration.ShouldBe(default(Vertex).Declaration),
+                () => buffer.Size.ShouldBe(IntPtr.Zero)
             );
         }
 
