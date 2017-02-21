@@ -22,10 +22,7 @@ namespace XogoEngine.Graphics
 
         public Sprite(TextureRegion textureRegion, int x, int y, Colour4 colour)
         {
-            if (textureRegion == null)
-            {
-                throw new ArgumentNullException(nameof(textureRegion));
-            }
+            textureRegion.ThrowIfNull(nameof(textureRegion));
             this.textureRegion = textureRegion;
             this.x = x;
             this.y = y;

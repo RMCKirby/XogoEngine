@@ -50,12 +50,9 @@ namespace XogoEngine.Graphics
             GC.SuppressFinalize(this);
         }
 
-        private void ValidateArguments(ITexture texture, string dataFilePath, TexturePackerParser parser)
+        private void ValidateArguments(ITexture texture, string dataFilePath)
         {
-            if (texture == null)
-            {
-                throw new ArgumentNullException(nameof(texture));
-            }
+            texture.ThrowIfNull(nameof(texture));
             if (texture.IsDisposed)
             {
                 throw new ObjectDisposedException(texture.GetType().FullName);
