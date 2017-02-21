@@ -21,8 +21,8 @@ namespace XogoEngine.OpenGL.Vertex
             handle = adapter.GenVertexArray();
         }
 
-        public int Handle { get { return handle; } }
-        public bool IsDisposed { get { return isDisposed; } }
+        public int Handle => handle;
+        public bool IsDisposed => isDisposed;
 
         public void Bind()
         {
